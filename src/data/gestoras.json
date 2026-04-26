@@ -1,0 +1,29 @@
+[
+  {
+    "id": "G001",
+    "nombre": "ReciclaUY S.A.",
+    "email": "gestora1@reciclauY.com",
+    "scoring": 75,
+    "habilitacion_ministerio": true,
+    "certificados_entregados": 8,
+    "certificados_a_tiempo": 7
+  },
+  {
+    "id": "G002",
+    "nombre": "EcoTech Uruguay",
+    "email": "gestora2@ecotech.com.uy",
+    "scoring": 55,
+    "habilitacion_ministerio": true,
+    "certificados_entregados": 3,
+    "certificados_a_tiempo": 2
+  },
+  {
+    "id": "G003",
+    "nombre": "GreenDispose",
+    "email": "gestora3@greendispose.uy",
+    "scoring": 50,
+    "habilitacion_ministerio": false,
+    "certificados_entregados": 0,
+    "certificados_a_tiempo": 0
+  }
+]
