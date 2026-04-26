@@ -5,6 +5,28 @@ Formato: `[Sesión N — Fecha] Título`
 
 ---
 
+## [Sesión 4 — 26 de abril de 2026] Sistema de documentación y preparación para desarrollo
+
+### Decisiones tomadas
+- Sistema dual de registro: CHANGELOG.md (ejecutivo) + docs/sesiones/ (detallado)
+- Carpeta entregas/ se mantiene para artefactos formales académicos
+- Templates obligatorios creados para prompts y ADRs
+- Flujo de cierre de sesión estandarizado (ver docs/SISTEMA-DOCUMENTACION.md)
+
+### Artefactos generados
+- `docs/SISTEMA-DOCUMENTACION.md` — documento maestro de cómo se documenta el proyecto
+- `docs/prompts/template-prompt.md` — plantilla para nuevos prompts
+- `docs/decisions/template-adr.md` — plantilla para ADRs
+- `docs/sesiones/sesion-04.md` — primer ejemplo de documentación detallada
+
+### Pendiente para próxima sesión
+- Ejecutar prompt 00 (verificación setup)
+- Implementar Sprint 1 completo: Portal Instituto (HU-I01, I02, I03)
+- Testing manual de flujo completo
+- Generar entregable de avance
+
+---
+
 ## [Sesión 3 — 21 de abril de 2026] Diseño de arquitectura del MVP
 
 ### Decisiones tomadas

@@ -1,83 +1,44 @@
-# Sistema de Gestión de Residuos Electrónicos (MVP)
+# EcoFIng — Sistema de Gestión de RAEE
 
-Sistema MVP para la gestión de residuos electrónicos en la Facultad de Ingeniería de la Universidad de la República, con aplicación de Inteligencia Artificial Generativa para optimizar el proceso actual.
+MVP web para la gestión de Residuos de Aparatos Eléctricos y Electrónicos (RAEE) en la Facultad de Ingeniería de la Universidad de la República (UdelaR), Uruguay.
 
----
-
-## Contexto académico
-
-| Campo | Detalle |
-|-------|---------|
-| **Materia** | Seminario de Tecnologías |
-| **Institución** | Facultad de Ingeniería, Universidad de la República (Udelar) |
-| **Período** | Abril – Junio 2026 |
-| **Cursada** | 10 semanas · Martes 18:00 a 21:00 |
-| **Presentación final** | 26 de mayo de 2026 |
+**Materia:** Seminario de Tecnologías · FIng UdelaR · Abril–Junio 2026  
+**Presentación final:** 26 de mayo de 2026  
+**Equipo:** Carmela González · Verónica Iriarte · Juan Raimondo
 
 ---
 
-## Integrantes
+## ¿Qué hace el sistema?
 
-| Nombre |
-|--------|
-| Carmela González |
-| Verónica Iriarte |
-| Juan Raimondo |
-
----
-
-## Objetivo general
-
-Desarrollar un MVP funcional para un sistema de gestión de residuos electrónicos que incorpore herramientas de GenAI, transformando un proceso actualmente manual e ineficiente en una solución ágil, trazable y escalable.
-
-### Estado inicial vs. estado final
-
-**Estado inicial (AS-IS)**
-- Registro y seguimiento de residuos electrónicos realizado de forma manual (planillas, correos, papel).
-- Sin visibilidad centralizada del inventario ni del historial de disposición.
-- Proceso propenso a errores humanos y pérdida de información.
-
-**Estado final esperado (TO-BE)**
-- Sistema MVP que centraliza el registro y seguimiento de residuos electrónicos.
-- Incorporación de GenAI para asistir en clasificación, generación de reportes y recomendaciones de disposición.
-- Proceso estandarizado, auditable y con indicadores de seguimiento.
+| Actor | Qué puede hacer |
+|---|---|
+| **Instituto** | Registrar lotes de RAEE, hacer seguimiento, ver QR de trazabilidad |
+| **Ecopunto** | Recibir lotes, clasificarlos con asistencia de IA, publicarlos |
+| **Gestora** | Ver catálogo de lotes disponibles, solicitar retiro, subir certificado |
+| **Administrador** | Ver KPIs de impacto ambiental, gestionar actores, aprobar retiros |
+| **Ciudadano** | Escanear QR para ver la trazabilidad pública de un lote (sin login) |
 
 ---
 
-## Gestión del proyecto
+## Cómo levantar el proyecto
 
-La gestión del proyecto contempla los siguientes artefactos:
+```bash
+git clone https://github.com/Juanraibo/seminario-tecnologia-fing.git
+cd seminario-tecnologia-fing/app
+npm install
+npm run dev
+```
 
-- **Cronograma Gantt**: planificación detallada de las 8 sesiones de trabajo con hitos y entregables por semana.
-- **Indicadores SMART**: métricas específicas, medibles, alcanzables, relevantes y con plazo definido para evaluar el avance del MVP.
-- **Supuestos y restricciones**: documentación de los factores asumidos como ciertos y de las limitaciones que enmarcan el proyecto (tiempo, tecnología, alcance).
+Abrir **http://localhost:5173**
 
----
+### Usuarios de prueba
 
-## Herramientas de gestión
-
-| Herramienta | Propósito |
-|-------------|-----------|
-| **FODA** | Análisis de Fortalezas, Oportunidades, Debilidades y Amenazas del proyecto |
-| **Matriz RACI** | Definición de roles y responsabilidades del equipo |
-| **Matriz de Riesgos** | Identificación, probabilidad e impacto de riesgos; plan de respuesta |
-| **Matriz de Comunicaciones** | Canales, frecuencia y responsables de la comunicación del proyecto |
-| **Matriz Interés-Poder** | Mapeo y estrategia de gestión de stakeholders |
-
----
-
-## Cronograma
-
-| Sesión | Fecha | Actividad principal |
-|--------|-------|---------------------|
-| 1 | 7 de abril de 2026 | Kick-off, relevamiento del proceso AS-IS |
-| 2 | 14 de abril de 2026 | Análisis de requerimientos y artefactos de gestión |
-| 3 | 21 de abril de 2026 | Diseño de arquitectura del MVP |
-| 4 | 28 de abril de 2026 | Desarrollo – Sprint 1 |
-| 5 | 5 de mayo de 2026 | Desarrollo – Sprint 2 |
-| 6 | 12 de mayo de 2026 | Integración de GenAI |
-| 7 | 19 de mayo de 2026 | Pruebas y ajustes finales |
-| 8 | 26 de mayo de 2026 | **Presentación final** |
+| Email | Contraseña | Portal |
+|---|---|---|
+| admin@fing.edu.uy | admin123 | Administrador |
+| inco@fing.edu.uy | inco123 | Instituto (INCO) |
+| ecopunto@fing.edu.uy | eco123 | Ecopunto |
+| gestora1@reciclauY.com | gest123 | Gestora |
 
 ---
 
@@ -85,16 +46,21 @@ La gestión del proyecto contempla los siguientes artefactos:
 
 ```
 seminario-tecnologia-fing/
-├── datos/        # Datasets, ejemplos de datos y archivos de entrada
-├── docs/         # Documentación del proyecto (artefactos de gestión, diseños)
-├── entregas/     # Entregables formales por sesión
-└── src/          # Código fuente del MVP
+├── app/          → Código fuente (React + Vite)
+├── docs/         → Documentación (HUs, ADRs, prompts, arquitectura)
+├── entregas/     → Entregables académicos por sesión
+├── CLAUDE.md     → Instrucciones para el agente de IA (OpenCode)
+└── CHANGELOG.md  → Bitácora de decisiones y avance
 ```
+
+---
+
+## Stack tecnológico
+
+React 18 · Vite 5 · TailwindCSS · React Router v6 · OpenRouter API (IA)
 
 ---
 
 ## Estado del proyecto
 
-> **En desarrollo**
-
-El proyecto se encuentra actualmente en fase de desarrollo activo dentro del período académico Abril – Junio 2026.
+> 🟡 **En desarrollo** — Sesión 4 / 8
