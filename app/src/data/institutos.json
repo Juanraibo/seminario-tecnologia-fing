@@ -1,0 +1,6 @@
+[
+  { "id": "INCO", "nombre": "Instituto de Computación", "sigla": "INCO", "responsable": "inco@fing.edu.uy", "activo": true },
+  { "id": "IIE",  "nombre": "Instituto de Ingeniería Eléctrica", "sigla": "IIE", "responsable": "iie@fing.edu.uy", "activo": true },
+  { "id": "IIMPI","nombre": "Instituto de Ingeniería Mecánica y Producción Industrial", "sigla": "IIMPI", "responsable": "iimpi@fing.edu.uy", "activo": true },
+  { "id": "IMERL","nombre": "Instituto de Mecánica de los Fluidos e Ingeniería Ambiental", "sigla": "IMFIA", "responsable": "imfia@fing.edu.uy", "activo": false }
+]

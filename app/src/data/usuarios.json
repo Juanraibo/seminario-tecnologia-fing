@@ -1,0 +1,8 @@
+[
+  { "email": "admin@fing.edu.uy",       "password": "admin123", "rol": "admin",     "nombre": "Administrador FIng" },
+  { "email": "inco@fing.edu.uy",        "password": "inco123",  "rol": "instituto", "nombre": "Rep. INCO",         "institutoId": "INCO" },
+  { "email": "iie@fing.edu.uy",         "password": "iie123",   "rol": "instituto", "nombre": "Rep. IIE",          "institutoId": "IIE"  },
+  { "email": "ecopunto@fing.edu.uy",    "password": "eco123",   "rol": "ecopunto",  "nombre": "Operario Ecopunto" },
+  { "email": "gestora1@reciclauY.com",  "password": "gest123",  "rol": "gestora",   "nombre": "ReciclaUY S.A.",    "gestoraId": "G001"   },
+  { "email": "gestora2@ecotech.com.uy", "password": "gest456",  "rol": "gestora",   "nombre": "EcoTech Uruguay",   "gestoraId": "G002"   }
+]
