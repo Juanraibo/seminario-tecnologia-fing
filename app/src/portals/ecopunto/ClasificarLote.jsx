@@ -119,7 +119,7 @@ export default function ClasificarLote() {
       categoria: categoriaSeleccionada,
       descripcion: descripcion.trim(),
       peso_kg: parseFloat(pesoReal),
-      foto_url: `${nuevoId}.jpg`, // En producción, se subiría la imagen a un servidor
+      foto_url: imagenPreview, // Imagen real en base64 capturada durante clasificación
       clasificado_por_ia: !!resultadoIA,
       confianza_ia: resultadoIA?.confianza || null,
       fecha_clasificacion: new Date().toISOString().split('T')[0],

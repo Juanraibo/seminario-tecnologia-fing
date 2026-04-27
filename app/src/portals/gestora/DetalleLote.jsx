@@ -191,7 +191,10 @@ export default function DetalleLote() {
                       <div className="flex items-start gap-4">
                         {/* Imagen del ítem */}
                         <img
-                          src={`https://picsum.photos/seed/${item.id}/200/200`}
+                          src={item.foto_url?.startsWith('data:')
+                            ? item.foto_url
+                            : `https://picsum.photos/seed/${item.id}/200/200`
+                          }
                           alt={item.descripcion}
                           className="w-24 h-24 object-cover rounded-lg border border-gray-700/50 flex-shrink-0"
                         />
