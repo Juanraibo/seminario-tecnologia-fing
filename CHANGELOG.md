@@ -64,6 +64,14 @@ Formato: `[Sesión N — Fecha] Título`
 - ✅ Vercel environment variables configuradas
 - ⚠️ Pendiente: Monitoreo de uso de OpenRouter
 
+### Actualizaciones post-deployment
+- ✅ **Fix íconos:** Exportados DollarSign y Award para Portal Gestora
+- ✅ **Imágenes reales:** Sistema de captura y visualización de fotos de clasificación
+  - Ecopunto guarda imagen base64 al clasificar ítem con IA
+  - Gestora muestra foto real en detalle de lote
+  - Fallback a placeholder si no existe imagen real
+  - Sin necesidad de backend: imágenes en memoria (suficiente para MVP)
+
 ### Próximos pasos
 - Portal Admin (HU-A01, A02, A03)
 - Vista Pública de Trazabilidad (HU-P01)
