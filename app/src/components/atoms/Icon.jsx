@@ -66,6 +66,9 @@ export const {
   Scale,
   Tag,
   QrCode,
+  Leaf,
+  Cpu,
+  Layers,
 
   // Documentos y datos
   FileText,
