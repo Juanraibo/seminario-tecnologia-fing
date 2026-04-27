@@ -85,6 +85,7 @@ export const {
   // Ubicación y tracking
   MapPin,
   Navigation,
+  Globe,
   TrendingUp,
   TrendingDown,
 
