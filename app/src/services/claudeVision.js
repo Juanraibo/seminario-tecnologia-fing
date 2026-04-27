@@ -5,14 +5,14 @@
  * Implementa HU-E02: Recepción y Clasificación con Asistencia IA
  *
  * OpenRouter actúa como proxy unificado hacia múltiples modelos de IA.
- * Usamos el modelo anthropic/claude-sonnet-4-5 por sus capacidades de visión.
+ * Usamos Google Gemini 2.0 Flash (FREE) por su excelente relación calidad/precio en visión.
  * La API es compatible con el estándar OpenAI (chat/completions).
  *
  * TODO(producción): mover esta llamada a un backend para no exponer la API key en el cliente.
  */
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODELO = "anthropic/claude-sonnet-4-5";
+const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "google/gemini-2.0-flash-exp:free";
 const TIMEOUT_MS = 15000; // 15 segundos — criterio de aceptación HU-E02 CA7
 
 /**
@@ -78,7 +78,7 @@ Respondé ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markd
         "Content-Type": "application/json",
         // Headers opcionales de OpenRouter para tracking
         "HTTP-Referer": "https://github.com/Juanraibo/seminario-tecnologia-fing",
-        "X-Title": "EcoFIng MVP — Seminario Tecnologías FIng",
+        "X-Title": "EcoFIng MVP - Seminario Tecnologias FIng",
       },
       signal: controller.signal,
       body: JSON.stringify({

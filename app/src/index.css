@@ -1,3 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-base: 249 250 251; /* gray-50 */
+    --color-bg-elevated: 255 255 255; /* white */
+    --color-text-primary: 17 24 39; /* gray-900 */
+    --color-text-secondary: 107 114 128; /* gray-500 */
+    --color-border: 229 231 235; /* gray-200 */
+  }
+
+  .dark {
+    --color-bg-base: 3 7 18; /* gray-950 */
+    --color-bg-elevated: 17 24 39; /* gray-900 */
+    --color-text-primary: 249 250 251; /* gray-50 */
+    --color-text-secondary: 156 163 175; /* gray-400 */
+    --color-border: 31 41 55; /* gray-800 */
+  }
+
+  body {
+    @apply bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-50;
+    @apply transition-colors duration-200;
+  }
+
+  /* Scrollbar personalizado */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
+  }
+}

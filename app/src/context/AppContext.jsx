@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer } from 'react'
 import lotesData      from '../data/lotes.json'
+import itemsData      from '../data/items.json'
 import institutosData from '../data/institutos.json'
 import gestorasData   from '../data/gestoras.json'
 import usuariosData   from '../data/usuarios.json'
@@ -8,6 +9,7 @@ import configData     from '../data/config.json'
 // ── Estado inicial ────────────────────────────────────────────────
 const initialState = {
   lotes:      lotesData,
+  items:      itemsData,
   institutos: institutosData,
   gestoras:   gestorasData,
   usuarios:   usuariosData,
@@ -51,6 +53,26 @@ function reducer(state, action) {
           : g
       )
       return { ...state, gestoras }
+    }
+
+    // ── Acciones para ítems ──────────────────────────────────────────
+
+    case 'AGREGAR_ITEM':
+      return { ...state, items: [action.payload, ...state.items] }
+
+    case 'ACTUALIZAR_ITEM': {
+      const items = state.items.map(i =>
+        i.id === action.payload.id ? { ...i, ...action.payload } : i
+      )
+      return { ...state, items }
+    }
+
+    case 'ASIGNAR_ITEMS_A_LOTE_PUBLICACION': {
+      const { itemsIds, lotePublicadoId } = action.payload
+      const items = state.items.map(i =>
+        itemsIds.includes(i.id) ? { ...i, lotePublicadoId } : i
+      )
+      return { ...state, items }
     }
 
     default:
