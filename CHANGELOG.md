@@ -5,6 +5,73 @@ Formato: `[Sesión N — Fecha] Título`
 
 ---
 
+## [Sesión 7 — 27 de abril de 2026] Portal Gestora + Deployment + Seguridad
+
+### Decisiones tomadas
+- **Portal Gestora completo:** 3 vistas implementadas con flujo end-to-end de cotización
+- **Deployment en Vercel:** Configuración automática desde GitHub a seminario.noah.uy
+- **Seguridad reforzada:** Git history limpio de API keys, documentación de riesgos y mitigaciones
+- **Sistema de scoring:** Visualización y explicación de métricas de confiabilidad de gestoras
+
+### Artefactos generados
+- **Portal Gestora (3 vistas):**
+  - `Dashboard.jsx` — Catálogo de lotes con filtros (categoría + estado), 4 estadísticas, navegación
+  - `DetalleLote.jsx` — Vista completa: ítems con trazabilidad, formulario de cotización, ranking de competencia
+  - `MisSolicitudes.jsx` — Historial de solicitudes, métricas de scoring, explicación de puntos
+- **Context actualizado:**
+  - `AppContext.jsx` — Nueva acción: `AGREGAR_SOLICITUD_GESTORA` para enviar cotizaciones
+- **Rutas agregadas:**
+  - `/gestora` → Dashboard
+  - `/gestora/lote/:id` → Detalle y cotización
+  - `/gestora/solicitudes` → Historial y scoring
+- **Documentación de deployment:**
+  - `docs/DEPLOYMENT.md` — Guía completa Vercel + DNS custom domain (400+ líneas)
+  - `docs/SECURITY.md` — Auditoría de riesgos, mitigaciones, plan de respuesta a incidentes
+  - `vercel.json` — Configuración de build y rewrites para SPA
+- **Seguridad:**
+  - `.gitignore` actualizado para bloquear todos los archivos .env
+  - Git history limpiado de API keys expuestas (git filter-branch)
+  - Placeholders en documentación pública
+
+### Problemas resueltos
+- **API key expuesta en GitHub:** OpenRouter detectó key en repositorio público → deshabilitada automáticamente
+  - Solución: Nueva key generada, git filter-branch para limpiar historial, .gitignore reforzado
+- **DNS misconfiguration:** CNAME apuntando a nameserver en vez de CNAME target
+  - Solución: Cambio a cname.vercel-dns.com, documentado en guía
+- **HTTP Basic Auth no disponible:** Vercel Hobby plan no incluye Password Protection
+  - Decisión: Deployment sin auth extra, solo datos mock (aceptable para MVP académico)
+
+### Métricas de implementación
+- **Líneas de código:** ~600 líneas (Portal Gestora)
+- **Líneas de documentación:** ~650 líneas (DEPLOYMENT.md + SECURITY.md)
+- **Archivos creados:** 5 archivos (3 componentes, 2 docs, 1 config)
+- **Archivos modificados:** 3 archivos (AppContext, App, Dashboard)
+- **Cobertura de HUs:** 6/16 completadas (HU-E01, E02, E03, G01, G02, G03)
+
+### Funcionalidades Portal Gestora
+- ✅ **HU-G01:** Catálogo de lotes disponibles con filtros dinámicos
+- ✅ **HU-G02:** Vista detallada de lote con trazabilidad ítem por ítem + formulario de cotización
+- ✅ **HU-G03:** Historial de solicitudes con clasificación por estado (adjudicado/pendiente/rechazado)
+- ✅ Sistema de scoring visible con explicación de cómo suma/resta puntos
+- ✅ Comparación de cotizaciones (ranking de competencia)
+- ✅ Badges visuales para lotes adjudicados
+
+### Validación de seguridad
+- ✅ API key nueva y protegida
+- ✅ Git history limpio de secrets
+- ✅ .gitignore actualizado y verificado
+- ✅ Documentación sin secrets expuestos
+- ✅ Vercel environment variables configuradas
+- ⚠️ Pendiente: Monitoreo de uso de OpenRouter
+
+### Próximos pasos
+- Portal Admin (HU-A01, A02, A03)
+- Vista Pública de Trazabilidad (HU-P01)
+- Testing completo del flujo gestora end-to-end
+- Verificar DNS propagation para seminario.noah.uy
+
+---
+
 ## [Sesión 6 — 27 de abril de 2026] Rediseño del flujo de clasificación: Sistema de ítems individuales
 
 ### Decisiones tomadas

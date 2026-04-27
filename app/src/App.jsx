@@ -11,6 +11,8 @@ import EcopuntoDashboard      from './portals/ecopunto/Dashboard'
 import EcopuntoClasificar     from './portals/ecopunto/ClasificarLote'
 import EcopuntoPublicar       from './portals/ecopunto/PublicarLotes'
 import GestoraDashboard       from './portals/gestora/Dashboard'
+import GestoraDetalleLote     from './portals/gestora/DetalleLote'
+import GestoraMisSolicitudes  from './portals/gestora/MisSolicitudes'
 import AdminDashboard         from './portals/admin/Dashboard'
 import Trazabilidad           from './portals/publico/Trazabilidad'
 
@@ -137,9 +139,19 @@ function AppRoutes() {
       } />
 
       {/* Gestora */}
-      <Route path="/gestora/*" element={
+      <Route path="/gestora" element={
         <PrivateRoute rolesPermitidos={['gestora']}>
           <LayoutAutenticado><GestoraDashboard /></LayoutAutenticado>
+        </PrivateRoute>
+      } />
+      <Route path="/gestora/lote/:id" element={
+        <PrivateRoute rolesPermitidos={['gestora']}>
+          <LayoutAutenticado><GestoraDetalleLote /></LayoutAutenticado>
+        </PrivateRoute>
+      } />
+      <Route path="/gestora/solicitudes" element={
+        <PrivateRoute rolesPermitidos={['gestora']}>
+          <LayoutAutenticado><GestoraMisSolicitudes /></LayoutAutenticado>
         </PrivateRoute>
       } />
 

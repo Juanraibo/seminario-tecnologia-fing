@@ -75,6 +75,21 @@ function reducer(state, action) {
       return { ...state, items }
     }
 
+    case 'AGREGAR_SOLICITUD_GESTORA': {
+      const { loteId, gestoraId, cotizacion, fecha } = action.payload
+      const lotes = state.lotes.map(l => {
+        if (l.id === loteId) {
+          const solicitudes = l.solicitudes_gestoras || []
+          return {
+            ...l,
+            solicitudes_gestoras: [...solicitudes, { gestoraId, cotizacion, fecha }]
+          }
+        }
+        return l
+      })
+      return { ...state, lotes }
+    }
+
     default:
       return state
   }
