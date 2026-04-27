@@ -73,10 +73,83 @@ Formato: `[Sesión N — Fecha] Título`
   - Sin necesidad de backend: imágenes en memoria (suficiente para MVP)
 
 ### Próximos pasos
-- ~~Portal Admin (HU-A01, A02, A03)~~ ✅ Completado
-- Vista Pública de Trazabilidad (HU-P01)
-- Testing completo end-to-end de todos los portales
-- Verificar DNS propagation para seminario.noah.uy
+- ~~Portal Admin (HU-A01, A02, A03)~~ ✅
+- ~~Vista Pública (HU-P01)~~ ✅
+- **Sesión 9:** Revisión de flujos entre roles (integración E2E)
+- Integración con APIs de CO2 reales (Climatiq/Carbon Interface)
+- Testing completo y preparación de demo final
+
+---
+
+## [Sesión 9 — 27 de abril de 2026] Vista Pública + CRUD Completo Admin + Reorganización UX
+
+### Decisiones tomadas
+- **Vista pública de trazabilidad:** Timeline visual sin login para ciudadanos
+- **CRUD completo en Gestión de Actores:** Agregar/eliminar operarios y gestoras
+- **Dashboard reorganizado:** Separación visual entre Impacto Ambiental y Gestión
+- **Investigación de APIs de CO2:** Evaluación de Climatiq y Carbon Interface
+
+### Artefactos generados
+- **Vista Pública (HU-P01):**
+  - `Trazabilidad.jsx` reescrito completamente
+  - Timeline con iconos y colores por etapa (instituto → ecopunto → gestora → certificado)
+  - Diseño público con gradientes claros (no dark mode)
+  - Footer educativo sobre impacto ambiental
+  - Vista de ítems individuales del lote
+- **Mejoras Admin:**
+  - `GestionActores.jsx` con CRUD completo (agregar/eliminar operarios y gestoras)
+  - `Dashboard.jsx` reorganizado en 2 secciones visuales con separadores
+  - Context con nuevas acciones: `AGREGAR_USUARIO`, `ELIMINAR_USUARIO`, `AGREGAR_GESTORA`, `ELIMINAR_GESTORA`
+- **Documentación:**
+  - `PROXIMA_SESION.md` con roadmap de mejoras y evaluación de APIs de CO2
+
+### Funcionalidades Vista Pública
+- ✅ Timeline completo del recorrido del lote
+- ✅ Información de instituto origen, clasificación, gestora y certificado
+- ✅ Vista de ítems clasificados (hasta 8 + contador de más)
+- ✅ Diseño responsive y accesible sin login
+- ✅ Footer educativo con impacto ambiental
+
+### Mejoras Dashboard Admin
+- ✅ **Sección 1: Impacto Ambiental** (verde)
+  - KPIs: Total kg, CO2 evitado, Cobre, Aluminio, Tasa finalización
+  - Gráficos de barras (kg por instituto) y torta (certificados)
+- ✅ **Sección 2: Gestión del Sistema** (azul)
+  - Métricas: Institutos activos, Operarios, Gestoras habilitadas
+
+### Mejoras Gestión de Actores
+- ✅ Formulario agregar operario con nombre, email, password
+- ✅ Botón eliminar operarios con confirmación
+- ✅ Formulario agregar gestora (scoring inicial automático)
+- ✅ Botón eliminar gestoras con confirmación y advertencia
+- ✅ Todo persiste en estado de React (se pierde al recargar - MVP)
+
+### Evaluación APIs de CO2
+**Climatiq API (RECOMENDADO):**
+- REST API con factores de emisión certificados
+- Endpoint específico para RAEE reciclado
+- Free tier: 100 requests/mes → $0.01/request
+- Implementación: servicio `carbonAPI.js` + llamada al finalizar lote
+
+**Carbon Interface API (ALTERNATIVA):**
+- Similar funcionalidad, 200 requests gratis/mes
+- Menos específico para electrónicos
+
+**Implementación sugerida (post-MVP):**
+- Calcular CO2 real vía API al generar certificado
+- Comparar valor API vs. factor fijo (1.4 kg/kg)
+- Toggle en dashboard: "Ver datos reales"
+
+### Métricas de implementación
+- **Líneas de código:** ~450 líneas (Trazabilidad + mejoras Admin)
+- **Archivos modificados:** 4 archivos
+- **Cobertura de HUs:** 13/13 completadas (100%)
+
+### Notas para próxima sesión
+- 🔴 **CRÍTICO:** Revisar flujos entre roles (actualmente desconectados)
+- Mapear E2E: Instituto → Ecopunto → Gestora → Admin
+- Validar que cambios de estado se reflejen en todos los portales
+- Testing completo del flujo integrado
 
 ---
 
