@@ -61,6 +61,37 @@ React 18 · Vite 5 · TailwindCSS · React Router v6 · OpenRouter API (IA)
 
 ---
 
+## Funcionalidades implementadas
+
+✅ **4 Portales completos:**
+- **Instituto:** Registro de lotes, seguimiento, QR de trazabilidad
+- **Ecopunto:** Clasificación con IA (OpenRouter + Claude), publicación de lotes
+- **Gestora:** Catálogo, cotizaciones, gestión de scoring
+- **Admin:** Dashboard ambiental, gestión de actores, aprobación de retiros
+
+✅ **Vista Pública:** Trazabilidad sin login (escaneo QR)
+
+✅ **13/13 User Stories completadas:**
+- HU-AUTH01: Autenticación
+- HU-I01, I02, I03: Portal Instituto
+- HU-E01, E02, E03: Portal Ecopunto
+- HU-G01, G02, G03: Portal Gestora
+- HU-A01, A02, A03: Portal Admin
+- HU-P01: Vista Pública
+
+---
+
+## KPIs del Sistema
+
+Según el Dashboard Administrativo (datos mock):
+- 🌍 **CO₂ evitado:** 1.4 kg por cada kg de RAEE gestionado
+- 🔩 **Materiales recuperados:** Cobre (5%), Aluminio (8%)
+- ✅ **Trazabilidad completa:** Desde instituto hasta certificado final
+
+---
+
 ## Estado del proyecto
 
-> 🟡 **En desarrollo** — Sesión 4 / 8
+> ✅ **MVP Completado** — 13/13 User Stories implementadas  
+> 🚀 **Deployado en:** [seminario.noah.uy](https://seminario.noah.uy)  
+> 📅 **Presentación final:** 26 de mayo de 2026
