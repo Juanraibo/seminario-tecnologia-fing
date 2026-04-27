@@ -85,6 +85,10 @@ export const {
   TrendingUp,
   TrendingDown,
 
+  // Finanzas y scoring
+  DollarSign,
+  Award,
+
   // Utilidades
   Settings,
   Calendar,
