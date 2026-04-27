@@ -14,6 +14,8 @@ import GestoraDashboard       from './portals/gestora/Dashboard'
 import GestoraDetalleLote     from './portals/gestora/DetalleLote'
 import GestoraMisSolicitudes  from './portals/gestora/MisSolicitudes'
 import AdminDashboard         from './portals/admin/Dashboard'
+import AdminGestionActores    from './portals/admin/GestionActores'
+import AdminAprobacionRetiros from './portals/admin/AprobacionRetiros'
 import Trazabilidad           from './portals/publico/Trazabilidad'
 
 // Ruta protegida: redirige a login si no hay usuario logueado
@@ -156,9 +158,19 @@ function AppRoutes() {
       } />
 
       {/* Admin */}
-      <Route path="/admin/*" element={
+      <Route path="/admin" element={
         <PrivateRoute rolesPermitidos={['admin']}>
           <LayoutAutenticado><AdminDashboard /></LayoutAutenticado>
+        </PrivateRoute>
+      } />
+      <Route path="/admin/actores" element={
+        <PrivateRoute rolesPermitidos={['admin']}>
+          <LayoutAutenticado><AdminGestionActores /></LayoutAutenticado>
+        </PrivateRoute>
+      } />
+      <Route path="/admin/retiros" element={
+        <PrivateRoute rolesPermitidos={['admin']}>
+          <LayoutAutenticado><AdminAprobacionRetiros /></LayoutAutenticado>
         </PrivateRoute>
       } />
 
