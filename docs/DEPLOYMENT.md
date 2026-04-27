@@ -19,6 +19,9 @@ Creá el archivo `.env.production` en la carpeta `app/`:
 
 ```bash
 # app/.env.production
+# ⚠️ IMPORTANTE: Este archivo NO debe estar en Git
+# Las variables se configuran directamente en Vercel
+
 VITE_OPENROUTER_API_KEY=TU_API_KEY_DE_OPENROUTER_AQUI
 VITE_OPENROUTER_MODEL=anthropic/claude-3-haiku
 ```
@@ -98,7 +101,7 @@ En la pantalla de configuración:
 2. Agregar:
    ```
    Key: VITE_OPENROUTER_API_KEY
-   Value: TU_API_KEY_DE_OPENROUTER_AQUI
+   Value: TU_API_KEY_DE_OPENROUTER (obtenerla en https://openrouter.ai/keys)
    ```
 3. Agregar otra:
    ```
