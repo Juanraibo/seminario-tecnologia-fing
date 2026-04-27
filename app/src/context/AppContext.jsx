@@ -90,6 +90,24 @@ function reducer(state, action) {
       return { ...state, lotes }
     }
 
+    // ── Acciones para usuarios y gestoras ────────────────────────────
+
+    case 'AGREGAR_USUARIO':
+      return { ...state, usuarios: [...state.usuarios, action.payload] }
+
+    case 'ELIMINAR_USUARIO': {
+      const usuarios = state.usuarios.filter(u => u.id !== action.payload)
+      return { ...state, usuarios }
+    }
+
+    case 'AGREGAR_GESTORA':
+      return { ...state, gestoras: [...state.gestoras, action.payload] }
+
+    case 'ELIMINAR_GESTORA': {
+      const gestoras = state.gestoras.filter(g => g.id !== action.payload)
+      return { ...state, gestoras }
+    }
+
     default:
       return state
   }

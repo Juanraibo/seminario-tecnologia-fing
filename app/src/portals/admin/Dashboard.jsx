@@ -94,7 +94,7 @@ export default function AdminDashboard() {
 
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl"></div>
 
-      <div className="relative max-w-7xl mx-auto p-6 space-y-6">
+      <div className="relative max-w-7xl mx-auto p-6 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
               Panel Administrativo
             </h1>
             <p className="text-gray-400">
-              Métricas de impacto ambiental y gestión del sistema
+              Impacto ambiental y gestión del sistema
             </p>
           </div>
           <div className="flex gap-3">
@@ -130,8 +130,19 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* KPIs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* SECCIÓN 1: IMPACTO AMBIENTAL */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-green-500/50 to-transparent"></div>
+            <h2 className="text-2xl font-bold text-green-400 flex items-center gap-2">
+              <Leaf size={28} />
+              Impacto Ambiental
+            </h2>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-green-500/50 to-transparent"></div>
+          </div>
+
+          {/* KPIs Ambientales */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Total kg */}
           <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
             <div className="flex items-start justify-between">
@@ -205,70 +216,30 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Fila de métricas secundarias */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Métrica de finalización */}
+        <div className="grid grid-cols-1 gap-4">
           {/* % Lotes con certificado */}
-          <div className="bg-gradient-to-br from-primary-500/20 to-primary-600/10 backdrop-blur-xl rounded-2xl border border-primary-500/50 p-6">
+          <div className="bg-gradient-to-br from-green-500/20 to-emerald-600/10 backdrop-blur-xl rounded-2xl border border-green-500/50 p-6">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-primary-300">
+                <p className="text-sm font-medium text-green-300">
                   Tasa de Finalización
                 </p>
                 <p className="text-5xl font-bold text-white mt-2">
                   {kpis.pctCertificados}%
                 </p>
-                <p className="text-xs text-primary-400 mt-1">
+                <p className="text-xs text-green-400 mt-1">
                   {kpis.lotesFinalizados} de {kpis.totalLotesPublicados} lotes con certificado
                 </p>
               </div>
-              <div className="p-3 bg-primary-500/20 rounded-xl">
-                <Award size={28} className="text-primary-400" />
-              </div>
-            </div>
-          </div>
-
-          {/* Total Institutos */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  Institutos Activos
-                </p>
-                <p className="text-5xl font-bold text-white mt-2">
-                  {state.institutos?.filter(i => i.activo).length || 0}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  de {state.institutos?.length || 0} totales
-                </p>
-              </div>
-              <div className="p-3 bg-blue-500/10 rounded-xl">
-                <Users size={28} className="text-blue-400" />
-              </div>
-            </div>
-          </div>
-
-          {/* Gestoras habilitadas */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  Gestoras Habilitadas
-                </p>
-                <p className="text-5xl font-bold text-white mt-2">
-                  {state.gestoras?.filter(g => g.habilitacion_ministerio).length || 0}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  de {state.gestoras?.length || 0} registradas
-                </p>
-              </div>
-              <div className="p-3 bg-green-500/10 rounded-xl">
-                <TrendingUp size={28} className="text-green-400" />
+              <div className="p-3 bg-green-500/20 rounded-xl">
+                <Award size={28} className="text-green-400" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Gráficos */}
+        {/* Gráficos Ambientales */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Gráfico de barras: kg por instituto */}
           <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
@@ -338,6 +309,82 @@ export default function AdminDashboard() {
                 No hay lotes publicados aún
               </div>
             )}
+          </div>
+        </div>
+        </div>
+
+        {/* SECCIÓN 2: GESTIÓN DEL SISTEMA */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+            <h2 className="text-2xl font-bold text-blue-400 flex items-center gap-2">
+              <Users size={28} />
+              Gestión del Sistema
+            </h2>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+          </div>
+
+          {/* Métricas de Actores */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Total Institutos */}
+            <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-400">
+                    Institutos Activos
+                  </p>
+                  <p className="text-5xl font-bold text-white mt-2">
+                    {state.institutos?.filter(i => i.activo).length || 0}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    de {state.institutos?.length || 0} totales
+                  </p>
+                </div>
+                <div className="p-3 bg-blue-500/10 rounded-xl">
+                  <Users size={28} className="text-blue-400" />
+                </div>
+              </div>
+            </div>
+
+            {/* Operarios */}
+            <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-400">
+                    Operarios Ecopunto
+                  </p>
+                  <p className="text-5xl font-bold text-white mt-2">
+                    {state.usuarios?.filter(u => u.rol === 'ecopunto').length || 0}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    usuarios activos
+                  </p>
+                </div>
+                <div className="p-3 bg-purple-500/10 rounded-xl">
+                  <Users size={28} className="text-purple-400" />
+                </div>
+              </div>
+            </div>
+
+            {/* Gestoras habilitadas */}
+            <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-400">
+                    Gestoras Habilitadas
+                  </p>
+                  <p className="text-5xl font-bold text-white mt-2">
+                    {state.gestoras?.filter(g => g.habilitacion_ministerio).length || 0}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    de {state.gestoras?.length || 0} registradas
+                  </p>
+                </div>
+                <div className="p-3 bg-green-500/10 rounded-xl">
+                  <TrendingUp size={28} className="text-green-400" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

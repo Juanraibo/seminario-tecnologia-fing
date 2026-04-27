@@ -2,47 +2,114 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import Button from '../../components/atoms/Button'
-import { ArrowLeft, Building2, Users, Factory, Plus, CheckCircle, XCircle, Award } from '../../components/atoms/Icon'
+import { ArrowLeft, Building2, Users, Factory, Plus, CheckCircle, XCircle, Award, Trash2 } from '../../components/atoms/Icon'
 
 export default function GestionActores() {
   const { state, dispatch } = useApp()
   const navigate = useNavigate()
   const [tabActiva, setTabActiva] = useState('institutos')
 
-  // Estados para formulario de nuevo instituto
+  // Estados para formularios
   const [mostrarFormInstituto, setMostrarFormInstituto] = useState(false)
-  const [nuevoInstituto, setNuevoInstituto] = useState({
-    nombre: '',
-    sigla: '',
-    responsable: ''
-  })
+  const [mostrarFormOperario, setMostrarFormOperario] = useState(false)
+  const [mostrarFormGestora, setMostrarFormGestora] = useState(false)
 
-  // Handler para agregar instituto
+  const [nuevoInstituto, setNuevoInstituto] = useState({ nombre: '', sigla: '', responsable: '' })
+  const [nuevoOperario, setNuevoOperario] = useState({ nombre: '', email: '', password: '' })
+  const [nuevaGestora, setNuevaGestora] = useState({ nombre: '', email: '' })
+
+  // Handler para agregar instituto (no persiste)
   const handleAgregarInstituto = () => {
     if (!nuevoInstituto.nombre || !nuevoInstituto.sigla || !nuevoInstituto.responsable) {
       alert('Por favor completá todos los campos')
       return
     }
-
-    // En un sistema real esto haría un POST al backend
-    // Por ahora solo mostramos confirmación (no persiste)
-    alert(`Instituto "${nuevoInstituto.sigla}" agregado exitosamente (no persiste - es MVP)`)
-
+    alert(`Instituto "${nuevoInstituto.sigla}" agregado (no persiste - MVP)`)
     setNuevoInstituto({ nombre: '', sigla: '', responsable: '' })
     setMostrarFormInstituto(false)
   }
 
-  // Handler para toggle de habilitación de gestora
+  // Handler para agregar operario
+  const handleAgregarOperario = () => {
+    if (!nuevoOperario.nombre || !nuevoOperario.email || !nuevoOperario.password) {
+      alert('Por favor completá todos los campos')
+      return
+    }
+
+    const nuevoId = `USER-${Date.now()}`
+    dispatch({
+      type: 'AGREGAR_USUARIO',
+      payload: {
+        id: nuevoId,
+        nombre: nuevoOperario.nombre,
+        email: nuevoOperario.email,
+        password: nuevoOperario.password,
+        rol: 'ecopunto'
+      }
+    })
+
+    setNuevoOperario({ nombre: '', email: '', password: '' })
+    setMostrarFormOperario(false)
+  }
+
+  // Handler para eliminar operario
+  const handleEliminarOperario = (operario) => {
+    if (confirm(`¿Eliminar operario "${operario.nombre}"?\n\nEsta acción no se puede deshacer.`)) {
+      dispatch({
+        type: 'ELIMINAR_USUARIO',
+        payload: operario.id
+      })
+    }
+  }
+
+  // Handler para agregar gestora
+  const handleAgregarGestora = () => {
+    if (!nuevaGestora.nombre || !nuevaGestora.email) {
+      alert('Por favor completá todos los campos')
+      return
+    }
+
+    const nuevoId = `G${String(state.gestoras.length + 1).padStart(3, '0')}`
+    dispatch({
+      type: 'AGREGAR_GESTORA',
+      payload: {
+        id: nuevoId,
+        nombre: nuevaGestora.nombre,
+        email: nuevaGestora.email,
+        scoring: state.config.scoring_inicial || 50,
+        habilitacion_ministerio: false,
+        certificados_entregados: 0,
+        certificados_a_tiempo: 0
+      }
+    })
+
+    setNuevaGestora({ nombre: '', email: '' })
+    setMostrarFormGestora(false)
+  }
+
+  // Handler para eliminar gestora
+  const handleEliminarGestora = (gestora) => {
+    if (confirm(
+      `¿Eliminar gestora "${gestora.nombre}"?\n\n` +
+      `Esta acción no se puede deshacer.\n` +
+      `Los lotes ya asignados quedarán sin gestora.`
+    )) {
+      dispatch({
+        type: 'ELIMINAR_GESTORA',
+        payload: gestora.id
+      })
+    }
+  }
+
+  // Handler para toggle de habilitación
   const handleToggleHabilitacion = (gestoraId, nombreGestora, habilitacionActual) => {
     const accion = habilitacionActual ? 'deshabilitar' : 'habilitar'
-    const confirmacion = confirm(
+    if (confirm(
       `¿Confirmar ${accion} a "${nombreGestora}"?\n\n` +
       (habilitacionActual
         ? 'No podrá participar en nuevas licitaciones.'
         : 'Podrá ver y solicitar lotes disponibles.')
-    )
-
-    if (confirmacion) {
+    )) {
       dispatch({
         type: 'TOGGLE_HABILITACION_GESTORA',
         payload: gestoraId
@@ -82,39 +149,24 @@ export default function GestionActores() {
         <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 overflow-hidden">
           {/* Tab Headers */}
           <div className="flex border-b border-gray-800">
-            <button
-              onClick={() => setTabActiva('institutos')}
-              className={`flex-1 px-6 py-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-                tabActiva === 'institutos'
-                  ? 'bg-primary-500/10 text-primary-400 border-b-2 border-primary-500'
-                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50'
-              }`}
-            >
-              <Building2 size={18} />
-              Institutos
-            </button>
-            <button
-              onClick={() => setTabActiva('operarios')}
-              className={`flex-1 px-6 py-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-                tabActiva === 'operarios'
-                  ? 'bg-primary-500/10 text-primary-400 border-b-2 border-primary-500'
-                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50'
-              }`}
-            >
-              <Users size={18} />
-              Operarios Ecopunto
-            </button>
-            <button
-              onClick={() => setTabActiva('gestoras')}
-              className={`flex-1 px-6 py-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-                tabActiva === 'gestoras'
-                  ? 'bg-primary-500/10 text-primary-400 border-b-2 border-primary-500'
-                  : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50'
-              }`}
-            >
-              <Factory size={18} />
-              Gestoras
-            </button>
+            {[
+              { id: 'institutos', label: 'Institutos', icon: Building2 },
+              { id: 'operarios', label: 'Operarios Ecopunto', icon: Users },
+              { id: 'gestoras', label: 'Gestoras', icon: Factory }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setTabActiva(tab.id)}
+                className={`flex-1 px-6 py-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                  tabActiva === tab.id
+                    ? 'bg-primary-500/10 text-primary-400 border-b-2 border-primary-500'
+                    : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50'
+                }`}
+              >
+                <tab.icon size={18} />
+                {tab.label}
+              </button>
+            ))}
           </div>
 
           {/* Tab Content */}
@@ -135,7 +187,6 @@ export default function GestionActores() {
                   </Button>
                 </div>
 
-                {/* Formulario de nuevo instituto */}
                 {mostrarFormInstituto && (
                   <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 space-y-3">
                     <h3 className="text-sm font-semibold text-white">Nuevo Instituto</h3>
@@ -163,27 +214,16 @@ export default function GestionActores() {
                       />
                     </div>
                     <div className="flex gap-2">
-                      <Button size="sm" onClick={handleAgregarInstituto}>
-                        Guardar
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          setMostrarFormInstituto(false)
-                          setNuevoInstituto({ nombre: '', sigla: '', responsable: '' })
-                        }}
-                      >
-                        Cancelar
-                      </Button>
+                      <Button size="sm" onClick={handleAgregarInstituto}>Guardar</Button>
+                      <Button size="sm" variant="ghost" onClick={() => {
+                        setMostrarFormInstituto(false)
+                        setNuevoInstituto({ nombre: '', sigla: '', responsable: '' })
+                      }}>Cancelar</Button>
                     </div>
-                    <p className="text-xs text-amber-400">
-                      ⚠️ MVP: Los datos no persisten al recargar
-                    </p>
+                    <p className="text-xs text-amber-400">⚠️ MVP: No persiste al recargar</p>
                   </div>
                 )}
 
-                {/* Tabla de institutos */}
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -226,9 +266,54 @@ export default function GestionActores() {
             {/* TAB OPERARIOS */}
             {tabActiva === 'operarios' && (
               <div className="space-y-4">
-                <h2 className="text-lg font-semibold text-white">
-                  Operarios de Ecopunto ({state.usuarios?.filter(u => u.rol === 'ecopunto').length || 0})
-                </h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-white">
+                    Operarios de Ecopunto ({state.usuarios?.filter(u => u.rol === 'ecopunto').length || 0})
+                  </h2>
+                  <Button
+                    onClick={() => setMostrarFormOperario(!mostrarFormOperario)}
+                    className="flex items-center gap-2"
+                  >
+                    <Plus size={18} />
+                    Agregar Operario
+                  </Button>
+                </div>
+
+                {mostrarFormOperario && (
+                  <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 space-y-3">
+                    <h3 className="text-sm font-semibold text-white">Nuevo Operario</h3>
+                    <div className="grid grid-cols-3 gap-3">
+                      <input
+                        type="text"
+                        placeholder="Nombre completo"
+                        value={nuevoOperario.nombre}
+                        onChange={(e) => setNuevoOperario({ ...nuevoOperario, nombre: e.target.value })}
+                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                      />
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        value={nuevoOperario.email}
+                        onChange={(e) => setNuevoOperario({ ...nuevoOperario, email: e.target.value })}
+                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                      />
+                      <input
+                        type="password"
+                        placeholder="Contraseña"
+                        value={nuevoOperario.password}
+                        onChange={(e) => setNuevoOperario({ ...nuevoOperario, password: e.target.value })}
+                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={handleAgregarOperario}>Guardar</Button>
+                      <Button size="sm" variant="ghost" onClick={() => {
+                        setMostrarFormOperario(false)
+                        setNuevoOperario({ nombre: '', email: '', password: '' })
+                      }}>Cancelar</Button>
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-3">
                   {state.usuarios?.filter(u => u.rol === 'ecopunto').map((operario) => (
@@ -240,26 +325,73 @@ export default function GestionActores() {
                         <p className="font-medium text-white">{operario.nombre}</p>
                         <p className="text-sm text-gray-400">{operario.email}</p>
                       </div>
-                      <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs bg-green-500/10 text-green-400 border border-green-500/30">
-                        <CheckCircle size={12} />
-                        Activo
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs bg-green-500/10 text-green-400 border border-green-500/30">
+                          <CheckCircle size={12} />
+                          Activo
+                        </span>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEliminarOperario(operario)}
+                          className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
-
-                <p className="text-xs text-gray-500 mt-4">
-                  💡 Alta/baja de operarios se gestiona externamente por el área de RRHH
-                </p>
               </div>
             )}
 
             {/* TAB GESTORAS */}
             {tabActiva === 'gestoras' && (
               <div className="space-y-4">
-                <h2 className="text-lg font-semibold text-white">
-                  Gestoras Registradas ({state.gestoras?.length || 0})
-                </h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-white">
+                    Gestoras Registradas ({state.gestoras?.length || 0})
+                  </h2>
+                  <Button
+                    onClick={() => setMostrarFormGestora(!mostrarFormGestora)}
+                    className="flex items-center gap-2"
+                  >
+                    <Plus size={18} />
+                    Agregar Gestora
+                  </Button>
+                </div>
+
+                {mostrarFormGestora && (
+                  <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 space-y-3">
+                    <h3 className="text-sm font-semibold text-white">Nueva Gestora</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      <input
+                        type="text"
+                        placeholder="Nombre de la empresa"
+                        value={nuevaGestora.nombre}
+                        onChange={(e) => setNuevaGestora({ ...nuevaGestora, nombre: e.target.value })}
+                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                      />
+                      <input
+                        type="email"
+                        placeholder="Email de contacto"
+                        value={nuevaGestora.email}
+                        onChange={(e) => setNuevaGestora({ ...nuevaGestora, email: e.target.value })}
+                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={handleAgregarGestora}>Guardar</Button>
+                      <Button size="sm" variant="ghost" onClick={() => {
+                        setMostrarFormGestora(false)
+                        setNuevaGestora({ nombre: '', email: '' })
+                      }}>Cancelar</Button>
+                    </div>
+                    <p className="text-xs text-gray-400">
+                      💡 Scoring inicial: {state.config.scoring_inicial} · Habilitación: Deshabilitada por defecto
+                    </p>
+                  </div>
+                )}
 
                 <div className="overflow-x-auto">
                   <table className="w-full">
@@ -270,6 +402,7 @@ export default function GestionActores() {
                         <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Scoring</th>
                         <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Certificados</th>
                         <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Habilitación</th>
+                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -290,15 +423,9 @@ export default function GestionActores() {
                           </td>
                           <td className="py-3 px-4 text-center">
                             <button
-                              onClick={() => handleToggleHabilitacion(
-                                gestora.id,
-                                gestora.nombre,
-                                gestora.habilitacion_ministerio
-                              )}
+                              onClick={() => handleToggleHabilitacion(gestora.id, gestora.nombre, gestora.habilitacion_ministerio)}
                               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                                gestora.habilitacion_ministerio
-                                  ? 'bg-green-500'
-                                  : 'bg-gray-600'
+                                gestora.habilitacion_ministerio ? 'bg-green-500' : 'bg-gray-600'
                               }`}
                             >
                               <span
@@ -307,6 +434,16 @@ export default function GestionActores() {
                                 }`}
                               />
                             </button>
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleEliminarGestora(gestora)}
+                              className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                            >
+                              <Trash2 size={16} />
+                            </Button>
                           </td>
                         </tr>
                       ))}
