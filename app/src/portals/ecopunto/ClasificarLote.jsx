@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
+import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
 import { ArrowLeft, Upload, Sparkles, Check, X, Loader, AlertCircle, Scale, Package, Plus, Trash2 } from '../../components/atoms/Icon'
 import { ESTADOS_LOTE } from '../../constants/estados'
@@ -10,6 +11,7 @@ export default function ClasificarLote() {
   const { loteId } = useParams()
   const navigate = useNavigate()
   const { state, dispatch } = useApp()
+  const toast = useToast()
 
   const lote = state.lotes.find(l => l.id === loteId && l.tipo === 'entrada')
   const instituto = state.institutos.find(i => i.id === lote?.institutoId)
@@ -63,11 +65,13 @@ export default function ClasificarLote() {
   const handleClasificarConIA = async () => {
     if (!imagen) {
       setError('Debes subir una imagen primero')
+      toast.warning('Debes subir una imagen primero')
       return
     }
 
     setClasificando(true)
     setError('')
+    toast.info('Clasificando con IA...')
 
     try {
       const { base64, mediaType } = await fileToBase64(imagen)
@@ -78,9 +82,11 @@ export default function ClasificarLote() {
       if (!descripcion) {
         setDescripcion(resultado.observacion)
       }
+      toast.success(`Clasificado como ${resultado.categoria} (${resultado.confianza}% confianza)`)
     } catch (err) {
       console.error('Error al clasificar:', err)
       setError(err.message || 'No se pudo obtener sugerencia de la IA. Clasificá manualmente.')
+      toast.error('No se pudo clasificar con IA. Clasificá manualmente.')
       setResultadoIA(null)
     } finally {
       setClasificando(false)
@@ -142,6 +148,9 @@ export default function ClasificarLote() {
       }
     })
 
+    // Mostrar toast de éxito
+    toast.success(`Ítem ${nuevoId} agregado correctamente`)
+
     // Resetear formulario
     setImagen(null)
     setImagenPreview(null)
@@ -165,6 +174,7 @@ export default function ClasificarLote() {
   const handleTerminarClasificacion = () => {
     if (itemsDelLote.length === 0) {
       setError('Debes clasificar al menos un ítem antes de terminar')
+      toast.warning('Debes clasificar al menos un ítem antes de terminar')
       return
     }
 
@@ -179,7 +189,11 @@ export default function ClasificarLote() {
       }
     })
 
-    navigate('/ecopunto')
+    toast.success(`Lote ${loteId} clasificado con ${itemsDelLote.length} ítems`)
+
+    setTimeout(() => {
+      navigate('/ecopunto')
+    }, 500)
   }
 
   const nivelConfianzaColor = {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
+import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
 import StatusBadge from '../../components/molecules/StatusBadge'
 import { ArrowLeft, Package, TrendingUp, AlertCircle, DollarSign, Building2, CheckCircle } from '../../components/atoms/Icon'
@@ -10,6 +11,7 @@ export default function DetalleLote() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { state, dispatch } = useApp()
+  const toast = useToast()
   const [cotizacion, setCotizacion] = useState('')
   const [enviando, setEnviando] = useState(false)
 
@@ -52,7 +54,7 @@ export default function DetalleLote() {
     const monto = parseFloat(cotizacion)
 
     if (!monto || monto <= 0) {
-      alert('Por favor ingresá un monto válido')
+      toast.error('Por favor ingresá un monto válido')
       return
     }
 
@@ -73,7 +75,7 @@ export default function DetalleLote() {
 
       setEnviando(false)
       setCotizacion('')
-      alert('¡Cotización enviada correctamente!')
+      toast.success(`Cotización de $${monto.toLocaleString()} enviada correctamente`)
     }, 800)
   }
 
@@ -191,10 +193,7 @@ export default function DetalleLote() {
                       <div className="flex items-start gap-4">
                         {/* Imagen del ítem */}
                         <img
-                          src={item.foto_url?.startsWith('data:')
-                            ? item.foto_url
-                            : `https://picsum.photos/seed/${item.id}/200/200`
-                          }
+                          src={item.foto_url || `https://picsum.photos/seed/${item.id}/200/200`}
                           alt={item.descripcion}
                           className="w-24 h-24 object-cover rounded-lg border border-gray-700/50 flex-shrink-0"
                         />

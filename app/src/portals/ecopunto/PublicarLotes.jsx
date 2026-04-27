@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
+import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
 import { ArrowLeft, Upload as PublishIcon, Check, Package, Building2 } from '../../components/atoms/Icon'
 import { ESTADOS_LOTE } from '../../constants/estados'
@@ -8,6 +9,7 @@ import { ESTADOS_LOTE } from '../../constants/estados'
 export default function PublicarLotes() {
   const { state, dispatch } = useApp()
   const navigate = useNavigate()
+  const toast = useToast()
 
   // Ítems sin asignar a lote de publicación
   const itemsSinPublicar = state.items.filter(i => i.lotePublicadoId === null)
@@ -54,7 +56,7 @@ export default function PublicarLotes() {
 
   const crearLotePublicacion = () => {
     if (itemsSeleccionados.length === 0) {
-      alert('Seleccioná al menos un ítem para publicar')
+      toast.warning('Seleccioná al menos un ítem para publicar')
       return
     }
 
@@ -109,6 +111,9 @@ export default function PublicarLotes() {
         lotePublicadoId: nuevoId
       }
     })
+
+    // Mostrar toast de éxito
+    toast.success(`Lote ${nuevoId} publicado con ${itemsSeleccionados.length} ítems`)
 
     // Navegar de vuelta
     setTimeout(() => {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
+import { useToast } from '../../components/molecules/Toast'
 import Card from '../../components/molecules/Card'
 import Button from '../../components/atoms/Button'
 import { ArrowLeft, Upload, Check, X, Package, PackagePlus, Boxes } from '../../components/atoms/Icon'
@@ -9,6 +10,7 @@ import { ESTADOS_LOTE } from '../../constants/estados'
 export default function NuevaSolicitud() {
   const { state, dispatch } = useApp()
   const navigate = useNavigate()
+  const toast = useToast()
   const usuario = state.usuarioActual
   const config = state.config
 
@@ -90,6 +92,7 @@ export default function NuevaSolicitud() {
     // Crear el nuevo lote
     const nuevoLote = {
       id: nuevoId,
+      tipo: 'entrada', // Tipo de lote para filtrado en Ecopunto
       institutoId: usuario.institutoId,
       tamano: tamano,
       peso_real_kg: null,
@@ -116,7 +119,10 @@ export default function NuevaSolicitud() {
     // Agregar al estado
     dispatch({ type: 'AGREGAR_LOTE', payload: nuevoLote })
 
-    // Redirigir con mensaje de éxito
+    // Mostrar toast de éxito
+    toast.success(`Solicitud ${nuevoId} creada correctamente`)
+
+    // Redirigir
     setTimeout(() => {
       navigate('/instituto')
     }, 500)

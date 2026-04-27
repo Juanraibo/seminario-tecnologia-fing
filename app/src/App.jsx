@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import { AppProvider, useApp } from './context/AppContext'
-import { Recycle, Sun, Moon, Settings, Building2, Factory, LogOut } from './components/atoms/Icon'
+import { Recycle, Sun, Moon, Settings, Building2, Factory, LogOut, Globe } from './components/atoms/Icon'
 import ToastContainer from './components/organisms/ToastContainer'
 
 import LoginPage              from './portals/auth/LoginPage'
@@ -79,6 +79,14 @@ function LayoutAutenticado({ children }) {
             {ICONOS_ROL[usuario?.rol]}
             <span>{ETIQUETAS_ROL[usuario?.rol]} · {usuario?.nombre}</span>
           </span>
+          <Link
+            to="/trazabilidad?lote=PUB-2026-001"
+            className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200 dark:border-blue-800 rounded px-3 py-1.5 transition-colors"
+            title="Ver trazabilidad pública"
+          >
+            <Globe size={14} />
+            <span className="hidden sm:inline">Trazabilidad</span>
+          </Link>
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

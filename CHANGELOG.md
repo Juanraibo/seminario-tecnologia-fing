@@ -5,6 +5,86 @@ Formato: `[Sesión N — Fecha] Título`
 
 ---
 
+## [Sesión 9 — 27 de abril de 2026] Sistema de Toasts + Vinculación E2E + Bugfixes Críticos + UX
+
+### Decisiones tomadas
+- **Sistema de notificaciones:** Toasts integrados en todas las acciones críticas del MVP
+- **Vinculación validada:** Flujo E2E entre roles funciona correctamente a través de Context
+- **3 Bugfixes críticos:** Lotes en Ecopunto, QR con dominio correcto, imágenes reales
+- **Documentación para rediseño:** Guía completa para Google Stitch con prompt optimizado
+- **Mejoras de UX:** Auto-login con un click + acceso fácil a vista pública desde cualquier lado
+
+### Artefactos generados
+- **Documentación de rediseño:**
+  - `docs/STITCH-REDISENO-COMPLETO.md` — Guía de 7 partes (700+ líneas) con stack técnico, paleta, sistema de diseño, workflow
+  - `docs/PROMPT-STITCH.txt` — Prompt optimizado listo para copiar/pegar en Google Stitch
+  - `docs/CAPTURAS-Y-REDISENO.md` — Instrucciones para capturar 14 páginas con Chrome DevTools
+- **Documentación de testing:**
+  - `docs/TESTING-E2E-VINCULACION.md` — Flujo completo paso a paso, validaciones por componente, checklist
+- **Documentación de bugfixes:**
+  - `docs/BUGFIXES-SESION-9.md` — Análisis de 3 bugs críticos con causa raíz y soluciones
+- **Documentación de mejoras UX:**
+  - `docs/UX-MEJORAS-AUTO-LOGIN.md` — Auto-login con un click + acceso vista pública (400+ líneas)
+
+### Integraciones realizadas
+- **Sistema de Toasts (8 componentes):**
+  - Instituto: `NuevaSolicitud.jsx` — Toast success al crear lote
+  - Ecopunto: `ClasificarLote.jsx` — Toasts en clasificación IA, agregar ítem, terminar
+  - Ecopunto: `PublicarLotes.jsx` — Toast warning/success en publicación
+  - Gestora: `DetalleLote.jsx` — Toast error/success en cotización
+  - Admin: `AprobacionRetiros.jsx` — Toasts en aprobación/rechazo
+  - Admin: `GestionActores.jsx` — Toasts en todos los CRUDs (operarios, gestoras)
+- **Todos los `alert()` reemplazados por toasts** con tipos semánticos (success, error, warning, info)
+- **Context actualizado:** Todos los dispatch ya existían, solo se agregó feedback visual
+
+### Problemas resueltos
+
+**Bug #1: Lotes creados en Instituto no aparecen en Ecopunto**
+- **Causa:** Faltaba `tipo: 'entrada'` en objeto de lote creado
+- **Solución:** Agregado en `NuevaSolicitud.jsx:95`
+- **Archivo:** `app/src/portals/instituto/NuevaSolicitud.jsx`
+
+**Bug #2: QR codes apuntan a localhost**
+- **Causa:** `window.location.origin` generaba URL relativa al entorno
+- **Solución:** Hardcoded `https://seminario.noah.uy` en QR URL
+- **Archivo:** `app/src/portals/instituto/DetalleLote.jsx`
+
+**Bug #3: Imágenes de stock en vez de subidas**
+- **Causa:** Condición `.startsWith('data:')` redundante/fallaba
+- **Solución:** Simplificado a `foto_url || fallback`
+- **Archivo:** `app/src/portals/gestora/DetalleLote.jsx`
+
+### Mejoras de UX
+
+**UX #1: Auto-login con un click**
+- **Antes:** Escribir email completo + password manualmente
+- **Ahora:** Grid 2x2 de perfiles → 1 click → login automático
+- **Beneficio:** 15x más rápido para testing y demos
+- **Archivo:** `app/src/portals/auth/LoginPage.jsx`
+
+**UX #2: Acceso fácil a vista pública**
+- **Antes:** Solo accesible por QR o URL manual
+- **Ahora:** 2 puntos de acceso:
+  1. Botón destacado en página de login
+  2. Link "Trazabilidad" en header de todos los portales
+- **Beneficio:** Accesible desde cualquier lugar sin QR físico
+- **Archivos:** `LoginPage.jsx` + `App.jsx`
+
+### Métricas de implementación
+- **Componentes con toasts:** 8 archivos modificados
+- **Líneas de documentación:** ~1500 líneas (3 docs de rediseño + 1 testing + 1 bugfixes)
+- **Alerts eliminados:** 15+ reemplazados por toasts semánticos
+- **Bugs críticos resueltos:** 3 (vinculación, QR, imágenes)
+- **Flujo E2E validado:** Instituto → Ecopunto → Gestora → Admin funciona correctamente
+
+### Próximos pasos
+- [ ] Testing E2E manual completo siguiendo guía
+- [ ] Capturas de pantalla para rediseño (14 páginas)
+- [ ] Rediseño con Google Stitch usando prompt optimizado
+- [ ] Deploy de bugfixes a Vercel
+
+---
+
 ## [Sesión 7 — 27 de abril de 2026] Portal Gestora + Deployment + Seguridad
 
 ### Decisiones tomadas

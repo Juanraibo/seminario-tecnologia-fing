@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
-import { Recycle, Building2, Factory, Shield } from '../../components/atoms/Icon'
+import { Recycle, Building2, Factory, Shield, Globe } from '../../components/atoms/Icon'
 
 export default function LoginPage() {
   const { state, dispatch } = useApp()
@@ -22,6 +22,38 @@ export default function LoginPage() {
     gestora:   '/gestora',
   }
 
+  // Perfiles de prueba para auto-login
+  const PERFILES_PRUEBA = [
+    {
+      nombre: 'Administrador',
+      email: 'admin@fing.edu.uy',
+      password: 'admin123',
+      icon: Shield,
+      color: 'text-red-400',
+    },
+    {
+      nombre: 'Instituto',
+      email: 'inco@fing.edu.uy',
+      password: 'inco123',
+      icon: Building2,
+      color: 'text-blue-400',
+    },
+    {
+      nombre: 'Ecopunto',
+      email: 'ecopunto@fing.edu.uy',
+      password: 'eco123',
+      icon: Recycle,
+      color: 'text-green-400',
+    },
+    {
+      nombre: 'Gestora',
+      email: 'gestora1@reciclauY.com',
+      password: 'gest123',
+      icon: Factory,
+      color: 'text-purple-400',
+    },
+  ]
+
   function handleLogin(e) {
     e.preventDefault()
     setError('')
@@ -34,6 +66,24 @@ export default function LoginPage() {
     }
     dispatch({ type: 'LOGIN', payload: usuario })
     navigate(RUTAS_POR_ROL[usuario.rol])
+  }
+
+  // Auto-login al hacer click en un perfil
+  function handleAutoLogin(perfil) {
+    setEmail(perfil.email)
+    setPassword(perfil.password)
+    setError('')
+
+    // Login automático después de un pequeño delay para feedback visual
+    setTimeout(() => {
+      const usuario = state.usuarios.find(
+        u => u.email === perfil.email && u.password === perfil.password
+      )
+      if (usuario) {
+        dispatch({ type: 'LOGIN', payload: usuario })
+        navigate(RUTAS_POR_ROL[usuario.rol])
+      }
+    }, 300)
   }
 
   return (
@@ -109,29 +159,44 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Usuarios de prueba */}
+          {/* Perfiles de prueba - Auto-login */}
           <div className="mt-8 pt-6 border-t border-gray-800">
             <p className="text-xs text-gray-400 font-medium mb-3 text-center">
-              Usuarios de prueba · MVP
+              Acceso rápido · MVP
             </p>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs text-gray-400 hover:text-gray-300 transition-colors p-2 rounded-lg hover:bg-gray-800/50">
-                <Shield size={14} className="text-red-400" />
-                <span className="font-mono">admin@fing.edu.uy / admin123</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-400 hover:text-gray-300 transition-colors p-2 rounded-lg hover:bg-gray-800/50">
-                <Building2 size={14} className="text-blue-400" />
-                <span className="font-mono">inco@fing.edu.uy / inco123</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-400 hover:text-gray-300 transition-colors p-2 rounded-lg hover:bg-gray-800/50">
-                <Recycle size={14} className="text-green-400" />
-                <span className="font-mono">ecopunto@fing.edu.uy / eco123</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-400 hover:text-gray-300 transition-colors p-2 rounded-lg hover:bg-gray-800/50">
-                <Factory size={14} className="text-purple-400" />
-                <span className="font-mono">gestora1@reciclauY.com / gest123</span>
-              </div>
+            <div className="grid grid-cols-2 gap-2">
+              {PERFILES_PRUEBA.map((perfil) => {
+                const Icon = perfil.icon
+                return (
+                  <button
+                    key={perfil.email}
+                    onClick={() => handleAutoLogin(perfil)}
+                    className="flex flex-col items-center gap-2 p-3 rounded-xl bg-gray-800/30 hover:bg-gray-800/60 border border-gray-700/50 hover:border-gray-600 transition-all group"
+                  >
+                    <Icon size={20} className={`${perfil.color} group-hover:scale-110 transition-transform`} />
+                    <span className="text-xs font-medium text-gray-300 group-hover:text-white transition-colors">
+                      {perfil.nombre}
+                    </span>
+                  </button>
+                )
+              })}
             </div>
+          </div>
+
+          {/* Acceso a vista pública */}
+          <div className="mt-6 pt-6 border-t border-gray-800">
+            <button
+              onClick={() => navigate('/trazabilidad?lote=PUB-2026-001')}
+              className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500/20 hover:to-purple-500/20 border border-blue-500/30 hover:border-blue-500/50 transition-all group"
+            >
+              <Globe size={18} className="text-blue-400 group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-medium text-blue-300 group-hover:text-blue-200">
+                Ver Trazabilidad Pública
+              </span>
+            </button>
+            <p className="text-xs text-gray-500 text-center mt-2">
+              Consultar seguimiento de lotes sin login
+            </p>
           </div>
         </div>
       </div>

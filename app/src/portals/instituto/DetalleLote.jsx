@@ -34,8 +34,8 @@ export default function DetalleLote() {
     )
   }
 
-  // URL para el QR
-  const qrUrl = `${window.location.origin}/trazabilidad?lote=${lote.id}`
+  // URL para el QR (siempre apunta al dominio de producción)
+  const qrUrl = `https://seminario.noah.uy/trazabilidad?lote=${lote.id}`
 
   // Descargar QR como imagen
   const handleDescargarQR = () => {

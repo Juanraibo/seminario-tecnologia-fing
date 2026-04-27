@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
+import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
 import { ArrowLeft, Building2, Users, Factory, Plus, CheckCircle, XCircle, Award, Trash2 } from '../../components/atoms/Icon'
 
 export default function GestionActores() {
   const { state, dispatch } = useApp()
   const navigate = useNavigate()
+  const toast = useToast()
   const [tabActiva, setTabActiva] = useState('institutos')
 
   // Estados para formularios
@@ -21,10 +23,10 @@ export default function GestionActores() {
   // Handler para agregar instituto (no persiste)
   const handleAgregarInstituto = () => {
     if (!nuevoInstituto.nombre || !nuevoInstituto.sigla || !nuevoInstituto.responsable) {
-      alert('Por favor completá todos los campos')
+      toast.warning('Por favor completá todos los campos')
       return
     }
-    alert(`Instituto "${nuevoInstituto.sigla}" agregado (no persiste - MVP)`)
+    toast.info(`Instituto "${nuevoInstituto.sigla}" agregado (no persiste en MVP)`)
     setNuevoInstituto({ nombre: '', sigla: '', responsable: '' })
     setMostrarFormInstituto(false)
   }
@@ -32,7 +34,7 @@ export default function GestionActores() {
   // Handler para agregar operario
   const handleAgregarOperario = () => {
     if (!nuevoOperario.nombre || !nuevoOperario.email || !nuevoOperario.password) {
-      alert('Por favor completá todos los campos')
+      toast.warning('Por favor completá todos los campos')
       return
     }
 
@@ -48,6 +50,7 @@ export default function GestionActores() {
       }
     })
 
+    toast.success(`Operario ${nuevoOperario.nombre} agregado correctamente`)
     setNuevoOperario({ nombre: '', email: '', password: '' })
     setMostrarFormOperario(false)
   }
@@ -59,13 +62,14 @@ export default function GestionActores() {
         type: 'ELIMINAR_USUARIO',
         payload: operario.id
       })
+      toast.success(`Operario ${operario.nombre} eliminado`)
     }
   }
 
   // Handler para agregar gestora
   const handleAgregarGestora = () => {
     if (!nuevaGestora.nombre || !nuevaGestora.email) {
-      alert('Por favor completá todos los campos')
+      toast.warning('Por favor completá todos los campos')
       return
     }
 
@@ -83,6 +87,7 @@ export default function GestionActores() {
       }
     })
 
+    toast.success(`Gestora ${nuevaGestora.nombre} agregada correctamente`)
     setNuevaGestora({ nombre: '', email: '' })
     setMostrarFormGestora(false)
   }
@@ -98,6 +103,7 @@ export default function GestionActores() {
         type: 'ELIMINAR_GESTORA',
         payload: gestora.id
       })
+      toast.success(`Gestora ${gestora.nombre} eliminada`)
     }
   }
 
@@ -114,6 +120,7 @@ export default function GestionActores() {
         type: 'TOGGLE_HABILITACION_GESTORA',
         payload: gestoraId
       })
+      toast.success(`${nombreGestora} ${habilitacionActual ? 'deshabilitada' : 'habilitada'}`)
     }
   }
 

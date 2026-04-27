@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
+import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
 import StatusBadge from '../../components/molecules/StatusBadge'
 import { ArrowLeft, ChevronDown, ChevronUp, Package, Award, CheckCircle, XCircle, AlertCircle } from '../../components/atoms/Icon'
@@ -9,6 +10,7 @@ import { ESTADOS_LOTE } from '../../constants/estados'
 export default function AprobacionRetiros() {
   const { state, dispatch } = useApp()
   const navigate = useNavigate()
+  const toast = useToast()
   const [loteExpandido, setLoteExpandido] = useState(null)
   const [gestoraSeleccionada, setGestoraSeleccionada] = useState({})
 
@@ -25,7 +27,7 @@ export default function AprobacionRetiros() {
     const gestoraId = gestoraSeleccionada[lote.id]
 
     if (!gestoraId) {
-      alert('Por favor seleccioná una gestora antes de aprobar')
+      toast.warning('Por favor seleccioná una gestora antes de aprobar')
       return
     }
 
@@ -54,7 +56,7 @@ export default function AprobacionRetiros() {
       setGestoraSeleccionada({ ...gestoraSeleccionada, [lote.id]: null })
       setLoteExpandido(null)
 
-      alert(`✅ Retiro aprobado\n\n${gestora?.nombre} fue notificada y debe proceder con el retiro.`)
+      toast.success(`Retiro aprobado para ${gestora?.nombre}`)
     }
   }
 
@@ -77,7 +79,7 @@ export default function AprobacionRetiros() {
       })
 
       setLoteExpandido(null)
-      alert('Solicitudes rechazadas. El lote volvió al catálogo.')
+      toast.info('Solicitudes rechazadas. Lote devuelto al catálogo.')
     }
   }
 
