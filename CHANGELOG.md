@@ -73,10 +73,67 @@ Formato: `[Sesión N — Fecha] Título`
   - Sin necesidad de backend: imágenes en memoria (suficiente para MVP)
 
 ### Próximos pasos
-- Portal Admin (HU-A01, A02, A03)
+- ~~Portal Admin (HU-A01, A02, A03)~~ ✅ Completado
 - Vista Pública de Trazabilidad (HU-P01)
-- Testing completo del flujo gestora end-to-end
+- Testing completo end-to-end de todos los portales
 - Verificar DNS propagation para seminario.noah.uy
+
+---
+
+## [Sesión 8 — 27 de abril de 2026] Portal Administrador + Finalización del MVP
+
+### Decisiones tomadas
+- **Portal Admin completo:** 3 vistas con KPIs, gráficos y gestión de actores
+- **Recharts para visualizaciones:** Gráficos de barras y torta integrados
+- **Gestión de habilitaciones:** Toggle para habilitar/deshabilitar gestoras del ministerio
+- **Aprobación de retiros:** Sistema de selección de gestora ganadora con comparación de cotizaciones
+
+### Artefactos generados
+- **Portal Admin (3 vistas):**
+  - `Dashboard.jsx` — KPIs ambientales, gráficos de barras (kg por instituto) y torta (certificados)
+  - `GestionActores.jsx` — 3 tabs: Institutos, Operarios, Gestoras con CRUD y habilitación
+  - `AprobacionRetiros.jsx` — Lista expandible, comparación de cotizaciones, aprobar/rechazar
+- **Rutas agregadas:**
+  - `/admin` → Dashboard Global
+  - `/admin/actores` → Gestión de Actores
+  - `/admin/retiros` → Aprobación de Retiros
+- **Context actualizado:**
+  - Acción `TOGGLE_HABILITACION_GESTORA` ya existía y funciona correctamente
+
+### Funcionalidades Portal Admin
+- ✅ **HU-A01:** Dashboard con 7 KPIs + 2 gráficos (Recharts)
+  - Total kg, CO2 evitado, Cobre, Aluminio recuperado
+  - % certificados, institutos activos, gestoras habilitadas
+  - Gráfico barras: kg por instituto
+  - Gráfico torta: finalizados vs en proceso
+- ✅ **HU-A02:** Gestión de actores con tabs
+  - Institutos: tabla + formulario agregar (no persiste - MVP)
+  - Operarios: lista read-only de usuarios ecopunto
+  - Gestoras: tabla con scoring + toggle habilitación (persiste en estado)
+- ✅ **HU-A03:** Aprobación de retiros
+  - Acordeón expandible por lote
+  - Tabla comparativa: gestora, scoring, habilitación, cotización
+  - Radio buttons para selección
+  - Aprobar → estado RETIRO_APROBADO + asigna gestora
+  - Rechazar → estado DISPONIBLE + limpia solicitudes
+
+### Métricas de implementación
+- **Líneas de código:** ~990 líneas (Portal Admin)
+- **Archivos creados:** 2 componentes nuevos (GestionActores, AprobacionRetiros)
+- **Archivos modificados:** 2 archivos (Dashboard reescrito, App rutas)
+- **Cobertura de HUs:** 12/13 completadas (solo falta HU-P01)
+
+### Validación técnica
+- ✅ Gráficos Recharts renderizando correctamente
+- ✅ Toggle de habilitación con confirmación
+- ✅ Aprobación de retiros actualiza estado y asigna gestora
+- ✅ Cálculos de KPIs dinámicos desde datos reales
+- ✅ Navegación entre vistas funcional
+
+### Próximos pasos
+- Vista Pública de Trazabilidad (HU-P01) - última HU pendiente
+- Testing end-to-end de flujo completo (Instituto → Ecopunto → Gestora → Admin)
+- Verificar deployment en seminario.noah.uy
 
 ---
 
