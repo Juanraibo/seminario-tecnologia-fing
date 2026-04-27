@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AppProvider, useApp } from './context/AppContext'
 import { Recycle, Sun, Moon, Settings, Building2, Factory, LogOut } from './components/atoms/Icon'
+import ToastContainer from './components/organisms/ToastContainer'
 
 import LoginPage              from './portals/auth/LoginPage'
 import InstitutoDashboard     from './portals/instituto/Dashboard'
@@ -185,6 +186,7 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
+        <ToastContainer />
         <AppRoutes />
       </BrowserRouter>
     </AppProvider>
