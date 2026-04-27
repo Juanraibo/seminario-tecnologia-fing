@@ -189,6 +189,13 @@ export default function DetalleLote() {
                       className="bg-gray-800/30 border border-gray-700/50 rounded-xl p-4 hover:bg-gray-800/50 transition-all"
                     >
                       <div className="flex items-start gap-4">
+                        {/* Imagen del ítem */}
+                        <img
+                          src={`https://picsum.photos/seed/${item.id}/200/200`}
+                          alt={item.descripcion}
+                          className="w-24 h-24 object-cover rounded-lg border border-gray-700/50 flex-shrink-0"
+                        />
+
                         {/* Info del ítem */}
                         <div className="flex-1">
                           <div className="flex items-start justify-between mb-2">
