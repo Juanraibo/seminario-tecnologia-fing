@@ -159,11 +159,11 @@ const qrUrl = `${baseUrl}/trazabilidad?lote=${lote.id}`
 ### Archivo `.env.local` Actualizado
 ```bash
 # OpenRouter API Configuration
-VITE_OPENROUTER_API_KEY=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
+VITE_OPENROUTER_API_KEY=sk-or-v1-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-# Modelo seleccionado: Claude 3.5 Sonnet (más robusto y actual)
+# Modelo seleccionado: Google Gemini 2.0 Flash (gratuito y rápido)
 # Excelente para clasificación de imágenes RAEE con vision
-VITE_OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
+VITE_OPENROUTER_MODEL=google/gemini-2.0-flash-thinking-exp:free
 
 # URL pública para QR codes (producción)
 VITE_PUBLIC_URL=https://seminario.noah.uy

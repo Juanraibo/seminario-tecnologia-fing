@@ -12,8 +12,9 @@
  */
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "anthropic/claude-3.5-sonnet";
-const TIMEOUT_MS = 30000; // 30 segundos — aumentado para modelos más robustos
+// Usar Gemini 2.0 Flash Thinking (gratuito) por defecto
+const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "google/gemini-2.0-flash-thinking-exp:free";
+const TIMEOUT_MS = 30000; // 30 segundos
 
 /**
  * Categorías válidas según Decreto 292/024 de Uruguay.
