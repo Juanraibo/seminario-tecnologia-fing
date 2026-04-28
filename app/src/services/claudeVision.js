@@ -12,8 +12,8 @@
  */
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "google/gemini-2.0-flash-exp:free";
-const TIMEOUT_MS = 15000; // 15 segundos — criterio de aceptación HU-E02 CA7
+const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "anthropic/claude-3.5-sonnet";
+const TIMEOUT_MS = 30000; // 30 segundos — aumentado para modelos más robustos
 
 /**
  * Categorías válidas según Decreto 292/024 de Uruguay.
@@ -108,16 +108,35 @@ Respondé ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markd
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        `OpenRouter API error ${response.status}: ${errorData.error?.message || response.statusText}`
-      );
+
+      // Mensajes de error más descriptivos
+      let errorMsg = `Error ${response.status}`;
+
+      if (response.status === 401) {
+        errorMsg = "API key inválida o no configurada. Revisá tu archivo .env.local";
+      } else if (response.status === 402) {
+        errorMsg = "Sin créditos en OpenRouter. Agregá créditos o usá clasificación manual";
+      } else if (response.status === 429) {
+        errorMsg = "Demasiadas solicitudes. Esperá unos segundos e intentá de nuevo";
+      } else if (errorData.error?.message) {
+        errorMsg = errorData.error.message;
+      } else {
+        errorMsg = `Error de la API: ${response.statusText}. Podés clasificar manualmente.`;
+      }
+
+      throw new Error(errorMsg);
     }
 
     const data = await response.json();
+
+    // Debug: mostrar respuesta completa si hay problema
+    console.log("Respuesta OpenRouter:", data);
+
     const contenido = data.choices?.[0]?.message?.content;
 
     if (!contenido) {
-      throw new Error("La API no devolvió contenido válido");
+      console.error("Respuesta sin contenido:", data);
+      throw new Error("La IA no devolvió una clasificación válida. Intentá clasificar manualmente o volvé a intentar con otra foto.");
     }
 
     // Limpiar posibles bloques de código markdown que el modelo pueda agregar

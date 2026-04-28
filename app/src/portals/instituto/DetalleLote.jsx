@@ -34,8 +34,12 @@ export default function DetalleLote() {
     )
   }
 
-  // URL para el QR (siempre apunta al dominio de producción)
-  const qrUrl = `https://seminario.noah.uy/trazabilidad?lote=${lote.id}`
+  // URL para el QR - usa producción si existe, sino localhost para desarrollo
+  const baseUrl = import.meta.env.VITE_PUBLIC_URL ||
+                  (window.location.hostname === 'localhost'
+                    ? `http://localhost:${window.location.port}`
+                    : 'https://seminario.noah.uy');
+  const qrUrl = `${baseUrl}/trazabilidad?lote=${lote.id}`
 
   // Descargar QR como imagen
   const handleDescargarQR = () => {
@@ -211,6 +215,32 @@ export default function DetalleLote() {
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 text-center">
                   Escanea para ver la trazabilidad pública
                 </p>
+
+                {/* URL visible y copiable */}
+                <div className="mt-4 w-full bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+                  <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase block mb-2">
+                    URL de trazabilidad
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={qrUrl}
+                      readOnly
+                      className="flex-1 text-xs bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded px-2 py-1.5 text-gray-700 dark:text-gray-300 font-mono"
+                      onClick={(e) => e.target.select()}
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(qrUrl);
+                        alert('URL copiada al portapapeles');
+                      }}
+                      className="text-xs bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 rounded transition-colors"
+                    >
+                      Copiar
+                    </button>
+                  </div>
+                </div>
+
                 <Button
                   variant="outline"
                   size="sm"
