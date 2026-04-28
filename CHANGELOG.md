@@ -5,6 +5,70 @@ Formato: `[Sesión N — Fecha] Título`
 
 ---
 
+## [Sesión 10.3 — 28 de abril de 2026] 🚨 Security Fix: API Key Expuesta + Migración a Modelo Gratuito
+
+### Incidente de seguridad
+**API key expuesta en repositorio público:**
+- OpenRouter detectó y deshabilitó automáticamente la key
+- Ubicación: `docs/FIXES-API-IA-Y-QR.md` (commit `a299400`)
+- Causa: Error humano al documentar configuración de `.env.local`
+- Impacto: Servicio de IA interrumpido, sin uso fraudulento
+
+### Acciones tomadas (inmediatas)
+1. **Nueva API key configurada:**
+   - Key anterior deshabilitada por OpenRouter
+   - Nueva key configurada en `app/.env.local` (NO versionado)
+   - Verificado que `.env.local` está en `.gitignore`
+
+2. **Eliminada de documentación:**
+   - `docs/FIXES-API-IA-Y-QR.md` — Key reemplazada por placeholder `XXXXXXXX`
+
+3. **Migración a modelo gratuito:**
+   - Modelo anterior: `anthropic/claude-3.5-sonnet` (~$3/1M tokens)
+   - Modelo nuevo: `google/gemini-2.0-flash-thinking-exp:free` (GRATIS)
+   - Ventajas: Sin costo, rápido (~3-5s), excelente para clasificación RAEE
+
+### Cambios en código
+- **app/src/services/claudeVision.js:**
+  - Modelo por defecto actualizado a Gemini 2.0 Flash
+  - Comentarios mejorados
+- **app/.env.local (NO versionado):**
+  - Nueva API key
+  - Modelo gratuito configurado
+  - Comentario de advertencia agregado
+
+### Medidas de prevención
+- ✅ Verificado `.gitignore` correcto
+- ⚠️ Recomendación: Instalar pre-commit hook para detectar secrets
+- ⚠️ Recomendación: Usar placeholders en documentación (no keys reales)
+- 📖 Documentación completa en `docs/SECURITY-FIX-API-KEY.md`
+
+### Problema del QR (no relacionado)
+**Lote LOT-2026-015 da 404:**
+- **Diagnóstico:** El lote no existe en los datos mock
+- **Lotes existentes:** LOT-2026-001 a 006 (entrada), PUB-2026-001 a 008 (publicación)
+- **Vista pública:** Ya maneja correctamente lotes no encontrados (mensaje claro + botón volver)
+- **Solución:** Usar lotes existentes o crear LOT-2026-015 si es necesario
+
+### Documentación
+- **SECURITY-FIX-API-KEY.md** — Análisis completo del incidente (500+ líneas)
+  - Qué pasó y por qué
+  - Acciones tomadas
+  - Medidas de prevención
+  - Comparación de modelos
+  - Lecciones aprendidas
+  - Recursos y herramientas
+
+### Testing requerido
+- [ ] Probar clasificación con IA (nuevo modelo gratuito)
+- [ ] Verificar que funciona correctamente
+- [ ] Probar con diferentes tipos de imágenes
+
+### Commit
+`bbabf88` - security: eliminar API key expuesta + cambio a modelo gratuito
+
+---
+
 ## [Sesión 10.2 — 28 de abril de 2026] Fixes Críticos: API de IA y QR Codes
 
 ### Problemas resueltos
