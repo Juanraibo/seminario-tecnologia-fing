@@ -12,8 +12,9 @@
  */
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-// Usar Gemini 2.0 Flash Thinking (gratuito) por defecto
-const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "google/gemini-2.0-flash-thinking-exp:free";
+// Claude 3 Haiku: económico (~$0.25/1M tokens), rápido, confiable
+// Alternativa: google/gemini-flash-1.5 (~$0.075/1M tokens)
+const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "anthropic/claude-3-haiku";
 const TIMEOUT_MS = 30000; // 30 segundos
 
 /**
