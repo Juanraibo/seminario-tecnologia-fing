@@ -242,6 +242,82 @@ export default function ClasificarLote() {
           </Button>
         </div>
 
+        {/* Información del Envío (Instituto) */}
+        <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
+          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <Package size={20} className="text-primary-400" />
+            📦 Información del Envío (Instituto)
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Foto original del lote */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-3">
+                Fotografía enviada por el Instituto
+              </label>
+              {lote.fotos && lote.fotos.length > 0 ? (
+                <div className="space-y-3">
+                  {lote.fotos.map((foto, idx) => (
+                    <img
+                      key={idx}
+                      src={foto}
+                      alt={`Foto ${idx + 1} del lote`}
+                      className="w-full rounded-xl border border-gray-700 object-cover max-h-64"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full h-48 bg-gray-800/30 border border-gray-700/50 rounded-xl flex items-center justify-center">
+                  <p className="text-sm text-gray-500">Sin fotografía</p>
+                </div>
+              )}
+            </div>
+
+            {/* Información y observaciones */}
+            <div className="space-y-4">
+              {/* Datos del lote */}
+              <div className="bg-gray-800/30 border border-gray-700/50 rounded-lg p-4 space-y-2">
+                <h3 className="text-sm font-semibold text-white mb-3">Datos del Lote</h3>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Instituto:</span>
+                  <span className="text-white font-medium">{instituto?.nombre}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Tamaño declarado:</span>
+                  <span className="text-white font-medium capitalize">{lote.tamano}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Peso aproximado:</span>
+                  <span className="text-white font-medium">{lote.peso_declarado_aprox_kg} kg</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Fecha solicitud:</span>
+                  <span className="text-white font-medium">
+                    {new Date(lote.fecha_solicitud).toLocaleDateString('es-UY')}
+                  </span>
+                </div>
+              </div>
+
+              {/* Observaciones del Instituto */}
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-amber-400 mb-2 flex items-center gap-2">
+                  <AlertCircle size={16} />
+                  Observaciones del Instituto
+                </h3>
+                {lote.observaciones ? (
+                  <p className="text-sm text-gray-300 leading-relaxed">
+                    {lote.observaciones}
+                  </p>
+                ) : (
+                  <p className="text-sm text-gray-500 italic">
+                    Sin observaciones adicionales
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Columna izquierda: Agregar nuevo ítem */}
           <div className="lg:col-span-2 space-y-6">
