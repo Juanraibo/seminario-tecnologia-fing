@@ -83,10 +83,13 @@ React 18 · Vite 5 · TailwindCSS · React Router v6 · OpenRouter API (IA)
 
 ## KPIs del Sistema
 
-Según el Dashboard Administrativo (datos mock):
-- 🌍 **CO₂ evitado:** 1.4 kg por cada kg de RAEE gestionado
+Según el Dashboard Administrativo y Registro Público (datos mock):
+- 📦 **Lotes gestionados:** 8 lotes de publicación + 6 lotes de entrada
+- ⚖️ **RAEE procesado:** ~81 kg de residuos electrónicos
+- 🌍 **CO₂ evitado:** ~113 kg (factores específicos por categoría)
 - 🔩 **Materiales recuperados:** Cobre (5%), Aluminio (8%)
 - ✅ **Trazabilidad completa:** Desde instituto hasta certificado final
+- 📊 **Registro público:** Vista abierta con búsqueda y filtros
 
 ---
 
@@ -94,4 +97,15 @@ Según el Dashboard Administrativo (datos mock):
 
 > ✅ **MVP Completado** — 13/13 User Stories implementadas  
 > 🚀 **Deployado en:** [seminario.noah.uy](https://seminario.noah.uy)  
+> 🌐 **Registro público:** Vista mejorada con estadísticas y filtros  
+> 📊 **Datos mock:** 8 lotes de publicación con estados variados  
+> 🔬 **API CO₂:** Integración con Climatiq API (factores específicos por categoría)  
 > 📅 **Presentación final:** 26 de mayo de 2026
+
+## Últimas Actualizaciones (Sesión 10 — 28 de abril)
+
+- ✨ **Registro público mejorado:** KPIs globales, ordenamiento, búsqueda avanzada
+- 🌓 **Modo oscuro persistente:** Preferencia guardada en localStorage
+- 🔬 **API de CO₂:** Servicio carbonAPI.js con Climatiq + factores estimados
+- 📦 **Datos enriquecidos:** 5 lotes adicionales, 7 categorías RAEE
+- 📸 **Prompts IA:** 45+ prompts listos para generar assets visuales
