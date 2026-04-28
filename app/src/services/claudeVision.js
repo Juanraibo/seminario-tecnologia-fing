@@ -120,12 +120,21 @@ Respondé ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markd
         errorMsg = "Sin créditos en OpenRouter. Agregá créditos o usá clasificación manual";
       } else if (response.status === 429) {
         errorMsg = "Demasiadas solicitudes. Esperá unos segundos e intentá de nuevo";
+      } else if (response.status === 413) {
+        errorMsg = "Imagen demasiado grande. Usá una foto más pequeña (máx 2MB)";
       } else if (errorData.error?.message) {
-        errorMsg = errorData.error.message;
+        // Mostrar error específico del provider
+        const providerError = errorData.error.message;
+        if (providerError.includes("image")) {
+          errorMsg = "Problema con la imagen. Intentá con otra foto más pequeña o en formato JPG/PNG";
+        } else {
+          errorMsg = `Error del proveedor: ${providerError}`;
+        }
       } else {
         errorMsg = `Error de la API: ${response.statusText}. Podés clasificar manualmente.`;
       }
 
+      console.error("Error completo de OpenRouter:", errorData);
       throw new Error(errorMsg);
     }
 
