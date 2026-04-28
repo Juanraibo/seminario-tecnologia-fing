@@ -50,12 +50,12 @@ docs/FIXES-API-IA-Y-QR.md → incluía la key completa
 
 **Key anterior (DESHABILITADA):**
 ```
-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
+sk-or-v1-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
 **Key nueva (ACTIVA):**
 ```
-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
+sk-or-v1-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
 **Ubicación:**
@@ -68,7 +68,7 @@ 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
 
 **Antes:**
 ```bash
-VITE_OPENROUTER_API_KEY=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
+VITE_OPENROUTER_API_KEY=sk-or-v1-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
 **Ahora:**
@@ -125,7 +125,7 @@ const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "google/gemini-2.0-flash
 ```bash
 # OpenRouter API Configuration
 # ⚠️ NUNCA commitear este archivo a Git (está en .gitignore)
-VITE_OPENROUTER_API_KEY=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
+VITE_OPENROUTER_API_KEY=sk-or-v1-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 # Modelo seleccionado: Google Gemini 2.0 Flash Thinking (GRATUITO)
 # Excelente relación calidad/precio para clasificación de imágenes RAEE
@@ -229,7 +229,7 @@ brew install bfg  # macOS
 # Windows: descargar JAR desde https://rtyley.github.io/bfg-repo-cleaner/
 
 # Crear archivo con strings a eliminar
-echo "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" > secrets.txt
+echo "sk-or-v1-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" > secrets.txt
 
 # Limpiar
 bfg --replace-text secrets.txt
@@ -315,11 +315,11 @@ git status --ignored | grep .env.local
 
 ```bash
 # Buscar key en archivos commiteados
-git grep "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"
+git grep "sk-or-v1-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 # Debe retornar vacío
 
 # Buscar key antigua en historial
-git log --all --full-history -S "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"
+git log --all --full-history -S "sk-or-v1-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 # Debe mostrar solo el commit a299400 donde se expuso (ya corregido)
 ```
 
