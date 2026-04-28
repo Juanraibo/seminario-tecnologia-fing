@@ -17,6 +17,15 @@ export default function ClasificarLote() {
   const instituto = state.institutos.find(i => i.id === lote?.institutoId)
   const categorias = state.config.categorias_raee
 
+  // Helper para convertir nombres de archivo a URLs o detectar base64/URLs
+  const getFotoUrl = (foto) => {
+    if (!foto) return null
+    // Si ya es una URL completa (http/https) o base64, usarla directamente
+    if (foto.startsWith('http') || foto.startsWith('data:image')) return foto
+    // Si es un nombre de archivo, asumir que está en /images/lotes/
+    return `/images/lotes/${foto}`
+  }
+
   // Ítems ya clasificados de este lote
   const itemsDelLote = state.items.filter(i => i.loteOrigenId === loteId)
 
@@ -257,14 +266,28 @@ export default function ClasificarLote() {
               </label>
               {lote.fotos && lote.fotos.length > 0 ? (
                 <div className="space-y-3">
-                  {lote.fotos.map((foto, idx) => (
-                    <img
-                      key={idx}
-                      src={foto}
-                      alt={`Foto ${idx + 1} del lote`}
-                      className="w-full rounded-xl border border-gray-700 object-cover max-h-64"
-                    />
-                  ))}
+                  {lote.fotos.map((foto, idx) => {
+                    const fotoUrl = getFotoUrl(foto)
+                    return (
+                      <div key={idx} className="relative">
+                        <img
+                          src={fotoUrl}
+                          alt={`Foto ${idx + 1} del lote`}
+                          className="w-full rounded-xl border border-gray-700 object-cover max-h-64"
+                          onError={(e) => {
+                            // Si la imagen no carga, mostrar placeholder
+                            e.target.style.display = 'none'
+                            e.target.nextElementSibling.style.display = 'flex'
+                          }}
+                        />
+                        <div className="hidden w-full h-48 bg-gray-800/30 border border-gray-700/50 rounded-xl items-center justify-center flex-col gap-2">
+                          <Package size={32} className="text-gray-600" />
+                          <p className="text-sm text-gray-500">Imagen no disponible</p>
+                          <p className="text-xs text-gray-600 font-mono">{foto}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="w-full h-48 bg-gray-800/30 border border-gray-700/50 rounded-xl flex items-center justify-center">

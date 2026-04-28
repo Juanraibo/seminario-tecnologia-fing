@@ -10,7 +10,7 @@
     "fecha_solicitud": "2026-02-10",
     "fecha_recepcion_ecopunto": "2026-02-12",
     "fecha_clasificacion_completa": "2026-02-13",
-    "fotos": ["lote-001-foto1.jpg"],
+    "fotos": ["/images/raee/monitor-lcd.png"],
     "observaciones": "Monitores LCD y teclados en buen estado general"
   },
   {
@@ -24,7 +24,7 @@
     "fecha_solicitud": "2026-03-05",
     "fecha_recepcion_ecopunto": "2026-03-07",
     "fecha_clasificacion_completa": "2026-03-08",
-    "fotos": ["lote-002-foto1.jpg"],
+    "fotos": ["/images/raee/bateria-ups.png"],
     "observaciones": "Baterías de UPS de servidores"
   },
   {
@@ -38,7 +38,7 @@
     "fecha_solicitud": "2026-03-20",
     "fecha_recepcion_ecopunto": "2026-03-22",
     "fecha_clasificacion_completa": "2026-03-23",
-    "fotos": ["lote-003-foto1.jpg", "lote-003-foto2.jpg"],
+    "fotos": ["/images/raee/tv-lcd.png"],
     "observaciones": "Proyectores y equipos de audio de aulas"
   },
   {
@@ -52,7 +52,7 @@
     "fecha_solicitud": "2026-04-10",
     "fecha_recepcion_ecopunto": "2026-04-14",
     "fecha_clasificacion_completa": "2026-04-15",
-    "fotos": ["lote-004-foto1.jpg"],
+    "fotos": ["/images/raee/cpu-torre.png"],
     "observaciones": "Equipos de laboratorio de electrónica"
   },
   {
@@ -66,7 +66,7 @@
     "fecha_solicitud": "2026-04-20",
     "fecha_recepcion_ecopunto": null,
     "fecha_clasificacion_completa": null,
-    "fotos": ["lote-005-foto1.jpg"],
+    "fotos": ["/images/raee/teclado-mouse.png"],
     "observaciones": "Teléfonos fijos y cables varios"
   },
   {
@@ -80,7 +80,7 @@
     "fecha_solicitud": "2026-04-01",
     "fecha_recepcion_ecopunto": "2026-04-03",
     "fecha_clasificacion_completa": "2026-04-04",
-    "fotos": ["lote-006-foto1.jpg"],
+    "fotos": ["/images/raee/cpu-torre.png"],
     "observaciones": "PCs de escritorio completas para reciclaje"
   },
   {
