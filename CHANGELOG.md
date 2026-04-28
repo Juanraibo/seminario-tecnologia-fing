@@ -5,6 +5,43 @@ Formato: `[Sesión N — Fecha] Título`
 
 ---
 
+## [Sesión 10.1 — 28 de abril de 2026] UX Critical: Visibilidad de Información del Instituto en Clasificación
+
+### Mejora implementada
+**Problema identificado:**
+- Durante la clasificación de un lote en el portal Ecopunto, el operador no podía ver la foto y observaciones que envió el Instituto
+- Esto impedía validar si el contenido del lote coincidía con lo declarado
+- UX crítica para el flujo de validación
+
+**Solución implementada:**
+- Nueva sección "Información del Envío (Instituto)" en `ClasificarLote.jsx`
+- Muestra foto(s) original(es) del lote enviadas por el Instituto
+- Muestra observaciones del Instituto en recuadro destacado (color ámbar)
+- Muestra datos clave del lote: instituto, tamaño, peso declarado, fecha solicitud
+- Ubicada entre el header y el formulario de clasificación
+
+**Impacto:**
+- ✅ Operador del Ecopunto puede comparar foto del Instituto con ítems reales
+- ✅ Observaciones del Instituto visibles durante todo el proceso de clasificación
+- ✅ Mejora la precisión de la clasificación
+- ✅ Facilita detección de discrepancias entre lo declarado y lo real
+
+### Detalles técnicos
+- **Archivo modificado:** `app/src/portals/ecopunto/ClasificarLote.jsx` (+76 líneas)
+- **Ubicación:** Línea 244 (después del header, antes del grid principal)
+- **Componentes:** Grid 2 columnas (md), foto izquierda, datos + observaciones derecha
+- **Estilo:** Dark mode, border ámbar para observaciones (destacado visual)
+- **Commit:** `95e77d9`
+
+### Testing sugerido
+- [ ] Navegar a portal Ecopunto → Lotes en Ecopunto → Clasificar
+- [ ] Verificar que se muestra la foto del Instituto
+- [ ] Verificar que se muestran las observaciones (si existen)
+- [ ] Verificar que todos los datos del lote son correctos
+- [ ] Verificar responsive (móvil: columnas apiladas verticalmente)
+
+---
+
 ## [Sesión 10 — 28 de abril de 2026] Bugfixes: Modo Oscuro + Registro Público de Trazabilidad
 
 ### Decisiones tomadas
