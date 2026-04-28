@@ -186,16 +186,16 @@ export default function LoginPage() {
           {/* Acceso a vista pública */}
           <div className="mt-6 pt-6 border-t border-gray-800">
             <button
-              onClick={() => navigate('/trazabilidad?lote=PUB-2026-001')}
+              onClick={() => navigate('/trazabilidad')}
               className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500/20 hover:to-purple-500/20 border border-blue-500/30 hover:border-blue-500/50 transition-all group"
             >
               <Globe size={18} className="text-blue-400 group-hover:scale-110 transition-transform" />
               <span className="text-sm font-medium text-blue-300 group-hover:text-blue-200">
-                Ver Trazabilidad Pública
+                Ver Registro Público
               </span>
             </button>
             <p className="text-xs text-gray-500 text-center mt-2">
-              Consultar seguimiento de lotes sin login
+              Consultar trazabilidad de todos los lotes sin login
             </p>
           </div>
         </div>

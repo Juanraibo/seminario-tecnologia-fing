@@ -5,6 +5,75 @@ Formato: `[Sesión N — Fecha] Título`
 
 ---
 
+## [Sesión 10 — 28 de abril de 2026] Bugfixes: Modo Oscuro + Registro Público de Trazabilidad
+
+### Decisiones tomadas
+- **Modo oscuro persistente:** Preferencia guardada en localStorage, funciona correctamente en light/dark
+- **Registro público mejorado:** Vista de listado con todos los lotes + búsqueda + filtros
+- **Navegación pública pulida:** Links del header y login apuntan al registro completo, no a lote hardcodeado
+
+### Problemas resueltos
+
+**Bug #1: Modo oscuro no funcionaba correctamente**
+- **Causa:** Estado inicial siempre `true`, no leía localStorage, se reseteaba al cambiar de ruta
+- **Solución:** Inicializar desde localStorage, sincronizar con DOM, persistir cambios
+- **Archivo:** `app/src/App.jsx` (líneas 36-64)
+
+**Bug #2: Links de trazabilidad hardcodeados**
+- **Causa:** Header y LoginPage apuntaban siempre a `PUB-2026-001`
+- **Solución:** Cambiar links a `/trazabilidad` (sin parámetro → registro completo)
+- **Archivos:** `app/src/App.jsx` (línea 83), `app/src/portals/auth/LoginPage.jsx` (línea 189)
+
+**Mejora #3: Vista pública con registro completo**
+- **Antes:** Solo mostraba un lote específico (vía QR)
+- **Ahora:** 
+  - Sin parámetro `lote`: Muestra listado de TODOS los lotes publicados
+  - Con parámetro `lote=XXX`: Muestra detalle específico (como antes)
+- **Archivo:** `app/src/portals/publico/Trazabilidad.jsx` (reescrito completo: 275 → 450 líneas)
+
+### Funcionalidades del Registro Público
+
+**Vista de listado (`/trazabilidad`):**
+- ✅ Grid responsive de tarjetas (3 lotes de publicación)
+- ✅ Búsqueda por código o categoría
+- ✅ Filtros: Todos | Finalizados | En proceso
+- ✅ Información por tarjeta: código, categoría, ítems, peso, progreso visual, estado, fecha
+- ✅ Click en tarjeta navega al detalle
+- ✅ Diseño con gradientes (green-blue-purple)
+
+**Vista de detalle (`/trazabilidad?lote=XXX`):**
+- ✅ Botón "Volver al registro" en la parte superior
+- ✅ Timeline completo del recorrido (instituto → ecopunto → gestora → certificado)
+- ✅ Ítems individuales del lote
+- ✅ Cálculo de CO₂ específico del lote
+- ✅ Manejo de lotes no encontrados con opción de volver
+
+### Componentes nuevos
+- `RegistroPublico` — Listado de lotes con búsqueda y filtros
+- `TarjetaLote` — Card clickeable con resumen de lote y barra de progreso
+- `DetalleLote` — Refactorizado del original (mejorado con botón volver)
+
+### Métricas de implementación
+- **Líneas de código:** ~200 líneas modificadas (3 archivos)
+- **Archivos creados:** 1 doc (`BUGFIXES-SESION-10.md`)
+- **Archivos modificados:** 3 archivos (App, LoginPage, Trazabilidad)
+- **Bugs críticos resueltos:** 2 (modo oscuro, links hardcodeados)
+- **Mejoras UX:** 1 (registro público completo)
+
+### Validación técnica
+- ✅ Modo oscuro funciona correctamente (toggle + persistencia)
+- ✅ Links de navegación apuntan al registro completo
+- ✅ Búsqueda y filtros operativos
+- ✅ Navegación fluida entre listado y detalle
+- ✅ QR codes siguen funcionando correctamente
+
+### Próximos pasos
+- [ ] Testing E2E manual completo (seguir guía `TESTING-E2E-VINCULACION.md`)
+- [ ] Agregar más lotes de publicación mock (5-8 adicionales)
+- [ ] Mejoras opcionales: paginación, ordenamiento, estadísticas en registro público
+
+---
+
 ## [Sesión 9 — 27 de abril de 2026] Sistema de Toasts + Vinculación E2E + Bugfixes Críticos + UX
 
 ### Decisiones tomadas

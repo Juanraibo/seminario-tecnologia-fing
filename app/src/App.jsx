@@ -35,7 +35,12 @@ function PrivateRoute({ children, rolesPermitidos }) {
 function LayoutAutenticado({ children }) {
   const { state, dispatch } = useApp()
   const usuario = state.usuarioActual
-  const [darkMode, setDarkMode] = useState(true)
+
+  // Leer preferencia de dark mode desde localStorage
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode')
+    return saved !== null ? saved === 'true' : true // Default: true (modo oscuro)
+  })
 
   const ETIQUETAS_ROL = {
     admin:     'Administrador',
@@ -51,15 +56,22 @@ function LayoutAutenticado({ children }) {
     gestora:   <Factory size={16} />,
   }
 
-  // Aplicar dark mode por defecto al montar
+  // Aplicar dark mode según preferencia guardada
   useEffect(() => {
-    document.documentElement.classList.add('dark')
-  }, [])
+    if (darkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [darkMode])
 
-  // Toggle dark mode
+  // Toggle dark mode y persistir en localStorage
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode)
-    document.documentElement.classList.toggle('dark')
+    setDarkMode(prev => {
+      const newValue = !prev
+      localStorage.setItem('darkMode', String(newValue))
+      return newValue
+    })
   }
 
   return (
@@ -80,9 +92,9 @@ function LayoutAutenticado({ children }) {
             <span>{ETIQUETAS_ROL[usuario?.rol]} · {usuario?.nombre}</span>
           </span>
           <Link
-            to="/trazabilidad?lote=PUB-2026-001"
+            to="/trazabilidad"
             className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-200 dark:border-blue-800 rounded px-3 py-1.5 transition-colors"
-            title="Ver trazabilidad pública"
+            title="Ver registro público de trazabilidad"
           >
             <Globe size={14} />
             <span className="hidden sm:inline">Trazabilidad</span>

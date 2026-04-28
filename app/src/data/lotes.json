@@ -144,5 +144,111 @@
     "certificado_numero": null,
     "observaciones": "Proyectores Epson y amplificador Yamaha",
     "solicitudes_gestoras": []
+  },
+  {
+    "id": "PUB-2026-004",
+    "tipo": "publicacion",
+    "categoria": "Equipos de Informática y Telecomunicaciones",
+    "items_ids": ["ITEM-2026-012", "ITEM-2026-013", "ITEM-2026-014", "ITEM-2026-015"],
+    "peso_total_kg": 18.5,
+    "cantidad_items": 4,
+    "institutos_origen": ["IIMPI", "INCO"],
+    "estado": "Solicitado por Gestora/s",
+    "fecha_publicacion": "2026-04-05",
+    "fecha_solicitud_gestora": "2026-04-06",
+    "fecha_aprobacion": null,
+    "fecha_certificado": null,
+    "gestora_asignada": null,
+    "gestora_asignada_id": null,
+    "certificado_numero": null,
+    "observaciones": "PCs de escritorio y servidores de laboratorio",
+    "solicitudes_gestoras": [
+      { "gestoraId": "G001", "cotizacion": 2200, "fecha": "2026-04-06" },
+      { "gestoraId": "G002", "cotizacion": 2100, "fecha": "2026-04-06" },
+      { "gestoraId": "G003", "cotizacion": 2400, "fecha": "2026-04-07" }
+    ]
+  },
+  {
+    "id": "PUB-2026-005",
+    "tipo": "publicacion",
+    "categoria": "Pantallas y Monitores",
+    "items_ids": ["ITEM-2026-016", "ITEM-2026-017", "ITEM-2026-018"],
+    "peso_total_kg": 15.3,
+    "cantidad_items": 3,
+    "institutos_origen": ["INCO"],
+    "estado": "Finalizado",
+    "fecha_publicacion": "2026-03-15",
+    "fecha_solicitud_gestora": "2026-03-16",
+    "fecha_aprobacion": "2026-03-18",
+    "fecha_certificado": "2026-04-02",
+    "gestora_asignada": "EcoGestión Ltda.",
+    "gestora_asignada_id": "G002",
+    "certificado_numero": "CERT-2026-018",
+    "observaciones": "Monitores CRT de 17 y 19 pulgadas",
+    "solicitudes_gestoras": [
+      { "gestoraId": "G002", "cotizacion": 1500, "fecha": "2026-03-16" },
+      { "gestoraId": "G001", "cotizacion": 1400, "fecha": "2026-03-16" }
+    ]
+  },
+  {
+    "id": "PUB-2026-006",
+    "tipo": "publicacion",
+    "categoria": "Pequeños Electrodomésticos",
+    "items_ids": ["ITEM-2026-019", "ITEM-2026-020"],
+    "peso_total_kg": 4.8,
+    "cantidad_items": 2,
+    "institutos_origen": ["IIE"],
+    "estado": "Disponible para retiro",
+    "fecha_publicacion": "2026-04-20",
+    "fecha_solicitud_gestora": null,
+    "fecha_aprobacion": null,
+    "fecha_certificado": null,
+    "gestora_asignada": null,
+    "gestora_asignada_id": null,
+    "certificado_numero": null,
+    "observaciones": "Cafeteras y microondas de oficinas",
+    "solicitudes_gestoras": []
+  },
+  {
+    "id": "PUB-2026-007",
+    "tipo": "publicacion",
+    "categoria": "Equipos de Informática y Telecomunicaciones",
+    "items_ids": ["ITEM-2026-021", "ITEM-2026-022", "ITEM-2026-023"],
+    "peso_total_kg": 8.2,
+    "cantidad_items": 3,
+    "institutos_origen": ["INCO"],
+    "estado": "Retiro Aprobado — Pendiente de Certificado",
+    "fecha_publicacion": "2026-04-10",
+    "fecha_solicitud_gestora": "2026-04-11",
+    "fecha_aprobacion": "2026-04-15",
+    "fecha_certificado": null,
+    "gestora_asignada": "ReciclaUY S.A.",
+    "gestora_asignada_id": "G001",
+    "certificado_numero": null,
+    "observaciones": "Routers y switches de red Cisco",
+    "solicitudes_gestoras": [
+      { "gestoraId": "G001", "cotizacion": 950, "fecha": "2026-04-11" }
+    ]
+  },
+  {
+    "id": "PUB-2026-008",
+    "tipo": "publicacion",
+    "categoria": "Cables y Periféricos",
+    "items_ids": ["ITEM-2026-024", "ITEM-2026-025", "ITEM-2026-026", "ITEM-2026-027"],
+    "peso_total_kg": 5.6,
+    "cantidad_items": 4,
+    "institutos_origen": ["IIMPI", "IIE"],
+    "estado": "Finalizado",
+    "fecha_publicacion": "2026-02-20",
+    "fecha_solicitud_gestora": "2026-02-21",
+    "fecha_aprobacion": "2026-02-22",
+    "fecha_certificado": "2026-03-08",
+    "gestora_asignada": "GreenTech Reciclaje",
+    "gestora_asignada_id": "G003",
+    "certificado_numero": "CERT-2026-015",
+    "observaciones": "Cables VGA, HDMI, teclados USB",
+    "solicitudes_gestoras": [
+      { "gestoraId": "G003", "cotizacion": 600, "fecha": "2026-02-21" }
+    ]
   }
 ]
