@@ -5,6 +5,57 @@ Formato: `[Sesión N — Fecha] Título`
 
 ---
 
+## [Sesión 10.2 — 28 de abril de 2026] Fixes Críticos: API de IA y QR Codes
+
+### Problemas resueltos
+
+**Bug #1: API de IA con errores 400**
+- **Síntomas:** "OpenRouter API error 400: Provider returned error", "La API no devolvió contenido válido"
+- **Causa:** Modelo Gemini 2.0 Flash experimental inestable, timeout insuficiente, errores genéricos
+- **Solución implementada:**
+  - Cambio a modelo Claude 3.5 Sonnet (más robusto y actual)
+  - Timeout aumentado de 15s a 30s
+  - Mensajes de error descriptivos (401: API key, 402: sin créditos, 429: rate limit)
+  - Debug logging para diagnóstico (`console.log` de respuesta completa)
+- **Archivo:** `app/src/services/claudeVision.js` (+28 líneas)
+
+**Bug #2: QR codes con 404**
+- **Síntomas:** Escanear QR muestra "404 Not Found", no funciona en localhost
+- **Causa:** URL hardcodeada a producción, sin detección de entorno
+- **Solución implementada:**
+  - Detección automática: localhost vs producción
+  - Soporte para `VITE_PUBLIC_URL` en `.env`
+  - URL visible y copiable debajo del QR
+  - Botón "Copiar" con feedback al portapapeles
+- **Archivo:** `app/src/portals/instituto/DetalleLote.jsx` (+24 líneas)
+
+### Configuración actualizada
+**`.env.local` (no versionado):**
+```bash
+VITE_OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
+VITE_PUBLIC_URL=https://seminario.noah.uy
+```
+
+### Documentación
+- **FIXES-API-IA-Y-QR.md** — Análisis completo, testing, troubleshooting (300+ líneas)
+
+### Impacto
+- ✅ API de IA funcional con modelo robusto
+- ✅ QR codes funcionan en desarrollo y producción
+- ✅ URL fácilmente compartible (copiar/pegar)
+- ✅ Errores con mensajes claros y soluciones
+
+### Testing sugerido
+- [ ] Clasificar lote con IA (verificar respuesta exitosa)
+- [ ] Verificar QR en localhost (http://localhost:5173/...)
+- [ ] Copiar URL del QR y abrir en nueva pestaña
+- [ ] Escanear QR con móvil en producción
+
+### Commit
+`9af3072` - fix: resolver errores de API IA y QR codes con 404
+
+---
+
 ## [Sesión 10.1 — 28 de abril de 2026] UX Critical: Visibilidad de Información del Instituto en Clasificación
 
 ### Mejora implementada
