@@ -67,12 +67,12 @@ export default function Sidebar({ isOpen, onClose }) {
       {/* Sidebar panel */}
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50
+          fixed inset-y-0 left-0 z-50
           w-60 bg-white dark:bg-gray-900
           border-r border-gray-200 dark:border-gray-800
           flex flex-col
           transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* Logo */}

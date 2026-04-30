@@ -1,8 +1,20 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AppProvider } from './context/AppContext'
 import PrivateRoute from './components/layout/PrivateRoute'
 import LayoutAutenticado from './components/layout/LayoutAutenticado'
 import ToastContainer from './components/organisms/ToastContainer'
+
+// Inicializa dark mode desde localStorage AL INICIAR la app
+// (no solo cuando se monta LayoutAutenticado, para que funcione en login y trazabilidad)
+function DarkModeInitializer() {
+  useEffect(() => {
+    const saved = localStorage.getItem('darkMode')
+    const isDark = saved !== null ? saved === 'true' : true
+    document.documentElement.classList.toggle('dark', isDark)
+  }, [])
+  return null
+}
 
 import LoginPage              from './portals/auth/LoginPage'
 import InstitutoDashboard     from './portals/instituto/Dashboard'
@@ -105,6 +117,7 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
+        <DarkModeInitializer />
         <ToastContainer />
         <AppRoutes />
       </BrowserRouter>
