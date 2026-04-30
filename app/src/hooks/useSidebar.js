@@ -9,8 +9,8 @@ export function useSidebar() {
   const [isOpen, setIsOpen] = useState(() => {
     try {
       const saved = localStorage.getItem('ecofing-sidebar-open')
-      // Por defecto true (abierto) si no hay valor guardado
-      return saved !== null ? saved === 'true' : true
+      // Por defecto false (cerrado) si no hay valor guardado
+      return saved !== null ? saved === 'true' : false
     } catch {
       return true
     }

@@ -1,9 +1,16 @@
+/**
+ * AprobacionRetiros - Panel de aprobación de retiros para administradores
+ * Lista solicitudes de gestoras y permite aprobar o rechazar
+ */
+
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
+import Card from '../../components/molecules/Card'
 import StatusBadge from '../../components/molecules/StatusBadge'
+import PageHeader from '../../components/layout/PageHeader'
 import { ArrowLeft, ChevronDown, ChevronUp, Package, Award, CheckCircle, XCircle, AlertCircle } from '../../components/atoms/Icon'
 import { ESTADOS_LOTE } from '../../constants/estados'
 
@@ -84,42 +91,28 @@ export default function AprobacionRetiros() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Gradiente de fondo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/5 via-transparent to-secondary-500/5"></div>
-      </div>
-
-      <div className="relative max-w-7xl mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
+      <div className="max-w-7xl mx-auto p-6 space-y-6">
         {/* Header */}
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/admin')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft size={20} />
-            Volver
-          </Button>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Aprobación de Retiros
-            </h1>
-            <p className="text-gray-400">
-              Evaluar solicitudes de gestoras y aprobar retiros
-            </p>
-          </div>
-        </div>
+        <PageHeader
+          title="Aprobación de Retiros"
+          description="Evaluar solicitudes de gestoras y aprobar retiros"
+          actions={
+            <Button variant="ghost" icon={<ArrowLeft size={18} />} onClick={() => navigate('/admin')}>
+              Volver
+            </Button>
+          }
+        />
 
         {/* Contador de pendientes */}
-        <div className="bg-gradient-to-r from-amber-500/20 to-amber-600/10 backdrop-blur-xl rounded-2xl border border-amber-500/50 p-4">
+        <div className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 border border-amber-200 dark:border-amber-700/50 rounded-2xl p-4">
           <div className="flex items-center gap-3">
-            <AlertCircle size={24} className="text-amber-400" />
+            <AlertCircle size={24} className="text-amber-500" />
             <div>
-              <p className="text-white font-semibold">
+              <p className="text-gray-900 dark:text-gray-100 font-semibold">
                 {lotesPendientes.length} lote(s) con solicitudes pendientes de aprobación
               </p>
-              <p className="text-xs text-amber-300 mt-0.5">
+              <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
                 Total de solicitudes: {lotesPendientes.reduce((sum, l) => sum + l.solicitudes_gestoras.length, 0)}
               </p>
             </div>
@@ -134,32 +127,29 @@ export default function AprobacionRetiros() {
               const gestoraIdSeleccionada = gestoraSeleccionada[lote.id]
 
               return (
-                <div
-                  key={lote.id}
-                  className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 overflow-hidden"
-                >
+                <Card key={lote.id} padding="none" className="overflow-hidden">
                   {/* Header del lote (clickeable para expandir) */}
                   <button
                     onClick={() => setLoteExpandido(expandido ? null : lote.id)}
-                    className="w-full p-6 flex items-center justify-between hover:bg-gray-800/30 transition-colors"
+                    className="w-full p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <Package size={24} className="text-primary-400" />
+                      <Package size={24} className="text-primary-500" />
                       <div className="text-left">
                         <div className="flex items-center gap-3 mb-1">
-                          <span className="font-mono text-sm font-semibold text-primary-400">
+                          <span className="font-mono text-sm font-semibold text-primary-500">
                             {lote.id}
                           </span>
                           <StatusBadge estado={lote.estado} size="sm" />
                         </div>
-                        <p className="text-white font-medium">{lote.categoria}</p>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-gray-900 dark:text-gray-100 font-medium">{lote.categoria}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           {lote.cantidad_items} ítems · {lote.peso_total_kg} kg · {lote.solicitudes_gestoras.length} solicitud(es)
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
                         {expandido ? 'Contraer' : 'Expandir'}
                       </span>
                       {expandido ? (
@@ -172,38 +162,38 @@ export default function AprobacionRetiros() {
 
                   {/* Contenido expandible */}
                   {expandido && (
-                    <div className="border-t border-gray-800 p-6 space-y-6">
+                    <div className="border-t border-gray-200 dark:border-gray-700 p-6 space-y-6">
                       {/* Información del lote */}
-                      <div className="grid grid-cols-3 gap-4 p-4 bg-gray-800/30 rounded-xl">
+                      <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Fecha publicación</p>
-                          <p className="text-sm text-white">{lote.fecha_publicacion}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Fecha publicación</p>
+                          <p className="text-sm text-gray-900 dark:text-gray-100">{lote.fecha_publicacion}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Institutos origen</p>
-                          <p className="text-sm text-white">{lote.institutos_origen?.join(', ')}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Institutos origen</p>
+                          <p className="text-sm text-gray-900 dark:text-gray-100">{lote.institutos_origen?.join(', ')}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Observaciones</p>
-                          <p className="text-sm text-white">{lote.observaciones || 'Ninguna'}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Observaciones</p>
+                          <p className="text-sm text-gray-900 dark:text-gray-100">{lote.observaciones || 'Ninguna'}</p>
                         </div>
                       </div>
 
                       {/* Tabla de gestoras solicitantes */}
                       <div>
-                        <h3 className="text-sm font-semibold text-white mb-3">
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
                           Gestoras Solicitantes
                         </h3>
                         <div className="overflow-x-auto">
                           <table className="w-full">
                             <thead>
-                              <tr className="border-b border-gray-800">
-                                <th className="text-left py-2 px-3 text-xs font-medium text-gray-400">Seleccionar</th>
-                                <th className="text-left py-2 px-3 text-xs font-medium text-gray-400">Gestora</th>
-                                <th className="text-center py-2 px-3 text-xs font-medium text-gray-400">Scoring</th>
-                                <th className="text-center py-2 px-3 text-xs font-medium text-gray-400">Habilitación</th>
-                                <th className="text-right py-2 px-3 text-xs font-medium text-gray-400">Cotización</th>
-                                <th className="text-center py-2 px-3 text-xs font-medium text-gray-400">Fecha</th>
+                              <tr className="border-b border-gray-200 dark:border-gray-700">
+                                <th className="text-left py-2 px-3 text-xs font-medium text-gray-500 dark:text-gray-400">Seleccionar</th>
+                                <th className="text-left py-2 px-3 text-xs font-medium text-gray-500 dark:text-gray-400">Gestora</th>
+                                <th className="text-center py-2 px-3 text-xs font-medium text-gray-500 dark:text-gray-400">Scoring</th>
+                                <th className="text-center py-2 px-3 text-xs font-medium text-gray-500 dark:text-gray-400">Habilitación</th>
+                                <th className="text-right py-2 px-3 text-xs font-medium text-gray-500 dark:text-gray-400">Cotización</th>
+                                <th className="text-center py-2 px-3 text-xs font-medium text-gray-500 dark:text-gray-400">Fecha</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -216,8 +206,8 @@ export default function AprobacionRetiros() {
                                   return (
                                     <tr
                                       key={idx}
-                                      className={`border-b border-gray-800/50 ${
-                                        seleccionada ? 'bg-primary-500/10' : 'hover:bg-gray-800/30'
+                                      className={`border-b border-gray-100 dark:border-gray-800 ${
+                                        seleccionada ? 'bg-primary-50 dark:bg-primary-900/10' : 'hover:bg-gray-50 dark:hover:bg-gray-800/30'
                                       }`}
                                     >
                                       <td className="py-3 px-3">
@@ -229,31 +219,31 @@ export default function AprobacionRetiros() {
                                             ...gestoraSeleccionada,
                                             [lote.id]: solicitud.gestoraId
                                           })}
-                                          className="w-4 h-4 text-primary-500 bg-gray-800 border-gray-600"
+                                          className="w-4 h-4 text-primary-500 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
                                         />
                                       </td>
                                       <td className="py-3 px-3">
-                                        <span className="text-white font-medium">{gestora?.nombre}</span>
+                                        <span className="text-gray-900 dark:text-gray-100 font-medium">{gestora?.nombre}</span>
                                       </td>
                                       <td className="py-3 px-3 text-center">
                                         <div className="flex items-center justify-center gap-1">
-                                          <Award size={14} className="text-primary-400" />
-                                          <span className="font-semibold text-primary-400">{gestora?.scoring}</span>
+                                          <Award size={14} className="text-primary-500" />
+                                          <span className="font-semibold text-primary-500">{gestora?.scoring}</span>
                                         </div>
                                       </td>
                                       <td className="py-3 px-3 text-center">
                                         {gestora?.habilitacion_ministerio ? (
-                                          <CheckCircle size={16} className="text-green-400 mx-auto" />
+                                          <CheckCircle size={16} className="text-green-500 mx-auto" />
                                         ) : (
-                                          <XCircle size={16} className="text-red-400 mx-auto" />
+                                          <XCircle size={16} className="text-red-500 mx-auto" />
                                         )}
                                       </td>
                                       <td className="py-3 px-3 text-right">
-                                        <span className="text-white font-bold">
+                                        <span className="text-gray-900 dark:text-gray-100 font-bold">
                                           ${solicitud.cotizacion.toLocaleString('es-UY')}
                                         </span>
                                       </td>
-                                      <td className="py-3 px-3 text-center text-xs text-gray-400">
+                                      <td className="py-3 px-3 text-center text-xs text-gray-500 dark:text-gray-400">
                                         {solicitud.fecha}
                                       </td>
                                     </tr>
@@ -265,41 +255,41 @@ export default function AprobacionRetiros() {
                       </div>
 
                       {/* Acciones */}
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-800">
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
                         <Button
                           variant="ghost"
                           onClick={() => handleRechazarSolicitudes(lote)}
-                          className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                         >
                           <XCircle size={18} className="mr-2" />
                           Rechazar Todas
                         </Button>
 
                         <Button
+                          variant="primary"
+                          icon={<CheckCircle size={18} />}
                           onClick={() => handleAprobarRetiro(lote)}
                           disabled={!gestoraIdSeleccionada}
-                          className="bg-primary-500 hover:bg-primary-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <CheckCircle size={18} className="mr-2" />
                           Aprobar Retiro
                         </Button>
                       </div>
                     </div>
                   )}
-                </div>
+                </Card>
               )
             })}
           </div>
         ) : (
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-12 text-center">
-            <CheckCircle size={48} className="text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">
+          <Card className="text-center py-12">
+            <CheckCircle size={48} className="text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
               No hay solicitudes pendientes
             </h3>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
               Todas las solicitudes han sido procesadas
             </p>
-          </div>
+          </Card>
         )}
       </div>
     </div>

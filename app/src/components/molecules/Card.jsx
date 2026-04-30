@@ -51,6 +51,7 @@ export default function Card({
           ? 'hover:shadow-glass hover:border-gray-300 dark:hover:border-gray-600 hover:-translate-y-0.5'
           : ''
         }
+        ${hover ? 'card-hover-lift' : ''}
         ${className}
       `}
     >
@@ -96,12 +97,15 @@ export function StatCard({ icon, label, value, trend, trendValue, variant = 'def
   return (
     <div
       className={`
+        group
         bg-white dark:bg-gray-900
         border border-gray-200 dark:border-gray-700
         rounded-lg shadow-soft
         p-6
         transition-all duration-300
         hover:shadow-glass hover:border-gray-300 dark:hover:border-gray-600 hover:-translate-y-0.5
+        cursor-default
+        card-hover-lift
         ${variant === 'gradient' ? 'relative overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-[3px] before:bg-gradient-to-r before:from-primary-500 before:to-secondary-500' : ''}
         ${className}
       `}
@@ -121,7 +125,7 @@ export function StatCard({ icon, label, value, trend, trendValue, variant = 'def
           )}
         </div>
         {icon && (
-          <div className={`p-3 rounded-xl shrink-0 ml-4 ${iconContainerStyles[variant]}`}>
+          <div className={`p-3 rounded-xl shrink-0 ml-4 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/40 ${iconContainerStyles[variant]}`}>
             {icon}
           </div>
         )}

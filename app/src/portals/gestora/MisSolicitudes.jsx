@@ -1,8 +1,15 @@
+/**
+ * MisSolicitudes - Vista de solicitudes de cotización realizadas por la gestora
+ * Muestra historial con scoring, estadísticas y detalle de cada gestión
+ */
+
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import Button from '../../components/atoms/Button'
+import Card, { StatCard } from '../../components/molecules/Card'
 import StatusBadge from '../../components/molecules/StatusBadge'
+import PageHeader from '../../components/layout/PageHeader'
 import { TrendingUp, Award, Clock, CheckCircle, XCircle, DollarSign, Package } from '../../components/atoms/Icon'
 import { ESTADOS_LOTE } from '../../constants/estados'
 
@@ -58,165 +65,97 @@ export default function MisSolicitudes() {
     : 0
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Gradiente de fondo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/5 via-transparent to-secondary-500/5"></div>
-      </div>
-
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl"></div>
-
-      <div className="relative max-w-7xl mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
+      <div className="max-w-7xl mx-auto p-6 space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Mis Solicitudes
-          </h1>
-          <p className="text-gray-400">
-            Historial de cotizaciones y gestión de scoring
-          </p>
-        </div>
+        <PageHeader
+          title="Mis Solicitudes"
+          description="Historial de cotizaciones y gestión de scoring"
+        />
 
         {/* Grid de estadísticas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Scoring actual */}
-          <div className="bg-gradient-to-br from-primary-500/20 to-primary-600/10 backdrop-blur-xl rounded-2xl border border-primary-500/50 p-6">
+          {/* Scoring actual con gradient */}
+          <div className="bg-gradient-to-br from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700 rounded-2xl p-6 text-white shadow-soft">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-primary-300">
+                <p className="text-sm font-medium text-primary-100">
                   Scoring Actual
                 </p>
-                <p className="text-4xl font-bold text-white mt-2">
+                <p className="text-4xl font-bold mt-2">
                   {gestora?.scoring || 0}
                 </p>
-                <p className="text-xs text-primary-400 mt-1">de 100 puntos</p>
+                <p className="text-xs text-primary-200 mt-1">de 100 puntos</p>
               </div>
-              <div className="p-3 bg-primary-500/20 rounded-xl">
-                <Award size={24} className="text-primary-400" />
-              </div>
-            </div>
-          </div>
-
-          {/* Total solicitudes */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  Total Solicitudes
-                </p>
-                <p className="text-4xl font-bold text-white mt-2">
-                  {stats.total}
-                </p>
-              </div>
-              <div className="p-3 bg-gray-500/10 rounded-xl">
-                <Package size={24} className="text-gray-400" />
+              <div className="p-3 bg-white/10 rounded-xl">
+                <Award size={24} />
               </div>
             </div>
           </div>
 
-          {/* Adjudicados */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  Adjudicados
-                </p>
-                <p className="text-4xl font-bold text-white mt-2">
-                  {stats.adjudicados}
-                </p>
-                <p className="text-xs text-green-400 mt-1">Tasa: {tasaExito}%</p>
-              </div>
-              <div className="p-3 bg-green-500/10 rounded-xl">
-                <CheckCircle size={24} className="text-green-400" />
-              </div>
-            </div>
-          </div>
-
-          {/* Pendientes */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  Pendientes
-                </p>
-                <p className="text-4xl font-bold text-white mt-2">
-                  {stats.pendientes}
-                </p>
-              </div>
-              <div className="p-3 bg-amber-500/10 rounded-xl">
-                <Clock size={24} className="text-amber-400" />
-              </div>
-            </div>
-          </div>
-
-          {/* Rechazados */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  No adjudicados
-                </p>
-                <p className="text-4xl font-bold text-white mt-2">
-                  {stats.rechazados}
-                </p>
-              </div>
-              <div className="p-3 bg-red-500/10 rounded-xl">
-                <XCircle size={24} className="text-red-400" />
-              </div>
-            </div>
-          </div>
+          <StatCard
+            icon={<Package size={18} />}
+            label="Total Solicitudes"
+            value={stats.total}
+          />
+          <StatCard
+            icon={<CheckCircle size={18} />}
+            label="Adjudicados"
+            value={stats.adjudicados}
+            trend="up"
+            trendValue={`Tasa: ${tasaExito}%`}
+          />
+          <StatCard
+            icon={<Clock size={18} />}
+            label="Pendientes"
+            value={stats.pendientes}
+          />
+          <StatCard
+            icon={<XCircle size={18} />}
+            label="No adjudicados"
+            value={stats.rechazados}
+          />
         </div>
 
         {/* Información del scoring */}
-        <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
+        <Card>
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp size={24} className="text-primary-400" />
-            <h2 className="text-xl font-semibold text-white">¿Cómo funciona el Scoring?</h2>
+            <TrendingUp size={24} className="text-primary-500" />
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">¿Cómo funciona el Scoring?</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
-              <p className="text-sm font-semibold text-green-400 mb-2">Suma puntos (+)</p>
-              <ul className="text-xs text-gray-300 space-y-1">
+            <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl">
+              <p className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2">Suma puntos (+)</p>
+              <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1">
                 <li>• Certificados entregados a tiempo: +5 pts</li>
                 <li>• Lotes completados sin incidentes: +3 pts</li>
                 <li>• Cotizaciones adjudicadas: +2 pts</li>
               </ul>
             </div>
 
-            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
-              <p className="text-sm font-semibold text-red-400 mb-2">Resta puntos (-)</p>
-              <ul className="text-xs text-gray-300 space-y-1">
+            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+              <p className="text-sm font-semibold text-red-700 dark:text-red-400 mb-2">Resta puntos (-)</p>
+              <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1">
                 <li>• Certificados con demora: -5 pts</li>
                 <li>• Incumplimiento de retiro: -10 pts</li>
                 <li>• Certificado rechazado: -15 pts</li>
               </ul>
             </div>
 
-            <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-              <p className="text-sm font-semibold text-blue-400 mb-2">Rangos de scoring</p>
-              <ul className="text-xs text-gray-300 space-y-1">
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+              <p className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2">Rangos de scoring</p>
+              <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1">
                 <li>• 0-30: Gestora nueva o con problemas</li>
                 <li>• 31-60: Gestora regular</li>
                 <li>• 61-100: Gestora confiable</li>
               </ul>
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* Listado de solicitudes */}
-        <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-semibold text-white">
-                Historial de Solicitudes
-              </h2>
-              <p className="text-sm text-gray-400 mt-1">
-                {misSolicitudes.length} solicitud(es) realizada(s)
-              </p>
-            </div>
-          </div>
-
+        <Card title="Historial de Solicitudes" subtitle={`${misSolicitudes.length} solicitud(es) realizada(s)`}>
           {misSolicitudes.length > 0 ? (
             <div className="space-y-3">
               {misSolicitudes.map(({ lote, miCotizacion, totalCotizaciones, esAdjudicado, esRechazado, estado }) => (
@@ -225,63 +164,63 @@ export default function MisSolicitudes() {
                   onClick={() => navigate(`/gestora/lote/${lote.id}`)}
                   className={`p-5 rounded-xl border cursor-pointer transition-all hover:scale-[1.01] ${
                     esAdjudicado
-                      ? 'bg-primary-500/10 border-primary-500/50 hover:bg-primary-500/15'
+                      ? 'bg-primary-50 dark:bg-primary-900/10 border-primary-200 dark:border-primary-700/50 hover:bg-primary-100 dark:hover:bg-primary-900/20'
                       : esRechazado
-                      ? 'bg-gray-800/30 border-gray-700/50 hover:bg-gray-800/50'
-                      : 'bg-gray-800/30 border-amber-500/50 hover:bg-gray-800/50'
+                      ? 'bg-gray-50 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800/50'
+                      : 'bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-700/50 hover:bg-amber-100 dark:hover:bg-amber-900/20'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="font-mono text-xs font-semibold text-primary-400">
+                        <span className="font-mono text-xs font-semibold text-primary-500">
                           {lote.id}
                         </span>
                         {esAdjudicado && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-primary-500/20 text-primary-300 border border-primary-500/50">
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-700/50">
                             <CheckCircle size={12} />
                             Adjudicado
                           </span>
                         )}
                         {esRechazado && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/50">
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700/30 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600/50">
                             <XCircle size={12} />
                             No adjudicado
                           </span>
                         )}
                         {estado === 'pendiente' && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/50">
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-700/50">
                             <Clock size={12} />
                             En evaluación
                           </span>
                         )}
                       </div>
-                      <h3 className="text-white font-semibold text-lg mb-1">
+                      <h3 className="text-gray-900 dark:text-gray-100 font-semibold text-lg mb-1">
                         {lote.categoria}
                       </h3>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         {lote.cantidad_items} ítems · {lote.peso_total_kg} kg
                       </p>
                     </div>
                     <StatusBadge estado={lote.estado} size="sm" />
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4 pt-3 border-t border-gray-700/50">
+                  <div className="grid grid-cols-3 gap-4 pt-3 border-t border-gray-100 dark:border-gray-700">
                     <div>
-                      <p className="text-xs text-gray-500 mb-1">Tu cotización</p>
-                      <p className="text-lg font-bold text-white">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Tu cotización</p>
+                      <p className="text-lg font-bold text-gray-900 dark:text-gray-100">
                         ${miCotizacion.cotizacion.toLocaleString('es-UY')}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 mb-1">Fecha</p>
-                      <p className="text-sm font-medium text-gray-300">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Fecha</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         {miCotizacion.fecha}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 mb-1">Competencia</p>
-                      <p className="text-sm font-medium text-gray-300">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Competencia</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         {totalCotizaciones} gestora(s)
                       </p>
                     </div>
@@ -291,22 +230,19 @@ export default function MisSolicitudes() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <DollarSign size={48} className="text-gray-600 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">
+              <DollarSign size={48} className="text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 No hay solicitudes aún
               </h3>
-              <p className="text-gray-400 text-sm mb-6">
+              <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
                 Comenzá cotizando lotes disponibles para hacer crecer tu historial
               </p>
-              <Button
-                onClick={() => navigate('/gestora')}
-                variant="primary"
-              >
+              <Button onClick={() => navigate('/gestora')} variant="primary">
                 Ver Catálogo de Lotes
               </Button>
             </div>
           )}
-        </div>
+        </Card>
       </div>
     </div>
   )

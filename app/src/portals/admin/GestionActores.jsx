@@ -1,8 +1,16 @@
+/**
+ * GestionActores - Panel de administración de actores del sistema
+ * Tabs para gestionar institutos, operarios de ecopunto y gestoras
+ */
+
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
+import Card from '../../components/molecules/Card'
+import PageHeader from '../../components/layout/PageHeader'
+import Badge from '../../components/atoms/Badge'
 import { ArrowLeft, Building2, Users, Factory, Plus, CheckCircle, XCircle, Award, Trash2 } from '../../components/atoms/Icon'
 
 export default function GestionActores() {
@@ -19,6 +27,13 @@ export default function GestionActores() {
   const [nuevoInstituto, setNuevoInstituto] = useState({ nombre: '', sigla: '', responsable: '' })
   const [nuevoOperario, setNuevoOperario] = useState({ nombre: '', email: '', password: '' })
   const [nuevaGestora, setNuevaGestora] = useState({ nombre: '', email: '' })
+
+  // Tabs disponibles
+  const tabs = [
+    { id: 'institutos', label: 'Institutos', icon: Building2 },
+    { id: 'operarios', label: 'Operarios Ecopunto', icon: Users },
+    { id: 'gestoras', label: 'Gestoras', icon: Factory }
+  ]
 
   // Handler para agregar instituto (no persiste)
   const handleAgregarInstituto = () => {
@@ -125,49 +140,31 @@ export default function GestionActores() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Gradiente de fondo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/5 via-transparent to-secondary-500/5"></div>
-      </div>
-
-      <div className="relative max-w-7xl mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
+      <div className="max-w-7xl mx-auto p-6 space-y-6">
         {/* Header */}
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/admin')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft size={20} />
-            Volver
-          </Button>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Gestión de Actores
-            </h1>
-            <p className="text-gray-400">
-              Administración de institutos, operarios y gestoras
-            </p>
-          </div>
-        </div>
+        <PageHeader
+          title="Gestión de Actores"
+          description="Administración de institutos, operarios y gestoras"
+          actions={
+            <Button variant="ghost" icon={<ArrowLeft size={18} />} onClick={() => navigate('/admin')}>
+              Volver
+            </Button>
+          }
+        />
 
         {/* Tabs */}
-        <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 overflow-hidden">
+        <Card padding="none" className="overflow-hidden">
           {/* Tab Headers */}
-          <div className="flex border-b border-gray-800">
-            {[
-              { id: 'institutos', label: 'Institutos', icon: Building2 },
-              { id: 'operarios', label: 'Operarios Ecopunto', icon: Users },
-              { id: 'gestoras', label: 'Gestoras', icon: Factory }
-            ].map(tab => (
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
+            {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setTabActiva(tab.id)}
                 className={`flex-1 px-6 py-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                   tabActiva === tab.id
-                    ? 'bg-primary-500/10 text-primary-400 border-b-2 border-primary-500'
-                    : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/50'
+                    ? 'bg-primary-50 dark:bg-primary-900/10 text-primary-600 dark:text-primary-400 border-b-2 border-primary-500'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50'
                 }`}
               >
                 <tab.icon size={18} />
@@ -182,42 +179,43 @@ export default function GestionActores() {
             {tabActiva === 'institutos' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-white">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     Institutos Registrados ({state.institutos?.length || 0})
                   </h2>
                   <Button
+                    variant="primary"
+                    size="sm"
+                    icon={<Plus size={16} />}
                     onClick={() => setMostrarFormInstituto(!mostrarFormInstituto)}
-                    className="flex items-center gap-2"
                   >
-                    <Plus size={18} />
                     Agregar Instituto
                   </Button>
                 </div>
 
                 {mostrarFormInstituto && (
-                  <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 space-y-3">
-                    <h3 className="text-sm font-semibold text-white">Nuevo Instituto</h3>
+                  <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-3">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Nuevo Instituto</h3>
                     <div className="grid grid-cols-3 gap-3">
                       <input
                         type="text"
                         placeholder="Nombre completo"
                         value={nuevoInstituto.nombre}
                         onChange={(e) => setNuevoInstituto({ ...nuevoInstituto, nombre: e.target.value })}
-                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                       />
                       <input
                         type="text"
                         placeholder="Sigla"
                         value={nuevoInstituto.sigla}
                         onChange={(e) => setNuevoInstituto({ ...nuevoInstituto, sigla: e.target.value })}
-                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                       />
                       <input
                         type="email"
                         placeholder="Email responsable"
                         value={nuevoInstituto.responsable}
                         onChange={(e) => setNuevoInstituto({ ...nuevoInstituto, responsable: e.target.value })}
-                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                       />
                     </div>
                     <div className="flex gap-2">
@@ -227,39 +225,39 @@ export default function GestionActores() {
                         setNuevoInstituto({ nombre: '', sigla: '', responsable: '' })
                       }}>Cancelar</Button>
                     </div>
-                    <p className="text-xs text-amber-400">⚠️ MVP: No persiste al recargar</p>
+                    <p className="text-xs text-amber-600 dark:text-amber-400">⚠️ MVP: No persiste al recargar</p>
                   </div>
                 )}
 
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-gray-800">
-                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Sigla</th>
-                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Nombre</th>
-                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Responsable</th>
-                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Estado</th>
+                      <tr className="border-b border-gray-200 dark:border-gray-700">
+                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Sigla</th>
+                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Nombre</th>
+                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Responsable</th>
+                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Estado</th>
                       </tr>
                     </thead>
                     <tbody>
                       {state.institutos?.map((instituto) => (
-                        <tr key={instituto.id} className="border-b border-gray-800/50 hover:bg-gray-800/30">
+                        <tr key={instituto.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/30">
                           <td className="py-3 px-4">
-                            <span className="font-semibold text-primary-400">{instituto.sigla}</span>
+                            <span className="font-semibold text-primary-500">{instituto.sigla}</span>
                           </td>
-                          <td className="py-3 px-4 text-white">{instituto.nombre}</td>
-                          <td className="py-3 px-4 text-gray-400 text-sm">{instituto.responsable}</td>
+                          <td className="py-3 px-4 text-gray-900 dark:text-gray-100">{instituto.nombre}</td>
+                          <td className="py-3 px-4 text-gray-500 dark:text-gray-400 text-sm">{instituto.responsable}</td>
                           <td className="py-3 px-4 text-center">
                             {instituto.activo ? (
-                              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-green-500/10 text-green-400 border border-green-500/30">
+                              <Badge variant="success" size="sm">
                                 <CheckCircle size={12} />
                                 Activo
-                              </span>
+                              </Badge>
                             ) : (
-                              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-gray-500/10 text-gray-400 border border-gray-500/30">
+                              <Badge variant="default" size="sm">
                                 <XCircle size={12} />
                                 Inactivo
-                              </span>
+                              </Badge>
                             )}
                           </td>
                         </tr>
@@ -274,42 +272,43 @@ export default function GestionActores() {
             {tabActiva === 'operarios' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-white">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     Operarios de Ecopunto ({state.usuarios?.filter(u => u.rol === 'ecopunto').length || 0})
                   </h2>
                   <Button
+                    variant="primary"
+                    size="sm"
+                    icon={<Plus size={16} />}
                     onClick={() => setMostrarFormOperario(!mostrarFormOperario)}
-                    className="flex items-center gap-2"
                   >
-                    <Plus size={18} />
                     Agregar Operario
                   </Button>
                 </div>
 
                 {mostrarFormOperario && (
-                  <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 space-y-3">
-                    <h3 className="text-sm font-semibold text-white">Nuevo Operario</h3>
+                  <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-3">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Nuevo Operario</h3>
                     <div className="grid grid-cols-3 gap-3">
                       <input
                         type="text"
                         placeholder="Nombre completo"
                         value={nuevoOperario.nombre}
                         onChange={(e) => setNuevoOperario({ ...nuevoOperario, nombre: e.target.value })}
-                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                       />
                       <input
                         type="email"
                         placeholder="Email"
                         value={nuevoOperario.email}
                         onChange={(e) => setNuevoOperario({ ...nuevoOperario, email: e.target.value })}
-                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                       />
                       <input
                         type="password"
                         placeholder="Contraseña"
                         value={nuevoOperario.password}
                         onChange={(e) => setNuevoOperario({ ...nuevoOperario, password: e.target.value })}
-                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                       />
                     </div>
                     <div className="flex gap-2">
@@ -326,22 +325,22 @@ export default function GestionActores() {
                   {state.usuarios?.filter(u => u.rol === 'ecopunto').map((operario) => (
                     <div
                       key={operario.id}
-                      className="bg-gray-800/30 border border-gray-700/50 rounded-xl p-4 flex items-center justify-between"
+                      className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex items-center justify-between"
                     >
                       <div>
-                        <p className="font-medium text-white">{operario.nombre}</p>
-                        <p className="text-sm text-gray-400">{operario.email}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{operario.nombre}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{operario.email}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs bg-green-500/10 text-green-400 border border-green-500/30">
+                        <Badge variant="success" size="sm">
                           <CheckCircle size={12} />
                           Activo
-                        </span>
+                        </Badge>
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => handleEliminarOperario(operario)}
-                          className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                         >
                           <Trash2 size={16} />
                         </Button>
@@ -356,35 +355,36 @@ export default function GestionActores() {
             {tabActiva === 'gestoras' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-white">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     Gestoras Registradas ({state.gestoras?.length || 0})
                   </h2>
                   <Button
+                    variant="primary"
+                    size="sm"
+                    icon={<Plus size={16} />}
                     onClick={() => setMostrarFormGestora(!mostrarFormGestora)}
-                    className="flex items-center gap-2"
                   >
-                    <Plus size={18} />
                     Agregar Gestora
                   </Button>
                 </div>
 
                 {mostrarFormGestora && (
-                  <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 space-y-3">
-                    <h3 className="text-sm font-semibold text-white">Nueva Gestora</h3>
+                  <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-3">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Nueva Gestora</h3>
                     <div className="grid grid-cols-2 gap-3">
                       <input
                         type="text"
                         placeholder="Nombre de la empresa"
                         value={nuevaGestora.nombre}
                         onChange={(e) => setNuevaGestora({ ...nuevaGestora, nombre: e.target.value })}
-                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                       />
                       <input
                         type="email"
                         placeholder="Email de contacto"
                         value={nuevaGestora.email}
                         onChange={(e) => setNuevaGestora({ ...nuevaGestora, email: e.target.value })}
-                        className="bg-gray-950/50 border border-gray-700 text-white rounded-lg px-3 py-2 text-sm"
+                        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
                       />
                     </div>
                     <div className="flex gap-2">
@@ -394,7 +394,7 @@ export default function GestionActores() {
                         setNuevaGestora({ nombre: '', email: '' })
                       }}>Cancelar</Button>
                     </div>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       💡 Scoring inicial: {state.config.scoring_inicial} · Habilitación: Deshabilitada por defecto
                     </p>
                   </div>
@@ -403,36 +403,36 @@ export default function GestionActores() {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-gray-800">
-                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Nombre</th>
-                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-400">Email</th>
-                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Scoring</th>
-                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Certificados</th>
-                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Habilitación</th>
-                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-400">Acciones</th>
+                      <tr className="border-b border-gray-200 dark:border-gray-700">
+                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Nombre</th>
+                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Email</th>
+                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Scoring</th>
+                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Certificados</th>
+                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Habilitación</th>
+                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       {state.gestoras?.map((gestora) => (
-                        <tr key={gestora.id} className="border-b border-gray-800/50 hover:bg-gray-800/30">
+                        <tr key={gestora.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/30">
                           <td className="py-3 px-4">
-                            <span className="font-semibold text-white">{gestora.nombre}</span>
+                            <span className="font-semibold text-gray-900 dark:text-gray-100">{gestora.nombre}</span>
                           </td>
-                          <td className="py-3 px-4 text-gray-400 text-sm">{gestora.email}</td>
+                          <td className="py-3 px-4 text-gray-500 dark:text-gray-400 text-sm">{gestora.email}</td>
                           <td className="py-3 px-4 text-center">
                             <div className="flex items-center justify-center gap-2">
-                              <Award size={16} className="text-primary-400" />
-                              <span className="font-bold text-primary-400">{gestora.scoring}</span>
+                              <Award size={16} className="text-primary-500" />
+                              <span className="font-bold text-primary-500">{gestora.scoring}</span>
                             </div>
                           </td>
-                          <td className="py-3 px-4 text-center text-sm text-gray-400">
+                          <td className="py-3 px-4 text-center text-sm text-gray-500 dark:text-gray-400">
                             {gestora.certificados_a_tiempo} / {gestora.certificados_entregados}
                           </td>
                           <td className="py-3 px-4 text-center">
                             <button
                               onClick={() => handleToggleHabilitacion(gestora.id, gestora.nombre, gestora.habilitacion_ministerio)}
                               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                                gestora.habilitacion_ministerio ? 'bg-green-500' : 'bg-gray-600'
+                                gestora.habilitacion_ministerio ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
                               }`}
                             >
                               <span
@@ -447,7 +447,7 @@ export default function GestionActores() {
                               size="sm"
                               variant="ghost"
                               onClick={() => handleEliminarGestora(gestora)}
-                              className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                              className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                             >
                               <Trash2 size={16} />
                             </Button>
@@ -458,8 +458,8 @@ export default function GestionActores() {
                   </table>
                 </div>
 
-                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                  <p className="text-sm text-blue-300">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
                     💡 <strong>Habilitación del Ministerio:</strong> Solo gestoras habilitadas pueden participar en licitaciones.
                     Deshabilitar una gestora no afecta sus lotes ya adjudicados.
                   </p>
@@ -467,7 +467,7 @@ export default function GestionActores() {
               </div>
             )}
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   )
