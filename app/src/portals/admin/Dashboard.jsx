@@ -1,10 +1,33 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { Package, Leaf, Cpu, Layers, Award, TrendingUp, Users, CheckCircle } from '../../components/atoms/Icon'
+import {
+  BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip,
+  Legend, ResponsiveContainer
+} from 'recharts'
+import PageHeader from '../../components/layout/PageHeader'
+import Card, { StatCard } from '../../components/molecules/Card'
 import Button from '../../components/atoms/Button'
+import {
+  Package, Leaf, Cpu, Layers, Award,
+  TrendingUp, Users, CheckCircle
+} from '../../components/atoms/Icon'
 import { ESTADOS_LOTE } from '../../constants/estados'
+
+// Componente interno para divisores de sección
+function SectionDivider({ title, icon }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary-500/50 to-transparent" />
+      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+        {icon}
+        {title}
+      </h2>
+      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary-500/50 to-transparent" />
+    </div>
+  )
+}
 
 export default function AdminDashboard() {
   const { state } = useApp()
@@ -85,26 +108,21 @@ export default function AdminDashboard() {
     !l.gestora_asignada_id
   ).length
 
+  // Tooltip personalizado para Recharts
+  const chartTooltipStyle = {
+    backgroundColor: 'var(--tooltip-bg, #ffffff)',
+    border: '1px solid var(--tooltip-border, #e5e7eb)',
+    borderRadius: '0.5rem',
+    color: 'var(--tooltip-color, #111827)'
+  }
+
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Gradiente de fondo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/5 via-transparent to-secondary-500/5"></div>
-      </div>
-
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl"></div>
-
-      <div className="relative max-w-7xl mx-auto p-6 space-y-8">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Panel Administrativo
-            </h1>
-            <p className="text-gray-400">
-              Impacto ambiental y gestión del sistema
-            </p>
-          </div>
+    <div className="space-y-8">
+      {/* Header */}
+      <PageHeader
+        title="Panel Administrativo"
+        description="Impacto ambiental y gestión del sistema"
+        actions={
           <div className="flex gap-3">
             <Button
               variant="secondary"
@@ -128,153 +146,87 @@ export default function AdminDashboard() {
               </Button>
             )}
           </div>
-        </div>
+        }
+      />
 
-        {/* SECCIÓN 1: IMPACTO AMBIENTAL */}
-        <div className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-green-500/50 to-transparent"></div>
-            <h2 className="text-2xl font-bold text-green-400 flex items-center gap-2">
-              <Leaf size={28} />
-              Impacto Ambiental
-            </h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-green-500/50 to-transparent"></div>
-          </div>
+      {/* SECCIÓN 1: IMPACTO AMBIENTAL */}
+      <div className="space-y-6">
+        <SectionDivider title="Impacto Ambiental" icon={<Leaf size={24} />} />
 
-          {/* KPIs Ambientales */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Total kg */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  Total Gestionado
-                </p>
-                <p className="text-4xl font-bold text-white mt-2">
-                  {kpis.totalKg}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">kilogramos de RAEE</p>
-              </div>
-              <div className="p-3 bg-blue-500/10 rounded-xl">
-                <Package size={24} className="text-blue-400" />
-              </div>
-            </div>
-          </div>
-
-          {/* CO2 evitado */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  CO₂ Evitado
-                </p>
-                <p className="text-4xl font-bold text-white mt-2">
-                  {kpis.co2Evitado}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">kg de emisiones</p>
-              </div>
-              <div className="p-3 bg-green-500/10 rounded-xl">
-                <Leaf size={24} className="text-green-400" />
-              </div>
-            </div>
-          </div>
-
-          {/* Cobre recuperado */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  Cobre Recuperado
-                </p>
-                <p className="text-4xl font-bold text-white mt-2">
-                  {kpis.cobreRecuperado}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">kg (~{state.config.materiales_recuperados_pct.cobre * 100}% del total)</p>
-              </div>
-              <div className="p-3 bg-amber-500/10 rounded-xl">
-                <Cpu size={24} className="text-amber-400" />
-              </div>
-            </div>
-          </div>
-
-          {/* Aluminio recuperado */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-400">
-                  Aluminio Recuperado
-                </p>
-                <p className="text-4xl font-bold text-white mt-2">
-                  {kpis.aluminioRecuperado}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">kg (~{state.config.materiales_recuperados_pct.aluminio * 100}% del total)</p>
-              </div>
-              <div className="p-3 bg-purple-500/10 rounded-xl">
-                <Layers size={24} className="text-purple-400" />
-              </div>
-            </div>
-          </div>
+        {/* KPIs Ambientales */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCard
+            icon={<Package size={24} />}
+            label="Total Gestionado"
+            value={`${kpis.totalKg} kg`}
+          />
+          <StatCard
+            icon={<Leaf size={24} />}
+            label="CO₂ Evitado"
+            value={`${kpis.co2Evitado} kg`}
+          />
+          <StatCard
+            icon={<Cpu size={24} />}
+            label="Cobre Recuperado"
+            value={`${kpis.cobreRecuperado} kg`}
+          />
+          <StatCard
+            icon={<Layers size={24} />}
+            label="Aluminio Recuperado"
+            value={`${kpis.aluminioRecuperado} kg`}
+          />
         </div>
 
         {/* Métrica de finalización */}
-        <div className="grid grid-cols-1 gap-4">
-          {/* % Lotes con certificado */}
-          <div className="bg-gradient-to-br from-green-500/20 to-emerald-600/10 backdrop-blur-xl rounded-2xl border border-green-500/50 p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-green-300">
-                  Tasa de Finalización
-                </p>
-                <p className="text-5xl font-bold text-white mt-2">
-                  {kpis.pctCertificados}%
-                </p>
-                <p className="text-xs text-green-400 mt-1">
-                  {kpis.lotesFinalizados} de {kpis.totalLotesPublicados} lotes con certificado
-                </p>
-              </div>
-              <div className="p-3 bg-green-500/20 rounded-xl">
-                <Award size={28} className="text-green-400" />
-              </div>
+        <Card variant="gradient" className="border-green-500/30">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm font-medium text-green-600 dark:text-green-400">
+                Tasa de Finalización
+              </p>
+              <p className="text-5xl font-bold text-gray-900 dark:text-white mt-2">
+                {kpis.pctCertificados}%
+              </p>
+              <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                {kpis.lotesFinalizados} de {kpis.totalLotesPublicados} lotes con certificado
+              </p>
+            </div>
+            <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-xl">
+              <Award size={28} className="text-green-600 dark:text-green-400" />
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* Gráficos Ambientales */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Gráfico de barras: kg por instituto */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <h2 className="text-xl font-semibold text-white mb-4">
-              RAEE Gestionado por Instituto
-            </h2>
+          <Card title="RAEE Gestionado por Instituto">
             {dataPorInstituto.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={dataPorInstituto}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis dataKey="nombre" stroke="#9ca3af" />
-                  <YAxis stroke="#9ca3af" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" />
+                  <XAxis dataKey="nombre" stroke="#6b7280" />
+                  <YAxis stroke="#6b7280" />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#1f2937',
-                      border: '1px solid #374151',
-                      borderRadius: '0.5rem',
-                      color: '#fff'
+                      ...chartTooltipStyle,
+                      backgroundColor: 'var(--tooltip-bg, #ffffff)',
+                      border: '1px solid var(--tooltip-border, #e5e7eb)',
+                      color: 'var(--tooltip-color, #111827)'
                     }}
                   />
                   <Bar dataKey="kg" fill="#3b82f6" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
                 No hay datos disponibles
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Gráfico de torta: certificados */}
-          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-            <h2 className="text-xl font-semibold text-white mb-4">
-              Estado de Lotes Publicados
-            </h2>
+          <Card title="Estado de Lotes Publicados">
             {dataCertificados.some(d => d.value > 0) ? (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
@@ -296,96 +248,44 @@ export default function AdminDashboard() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#1f2937',
-                      border: '1px solid #374151',
-                      borderRadius: '0.5rem',
-                      color: '#fff'
+                      ...chartTooltipStyle,
+                      backgroundColor: 'var(--tooltip-bg, #ffffff)',
+                      border: '1px solid var(--tooltip-border, #e5e7eb)',
+                      color: 'var(--tooltip-color, #111827)'
                     }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
                 No hay lotes publicados aún
               </div>
             )}
-          </div>
+          </Card>
         </div>
-        </div>
+      </div>
 
-        {/* SECCIÓN 2: GESTIÓN DEL SISTEMA */}
-        <div className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-            <h2 className="text-2xl font-bold text-blue-400 flex items-center gap-2">
-              <Users size={28} />
-              Gestión del Sistema
-            </h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-          </div>
+      {/* SECCIÓN 2: GESTIÓN DEL SISTEMA */}
+      <div className="space-y-6">
+        <SectionDivider title="Gestión del Sistema" icon={<Users size={24} />} />
 
-          {/* Métricas de Actores */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Total Institutos */}
-            <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-400">
-                    Institutos Activos
-                  </p>
-                  <p className="text-5xl font-bold text-white mt-2">
-                    {state.institutos?.filter(i => i.activo).length || 0}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    de {state.institutos?.length || 0} totales
-                  </p>
-                </div>
-                <div className="p-3 bg-blue-500/10 rounded-xl">
-                  <Users size={28} className="text-blue-400" />
-                </div>
-              </div>
-            </div>
-
-            {/* Operarios */}
-            <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-400">
-                    Operarios Ecopunto
-                  </p>
-                  <p className="text-5xl font-bold text-white mt-2">
-                    {state.usuarios?.filter(u => u.rol === 'ecopunto').length || 0}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    usuarios activos
-                  </p>
-                </div>
-                <div className="p-3 bg-purple-500/10 rounded-xl">
-                  <Users size={28} className="text-purple-400" />
-                </div>
-              </div>
-            </div>
-
-            {/* Gestoras habilitadas */}
-            <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-400">
-                    Gestoras Habilitadas
-                  </p>
-                  <p className="text-5xl font-bold text-white mt-2">
-                    {state.gestoras?.filter(g => g.habilitacion_ministerio).length || 0}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    de {state.gestoras?.length || 0} registradas
-                  </p>
-                </div>
-                <div className="p-3 bg-green-500/10 rounded-xl">
-                  <TrendingUp size={28} className="text-green-400" />
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Métricas de Actores */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StatCard
+            icon={<Users size={24} />}
+            label="Institutos Activos"
+            value={`${state.institutos?.filter(i => i.activo).length || 0}`}
+          />
+          <StatCard
+            icon={<Users size={24} />}
+            label="Operarios Ecopunto"
+            value={`${state.usuarios?.filter(u => u.rol === 'ecopunto').length || 0}`}
+          />
+          <StatCard
+            icon={<TrendingUp size={24} />}
+            label="Gestoras Habilitadas"
+            value={`${state.gestoras?.filter(g => g.habilitacion_ministerio).length || 0}`}
+          />
         </div>
       </div>
     </div>

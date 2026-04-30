@@ -58,7 +58,7 @@ export default function Sidebar({ isOpen, onClose }) {
       {/* Overlay para mobile cuando el sidebar está abierto */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-2xl z-40 lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -71,7 +71,8 @@ export default function Sidebar({ isOpen, onClose }) {
           w-60 bg-white dark:bg-gray-900
           border-r border-gray-200 dark:border-gray-800
           flex flex-col
-          transition-transform duration-300 ease-in-out
+          transition-all duration-300 ease-in-out
+          shadow-2xl shadow-black/20 dark:shadow-black/40
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
@@ -94,7 +95,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* Navegación */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {items.map((item) => {
+          {items.map((item, index) => {
             const IconComp = item.icon
             const isActive = location.pathname === item.to
 
@@ -103,6 +104,7 @@ export default function Sidebar({ isOpen, onClose }) {
                 key={item.to}
                 to={item.to}
                 onClick={onClose}
+                style={{ transitionDelay: `${index * 50}ms` }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
                   isActive
                     ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 font-medium'
@@ -117,31 +119,33 @@ export default function Sidebar({ isOpen, onClose }) {
         </nav>
 
         {/* Información del usuario y cierre de sesión */}
-        {usuario && (
-          <div className="p-4 border-t border-gray-200 dark:border-gray-800 shrink-0">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center text-white text-sm font-semibold shrink-0">
-                {usuario.nombre?.charAt(0)?.toUpperCase() || '?'}
+        <div className="mt-auto">
+          {usuario && (
+            <div className="p-4 border-t border-gray-200 dark:border-gray-800 shrink-0">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center text-white text-sm font-semibold shrink-0">
+                  {usuario.nombre?.charAt(0)?.toUpperCase() || '?'}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                    {usuario.nombre}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {ETIQUETAS_ROL[usuario.rol] || usuario.rol}
+                  </p>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                  {usuario.nombre}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {ETIQUETAS_ROL[usuario.rol] || usuario.rol}
-                </p>
-              </div>
+              <button
+                onClick={() => dispatch({ type: 'LOGOUT' })}
+                className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                aria-label="Cerrar sesión"
+              >
+                <LogOut size={16} />
+                <span>Cerrar sesión</span>
+              </button>
             </div>
-            <button
-              onClick={() => dispatch({ type: 'LOGOUT' })}
-              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-              aria-label="Cerrar sesión"
-            >
-              <LogOut size={16} />
-              <span>Cerrar sesión</span>
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </aside>
     </>
   )
