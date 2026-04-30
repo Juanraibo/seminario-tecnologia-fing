@@ -27,6 +27,8 @@ export const {
   ChevronUp,
   ArrowLeft,
   ArrowRight,
+  LayoutDashboard,
+  PlusCircle,
 
   // Acciones
   Plus,
@@ -39,6 +41,7 @@ export const {
   Search,
   Filter,
   MoreVertical,
+  ArrowUpDown,
 
   // Estados y feedback
   Check,
@@ -62,6 +65,7 @@ export const {
   Package,
   PackageCheck,
   PackagePlus,
+  PackageX,
   Boxes,
   Scale,
   Tag,

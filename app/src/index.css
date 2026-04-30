@@ -5,6 +5,11 @@
 @tailwind utilities;
 
 @layer base {
+  /* ── Design tokens CSS ────────────────────────────────────────
+   * Estas variables están disponibles para estilos que no
+   * puedan expresarse fácilmente con clases Tailwind.
+   * Uso: background-color: rgb(var(--color-bg-base));
+   */
   :root {
     --color-bg-base: 249 250 251; /* gray-50 */
     --color-bg-elevated: 255 255 255; /* white */
@@ -22,11 +27,12 @@
   }
 
   body {
-    @apply bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-50;
+    background-color: rgb(var(--color-bg-base));
+    color: rgb(var(--color-text-primary));
     @apply transition-colors duration-200;
   }
 
-  /* Scrollbar personalizado */
+  /* Scrollbar personalizado — smooth */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -44,6 +50,11 @@
     @apply bg-gray-400 dark:bg-gray-500;
   }
 
+  /* Smooth scroll para toda la app */
+  html {
+    scroll-behavior: smooth;
+  }
+
   /* Animación para toasts */
   @keyframes slide-in {
     from {
@@ -58,5 +69,68 @@
 
   .animate-slide-in {
     animation: slide-in 0.3s ease-out;
+  }
+
+  /* ── Clases de utilidad ────────────────────────────────────── */
+
+  /* Efecto glass genérico */
+  .glass {
+    @apply backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border border-white/20 dark:border-gray-700/30;
+  }
+
+  /* Card con efecto glass y sombra */
+  .glass-card {
+    @apply glass shadow-glass dark:shadow-glass-lg;
+    @apply transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    @apply shadow-glass-lg dark:shadow-glass-lg;
+    @apply border-white/30 dark:border-gray-600/40;
+  }
+
+  /* Animación fade-in-up para entradas de página */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.4s ease-out;
+  }
+
+  /* Clases para transiciones de ruta */
+  .page-enter {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+
+  /* Focus ring global refinado — respeta prefers-reduced-motion */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary-500/50 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-950;
+    transition: ring-offset-color 0.2s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
