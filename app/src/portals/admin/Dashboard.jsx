@@ -182,8 +182,7 @@ export default function AdminDashboard() {
       {vistaActual === 'impacto' ? (
         <ImpactoAmbiental />
       ) : (
-        <div className="space-y-8">{/* Contenido original del dashboard */}
-
+        <>
       {/* SECCIÓN 1: IMPACTO AMBIENTAL */}
       <div className="space-y-6">
         <SectionDivider title="Impacto Ambiental" icon={<Leaf size={24} />} />
@@ -323,7 +322,7 @@ export default function AdminDashboard() {
           />
         </div>
       </div>
-        </div>
+        </>
       )}
     </div>
   )
