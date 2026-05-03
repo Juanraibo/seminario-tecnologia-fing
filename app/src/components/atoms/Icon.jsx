@@ -73,6 +73,15 @@ export const {
   Leaf,
   Cpu,
   Layers,
+  Battery,
+  Monitor,
+  Speaker,
+  Cable,
+  Lightbulb,
+  TreePine,
+  Car,
+  Smartphone,
+  BarChart3,
 
   // Documentos y datos
   FileText,
