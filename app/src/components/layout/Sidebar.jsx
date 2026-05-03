@@ -100,7 +100,12 @@ export default function Sidebar({ isOpen, onClose }) {
               <NavLink
                 key={item.to}
                 to={item.to}
-                onClick={onClose}
+                onClick={() => {
+                  // Solo cerrar en mobile (< lg breakpoint)
+                  if (window.innerWidth < 1024) {
+                    onClose()
+                  }
+                }}
                 className={({ isActive }) =>
                   `nav-item ${isActive ? 'active' : ''}`
                 }

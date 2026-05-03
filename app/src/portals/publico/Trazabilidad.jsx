@@ -201,7 +201,7 @@ function RegistroPublico({ state }) {
         )}
 
         {/* Footer informativo */}
-        <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl shadow-lg p-6 text-white text-center">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-400 rounded-lg shadow-enterprise-lg p-6 text-white text-center">
           <h3 className="text-lg font-semibold mb-2">
             🌱 Contribución al Medio Ambiente
           </h3>
@@ -257,7 +257,7 @@ function TarjetaLote({ lote, state, index }) {
   return (
     <button
       onClick={() => navigate(`/trazabilidad?lote=${lote.id}`)}
-      className="bg-white dark:bg-gray-900 rounded-xl shadow-soft dark:shadow-none dark:border dark:border-gray-700 hover:shadow-lg dark:hover:border-gray-600 transition-all p-5 text-left group w-full card-hover-lift"
+      className="enterprise-card transition-all duration-200 hover:scale-[1.01] hover:shadow-enterprise-md p-4 text-left group w-full cursor-pointer"
       style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
     >
       {/* Header */}
@@ -289,10 +289,10 @@ function TarjetaLote({ lote, state, index }) {
           <span className="text-xs text-gray-500 dark:text-gray-400">Progreso</span>
           <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">{progreso}%</span>
         </div>
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
           <div
-            className={`h-1.5 rounded-full transition-all ${
-              progreso === 100 ? 'bg-primary-500' : 'bg-secondary-500'
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              progreso === 100 ? 'bg-gradient-to-r from-primary-600 to-primary-400' : 'bg-gradient-to-r from-primary-500 to-primary-300'
             }`}
             style={{ width: `${progreso}%` }}
           />
@@ -414,7 +414,7 @@ function DetalleLote({ loteId, state }) {
 
             <div className="relative pl-8 space-y-6">
               {/* Línea vertical */}
-              <div className="absolute left-3 top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary-500 to-secondary-500"></div>
+              <div className="absolute left-3 top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary-600 to-primary-300"></div>
 
               {/* Paso 1: Origen (Instituto) */}
               <div className="relative">
@@ -445,7 +445,7 @@ function DetalleLote({ loteId, state }) {
               {/* Paso 2: Ecopunto (clasificación) */}
               {(lote.fecha_clasificacion_completa || lote.fecha_publicacion) && (
                 <div className="relative">
-                  <div className="absolute -left-8 w-6 h-6 bg-secondary-500 rounded-full flex items-center justify-center">
+                  <div className="absolute -left-8 w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center">
                     <Recycle size={14} className="text-white" />
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
@@ -474,7 +474,7 @@ function DetalleLote({ loteId, state }) {
               {/* Paso 3: Gestora (retiro) */}
               {gestora && (
                 <div className="relative">
-                  <div className="absolute -left-8 w-6 h-6 bg-accent-500 rounded-full flex items-center justify-center">
+                  <div className="absolute -left-8 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
                     <Factory size={14} className="text-white" />
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
@@ -534,16 +534,16 @@ function DetalleLote({ loteId, state }) {
         {items && items.length > 0 && (
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <Package size={20} className="text-secondary-500" />
+              <Package size={20} className="text-primary-600 dark:text-primary-400" />
               Ítems en este lote ({items.length})
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {items.slice(0, 8).map(item => (
-                <div key={item.id} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+                <div key={item.id} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700 transition-colors">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.descripcion}</p>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-xs text-gray-600 dark:text-gray-400">{item.categoria}</span>
-                    <span className="text-xs font-semibold text-secondary-500">{item.peso_kg} kg</span>
+                    <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">{item.peso_kg} kg</span>
                   </div>
                 </div>
               ))}
@@ -557,7 +557,7 @@ function DetalleLote({ loteId, state }) {
         )}
 
         {/* Footer informativo */}
-        <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl shadow-lg p-6 text-white text-center">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-400 rounded-lg shadow-enterprise-lg p-6 text-white text-center">
           <h3 className="text-lg font-semibold mb-2">
             🌱 Contribución al Medio Ambiente
           </h3>

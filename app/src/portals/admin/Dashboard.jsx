@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import {
@@ -9,9 +9,10 @@ import {
 import PageHeader from '../../components/layout/PageHeader'
 import Card, { StatCard } from '../../components/molecules/Card'
 import Button from '../../components/atoms/Button'
+import ImpactoAmbiental from '../../components/organisms/ImpactoAmbiental'
 import {
   Package, Leaf, Cpu, Layers, Award,
-  TrendingUp, Users, CheckCircle
+  TrendingUp, Users, CheckCircle, BarChart3
 } from '../../components/atoms/Icon'
 import { ESTADOS_LOTE } from '../../constants/estados'
 
@@ -32,6 +33,7 @@ function SectionDivider({ title, icon }) {
 export default function AdminDashboard() {
   const { state } = useApp()
   const navigate = useNavigate()
+  const [vistaActual, setVistaActual] = useState('resumen') // 'resumen' | 'impacto'
 
   // Calcular KPIs
   const kpis = useMemo(() => {
@@ -118,36 +120,69 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <PageHeader
-        title="Panel Administrativo"
-        description="Impacto ambiental y gestión del sistema"
-        actions={
-          <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              onClick={() => navigate('/admin/actores')}
-              className="flex items-center gap-2"
-            >
-              <Users size={18} />
-              Gestión de Actores
-            </Button>
-            {lotesPendientes > 0 && (
+      {/* Header con tabs */}
+      <div className="space-y-4">
+        <PageHeader
+          title="Panel Administrativo"
+          description="Impacto ambiental y gestión del sistema"
+          actions={
+            <div className="flex gap-3">
               <Button
-                variant="primary"
-                onClick={() => navigate('/admin/retiros')}
-                className="flex items-center gap-2 relative"
+                variant="secondary"
+                onClick={() => navigate('/admin/actores')}
+                className="flex items-center gap-2"
               >
-                <CheckCircle size={18} />
-                Aprobar Retiros
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                  {lotesPendientes}
-                </span>
+                <Users size={18} />
+                Gestión de Actores
               </Button>
-            )}
-          </div>
-        }
-      />
+              {lotesPendientes > 0 && (
+                <Button
+                  variant="primary"
+                  onClick={() => navigate('/admin/retiros')}
+                  className="flex items-center gap-2 relative"
+                >
+                  <CheckCircle size={18} />
+                  Aprobar Retiros
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                    {lotesPendientes}
+                  </span>
+                </Button>
+              )}
+            </div>
+          }
+        />
+
+        {/* Tabs de navegación */}
+        <div className="flex gap-2 border-b border-gray-200 dark:border-gray-800">
+          <button
+            onClick={() => setVistaActual('resumen')}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+              vistaActual === 'resumen'
+                ? 'border-primary-600 text-primary-600 dark:text-primary-400'
+                : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+            }`}
+          >
+            Resumen General
+          </button>
+          <button
+            onClick={() => setVistaActual('impacto')}
+            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
+              vistaActual === 'impacto'
+                ? 'border-primary-600 text-primary-600 dark:text-primary-400'
+                : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+            }`}
+          >
+            <BarChart3 size={16} />
+            Impacto Ambiental
+          </button>
+        </div>
+      </div>
+
+      {/* Contenido según vista activa */}
+      {vistaActual === 'impacto' ? (
+        <ImpactoAmbiental />
+      ) : (
+        <div className="space-y-8">{/* Contenido original del dashboard */}
 
       {/* SECCIÓN 1: IMPACTO AMBIENTAL */}
       <div className="space-y-6">
@@ -288,6 +323,8 @@ export default function AdminDashboard() {
           />
         </div>
       </div>
+        </div>
+      )}
     </div>
   )
 }

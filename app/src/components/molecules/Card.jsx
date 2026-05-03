@@ -60,7 +60,7 @@ export function StatCard({ icon, label, value, trend, trendValue, className = ''
   }
 
   return (
-    <div className={`enterprise-card p-5 ${className}`}>
+    <div className={`enterprise-card p-5 transition-all duration-200 hover:scale-[1.02] hover:shadow-enterprise-md group ${className}`}>
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
@@ -76,7 +76,7 @@ export function StatCard({ icon, label, value, trend, trendValue, className = ''
           )}
         </div>
         {icon && (
-          <div className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 shrink-0 ml-4">
+          <div className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 group-hover:bg-primary-50 dark:group-hover:bg-primary-950/30 shrink-0 ml-4 transition-colors text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400">
             {icon}
           </div>
         )}

@@ -82,7 +82,7 @@
   }
 
   .enterprise-card:hover {
-    @apply border-gray-300 dark:border-gray-700 shadow-enterprise-md;
+    @apply border-primary-200 dark:border-primary-900/30 shadow-enterprise-md;
   }
 
   /* Table row hover */
@@ -92,7 +92,7 @@
   }
 
   .enterprise-table-row:hover {
-    @apply bg-gray-50 dark:bg-gray-900/50;
+    @apply bg-primary-50/50 dark:bg-primary-950/20;
   }
 
   /* Kbd tag para shortcuts */
@@ -116,7 +116,7 @@
   }
 
   .nav-item.active {
-    @apply bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white;
+    @apply bg-primary-50 dark:bg-primary-950/30 text-primary-900 dark:text-primary-100 border-l-2 border-primary-600 dark:border-primary-400 -ml-0.5 pl-[7px];
   }
 
   /* Clases para transiciones de ruta */
