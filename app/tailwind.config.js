@@ -4,151 +4,62 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class', // Habilitar dark mode con estrategia de clase
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // Paleta Tech Sostenible
+        // Enterprise Primary — Verde sostenible como único accent
         primary: {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          200: '#a7f3d0',
-          300: '#6ee7b7',
-          400: '#34d399',
-          500: '#10b981', // Verde esmeralda principal
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#10b981', // Verde esmeralda — único color de marca
           600: '#059669',
           700: '#047857',
           800: '#065f46',
           900: '#064e3b',
           950: '#022c22',
         },
-        secondary: {
-          50: '#ecfeff',
-          100: '#cffafe',
-          200: '#a5f3fc',
-          300: '#67e8f9',
-          400: '#22d3ee',
-          500: '#06b6d4', // Azul eléctrico/cyan
-          600: '#0891b2',
-          700: '#0e7490',
-          800: '#155e75',
-          900: '#164e63',
-          950: '#083344',
-        },
-        accent: {
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
-          300: '#d8b4fe',
-          400: '#c084fc',
-          500: '#a855f7', // Morado para highlights
-          600: '#9333ea',
-          700: '#7e22ce',
-          800: '#6b21a8',
-          900: '#581c87',
-          950: '#3b0764',
-        },
-        teal: {
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          200: '#99f6e4',
-          300: '#5eead4',
-          400: '#2dd4bf',
-          500: '#14b8a6', // Teal para acentos
-          600: '#0d9488',
-          700: '#0f766e',
-          800: '#115e59',
-          900: '#134e4a',
-          950: '#042f2e',
-        },
-        // Superficies neutras cálidas (warm stone)
-        surface: {
-          50: '#fafaf9',
-          100: '#f5f5f4',
-          200: '#e7e5e4',
-          300: '#d6d3d1',
-          400: '#a8a29e',
-          500: '#78716c',
-          600: '#57534e',
-          700: '#44403c',
-          800: '#292524',
-          900: '#1c1917',
-          950: '#0c0a09',
-        },
-        // Alias para gradient stops
-        gradient: {
-          primary: '#10b981',
-          'primary-dark': '#059669',
-          secondary: '#06b6d4',
-          'secondary-dark': '#0891b2',
-          accent: '#a855f7',
-          'accent-dark': '#9333ea',
-        },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+      },
+      fontSize: {
+        xs: ['0.75rem', { lineHeight: '1rem' }],      // 12px
+        sm: ['0.875rem', { lineHeight: '1.25rem' }],  // 14px
+        base: ['1rem', { lineHeight: '1.5rem' }],     // 16px
+        lg: ['1.125rem', { lineHeight: '1.75rem' }],  // 18px
+        xl: ['1.25rem', { lineHeight: '1.75rem' }],   // 20px
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],    // 24px
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],   // 36px
       },
       animation: {
-        'fade-in': 'fadeIn 0.3s ease-in-out',
-        'slide-up': 'slideUp 0.4s ease-out',
-        'slide-down': 'slideDown 0.4s ease-out',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        // Nuevas animaciones
-        'scale-in': 'scaleIn 0.2s ease-out',
-        'slide-in-bottom': 'slideInBottom 0.4s ease-out',
-        'slide-in-left': 'slideInLeft 0.3s ease-out',
-        'slide-in-right': 'slideInRight 0.3s ease-out',
-        'fade-in-up': 'fadeInUp 0.4s ease-out',
+        'fade-in': 'fadeIn 0.15s ease-out',
       },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
-        slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        slideDown: {
-          '0%': { transform: 'translateY(-10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        // Nuevos keyframes
-        scaleIn: {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        slideInBottom: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        slideInLeft: {
-          '0%': { transform: 'translateX(-100%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
-        slideInRight: {
-          '0%': { transform: 'translateX(100%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
-        fadeInUp: {
-          '0%': { transform: 'translateY(12px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
       },
       boxShadow: {
-        'soft': '0 2px 8px rgba(0, 0, 0, 0.04)',
-        'soft-lg': '0 4px 16px rgba(0, 0, 0, 0.08)',
-        'glow-primary': '0 0 20px rgba(16, 185, 129, 0.3)',
-        'glow-secondary': '0 0 20px rgba(6, 182, 212, 0.3)',
-        // Nuevas sombras
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.08)',
-        'glass-lg': '0 16px 48px rgba(0, 0, 0, 0.12)',
-        'glow-emerald': '0 0 20px rgba(16, 185, 129, 0.35)',
-        'glow-teal': '0 0 20px rgba(6, 182, 212, 0.35)',
-        'glow-accent': '0 0 20px rgba(168, 85, 247, 0.35)',
+        // Enterprise shadows — sutiles y funcionales
+        'enterprise-sm': '0 1px 2px rgba(0, 0, 0, 0.04)',
+        'enterprise': '0 1px 3px rgba(0, 0, 0, 0.08)',
+        'enterprise-md': '0 2px 4px rgba(0, 0, 0, 0.08)',
+        'enterprise-lg': '0 4px 6px rgba(0, 0, 0, 0.1)',
       },
-      backdropBlur: {
-        xs: '2px',
+      borderRadius: {
+        sm: '0.25rem',  // 4px
+        DEFAULT: '0.375rem', // 6px
+        md: '0.5rem',   // 8px
+        lg: '0.5rem',   // 8px — máximo para enterprise
+      },
+      spacing: {
+        '4.5': '1.125rem', // 18px — spacing intermedio útil
       },
     },
   },

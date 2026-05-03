@@ -11,7 +11,11 @@
  * TODO(producción): mover esta llamada a un backend para no exponer la API key en el cliente.
  */
 
-const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+// En desarrollo usa el proxy de Vite (/api/proxy/classify)
+// En producción va directo a OpenRouter (hasta tener backend propio)
+const OPENROUTER_API_URL = import.meta.env.DEV
+  ? '/api/proxy/classify'
+  : "https://openrouter.ai/api/v1/chat/completions";
 // Claude 3 Haiku: económico (~$0.25/1M tokens), rápido, confiable
 // Alternativa: google/gemini-flash-1.5 (~$0.075/1M tokens)
 const MODELO = import.meta.env.VITE_OPENROUTER_MODEL || "anthropic/claude-3-haiku";
@@ -46,14 +50,6 @@ export async function clasificarImagenRAEE(
   mediaType = "image/jpeg",
   categorias = CATEGORIAS_RAEE
 ) {
-  const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-
-  if (!apiKey) {
-    throw new Error(
-      "VITE_OPENROUTER_API_KEY no está configurada. Revisá tu archivo .env.local"
-    );
-  }
-
   const prompt = `Sos un clasificador experto de RAEE (Residuos de Aparatos Eléctricos y Electrónicos) según el Decreto 292/024 de Uruguay.
 
 Analizá la imagen y clasificá los residuos electrónicos que ves.
@@ -76,11 +72,10 @@ Respondé ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markd
     const response = await fetch(OPENROUTER_API_URL, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
-        // Headers opcionales de OpenRouter para tracking
-        "HTTP-Referer": "https://github.com/Juanraibo/seminario-tecnologia-fing",
-        "X-Title": "EcoFIng MVP - Seminario Tecnologias FIng",
+        // NOTA: En desarrollo, el proxy de Vite agrega Authorization y demás headers.
+        // En producción, se envían directamente a OpenRouter (también sin headers por ahora,
+        // hasta implementar Vercel API Route).
       },
       signal: controller.signal,
       body: JSON.stringify({
@@ -134,19 +129,18 @@ Respondé ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markd
         errorMsg = `Error de la API: ${response.statusText}. Podés clasificar manualmente.`;
       }
 
-      console.error("Error completo de OpenRouter:", errorData);
+      if (import.meta.env.DEV) console.error("Error completo de OpenRouter:", errorData);
       throw new Error(errorMsg);
     }
 
     const data = await response.json();
 
-    // Debug: mostrar respuesta completa si hay problema
-    console.log("Respuesta OpenRouter:", data);
+    if (import.meta.env.DEV) console.log("Respuesta OpenRouter:", data);
 
     const contenido = data.choices?.[0]?.message?.content;
 
     if (!contenido) {
-      console.error("Respuesta sin contenido:", data);
+      if (import.meta.env.DEV) console.error("Respuesta sin contenido:", data);
       throw new Error("La IA no devolvió una clasificación válida. Intentá clasificar manualmente o volvé a intentar con otra foto.");
     }
 
@@ -161,7 +155,7 @@ Respondé ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markd
     // Validar que la categoría devuelta sea una de las válidas
     if (!categorias.includes(resultado.categoria)) {
       // Si devuelve una categoría desconocida, la mapeamos a "Otros RAEE"
-      console.warn(
+      if (import.meta.env.DEV) console.warn(
         `IA devolvió categoría desconocida: "${resultado.categoria}". Usando "Otros RAEE".`
       );
       resultado.categoria = "Otros RAEE";

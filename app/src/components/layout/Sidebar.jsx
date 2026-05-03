@@ -1,10 +1,9 @@
 /**
- * Sidebar - Navegación lateral principal
- * Fijo 240px en desktop, overlay en mobile
- * Recibe isOpen y onClose desde LayoutAutenticado (useSidebar hook)
+ * Sidebar - Navegación lateral Enterprise
+ * Estilo Notion/Linear: limpio, funcional, con shortcuts visibles
  */
 
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import {
   Recycle,
@@ -18,24 +17,24 @@ import {
   X,
 } from '../atoms/Icon'
 
-// Configuración de navegación por rol
+// Configuración de navegación por rol con shortcuts
 const NAV_ITEMS = {
   instituto: [
-    { to: '/instituto', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/instituto/nueva-solicitud', icon: PlusCircle, label: 'Nueva Solicitud' },
+    { to: '/instituto', icon: LayoutDashboard, label: 'Dashboard', shortcut: '⌘D' },
+    { to: '/instituto/nueva-solicitud', icon: PlusCircle, label: 'Nueva Solicitud', shortcut: '⌘N' },
   ],
   ecopunto: [
-    { to: '/ecopunto', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/ecopunto/publicar', icon: Package, label: 'Publicar Lotes' },
+    { to: '/ecopunto', icon: LayoutDashboard, label: 'Dashboard', shortcut: '⌘D' },
+    { to: '/ecopunto/publicar', icon: Package, label: 'Publicar Lotes', shortcut: '⌘P' },
   ],
   gestora: [
-    { to: '/gestora', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/gestora/solicitudes', icon: FileText, label: 'Mis Solicitudes' },
+    { to: '/gestora', icon: LayoutDashboard, label: 'Dashboard', shortcut: '⌘D' },
+    { to: '/gestora/solicitudes', icon: FileText, label: 'Mis Solicitudes', shortcut: '⌘S' },
   ],
   admin: [
-    { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/admin/actores', icon: Users, label: 'Gestionar Actores' },
-    { to: '/admin/retiros', icon: CheckCircle, label: 'Aprobación Retiros' },
+    { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', shortcut: '⌘D' },
+    { to: '/admin/actores', icon: Users, label: 'Gestionar Actores', shortcut: '⌘U' },
+    { to: '/admin/retiros', icon: CheckCircle, label: 'Aprobación Retiros', shortcut: '⌘R' },
   ],
 }
 
@@ -50,15 +49,14 @@ const ETIQUETAS_ROL = {
 export default function Sidebar({ isOpen, onClose }) {
   const { state, dispatch } = useApp()
   const usuario = state.usuarioActual
-  const location = useLocation()
   const items = NAV_ITEMS[usuario?.rol] || []
 
   return (
     <>
-      {/* Overlay para mobile cuando el sidebar está abierto */}
+      {/* Overlay para mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-2xl z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -68,84 +66,83 @@ export default function Sidebar({ isOpen, onClose }) {
       <aside
         className={`
           fixed inset-y-0 left-0 z-50
-          w-60 bg-white dark:bg-gray-900
+          w-60 bg-gray-50 dark:bg-gray-950
           border-r border-gray-200 dark:border-gray-800
           flex flex-col
-          transition-all duration-300 ease-in-out
-          shadow-2xl shadow-black/20 dark:shadow-black/40
+          transition-transform duration-200
+          shadow-enterprise-lg
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800 shrink-0">
+        <div className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800 shrink-0">
           <div className="flex items-center gap-2">
-            <Recycle size={24} className="text-primary-500" />
-            <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">
+            <Recycle size={20} className="text-primary-600 dark:text-primary-500" strokeWidth={2.5} />
+            <span className="font-semibold text-base text-gray-900 dark:text-white">
               EcoFIng
             </span>
           </div>
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400"
+            className="lg:hidden p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-500"
             aria-label="Cerrar menú"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
         {/* Navegación */}
-        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {items.map((item, index) => {
+        <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto">
+          {items.map((item) => {
             const IconComp = item.icon
-            const isActive = location.pathname === item.to
 
             return (
               <NavLink
                 key={item.to}
                 to={item.to}
                 onClick={onClose}
-                style={{ transitionDelay: `${index * 50}ms` }}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-                  isActive
-                    ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 font-medium'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200'
-                }`}
+                className={({ isActive }) =>
+                  `nav-item ${isActive ? 'active' : ''}`
+                }
               >
-                <IconComp size={18} />
-                <span>{item.label}</span>
+                <IconComp size={16} strokeWidth={2} />
+                <span className="flex-1">{item.label}</span>
+                {item.shortcut && (
+                  <span className="hidden lg:inline-block ml-auto text-xs text-gray-400 dark:text-gray-500">
+                    {item.shortcut}
+                  </span>
+                )}
               </NavLink>
             )
           })}
         </nav>
 
-        {/* Información del usuario y cierre de sesión */}
-        <div className="mt-auto">
-          {usuario && (
-            <div className="p-4 border-t border-gray-200 dark:border-gray-800 shrink-0">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center text-white text-sm font-semibold shrink-0">
-                  {usuario.nombre?.charAt(0)?.toUpperCase() || '?'}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                    {usuario.nombre}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {ETIQUETAS_ROL[usuario.rol] || usuario.rol}
-                  </p>
-                </div>
+        {/* Usuario y cierre de sesión */}
+        {usuario && (
+          <div className="mt-auto p-3 border-t border-gray-200 dark:border-gray-800 shrink-0">
+            <div className="flex items-center gap-2.5 mb-2 px-2 py-1.5">
+              <div className="w-7 h-7 rounded bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 text-xs font-semibold shrink-0">
+                {usuario.nombre?.charAt(0)?.toUpperCase() || '?'}
               </div>
-              <button
-                onClick={() => dispatch({ type: 'LOGOUT' })}
-                className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                aria-label="Cerrar sesión"
-              >
-                <LogOut size={16} />
-                <span>Cerrar sesión</span>
-              </button>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate">
+                  {usuario.nombre}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {ETIQUETAS_ROL[usuario.rol] || usuario.rol}
+                </p>
+              </div>
             </div>
-          )}
-        </div>
+            <button
+              onClick={() => dispatch({ type: 'LOGOUT' })}
+              className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded transition-colors font-medium"
+              aria-label="Cerrar sesión"
+            >
+              <LogOut size={14} />
+              <span>Cerrar sesión</span>
+            </button>
+          </div>
+        )}
       </aside>
     </>
   )

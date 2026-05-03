@@ -1,8 +1,8 @@
 /**
- * Button - Componente atómico para botones
- * Variantes: primary, secondary, ghost, danger, outline, accent, gradient
+ * Button - Componente atómico Enterprise
+ * Variantes: primary, secondary, ghost, danger
  * Tamaños: sm, md, lg
- * Prop loading que muestra spinner y deshabilita
+ * Estilo: Minimalista, funcional, sin efectos decorativos
  */
 
 import { Loader } from './Icon'
@@ -20,29 +20,23 @@ export default function Button({
   type = 'button',
   className = '',
 }) {
-  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium rounded-md transition-colors duration-100 disabled:opacity-50 disabled:cursor-not-allowed'
 
   const variants = {
     primary:
-      'bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white shadow-sm hover:shadow-lg hover:shadow-primary-500/25 hover:-translate-y-0.5 active:translate-y-0',
+      'bg-gray-900 hover:bg-gray-800 active:bg-gray-950 text-white shadow-enterprise-sm',
     secondary:
-      'bg-secondary-500 hover:bg-secondary-600 active:bg-secondary-700 text-white shadow-sm hover:shadow-md hover:shadow-secondary-500/20 dark:hover:shadow-secondary-500/30',
-    accent:
-      'bg-accent-500 hover:bg-accent-600 active:bg-accent-700 text-white shadow-sm hover:shadow-md hover:shadow-accent-500/20 dark:hover:shadow-accent-500/30',
+      'bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-900 border border-gray-300 shadow-enterprise-sm dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white dark:border-gray-700',
     ghost:
-      'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700',
+      'bg-transparent hover:bg-gray-100 active:bg-gray-200 text-gray-700 dark:hover:bg-gray-800 dark:active:bg-gray-700 dark:text-gray-200',
     danger:
-      'bg-red-500 hover:bg-red-600 active:bg-red-700 text-white shadow-sm hover:shadow-md hover:shadow-red-500/20',
-    outline:
-      'bg-transparent border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20',
-    gradient:
-      'bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 active:from-primary-700 active:to-primary-800 text-white shadow-sm hover:shadow-lg hover:shadow-primary-500/30 hover:scale-[1.02]',
+      'bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow-enterprise-sm',
   }
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
+    sm: 'px-3 py-1.5 text-xs',
     md: 'px-4 py-2 text-sm',
-    lg: 'px-6 py-3 text-base',
+    lg: 'px-5 py-2.5 text-sm',
   }
 
   const isDisabled = disabled || loading
@@ -57,14 +51,12 @@ export default function Button({
         ${variants[variant]}
         ${sizes[size]}
         ${fullWidth ? 'w-full' : ''}
-        ${loading ? 'relative' : ''}
-        ${variant !== 'ghost' ? 'active:translate-y-0' : ''}
         ${className}
       `}
     >
       {loading ? (
         <>
-          <Loader size={size === 'sm' ? 14 : 18} className="animate-spin" />
+          <Loader size={size === 'sm' ? 12 : 14} className="animate-spin" />
           <span>{children}</span>
         </>
       ) : (

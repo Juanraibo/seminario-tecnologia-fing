@@ -17,7 +17,7 @@ export default function LayoutAutenticado({ children }) {
       <Sidebar isOpen={isOpen} onClose={close} />
       <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${isOpen ? 'lg:ml-60' : 'lg:ml-0'}`}>
         <TopBar onToggleSidebar={toggle} />
-        <main className="flex-1 p-4 lg:p-6 overflow-auto page-transition-enter" key={location.pathname}>
+        <main className="flex-1 p-4 lg:p-6 max-w-7xl w-full mx-auto px-4 md:px-6 overflow-auto page-transition-enter" key={location.pathname}>
           {children}
         </main>
       </div>

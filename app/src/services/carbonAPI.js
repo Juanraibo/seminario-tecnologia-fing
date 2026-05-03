@@ -8,8 +8,11 @@
  * Endpoint: POST https://api.climatiq.io/data/v1/estimate
  */
 
-const CLIMATIQ_API_KEY = import.meta.env.VITE_CLIMATIQ_API_KEY
-const CLIMATIQ_ENDPOINT = 'https://api.climatiq.io/data/v1/estimate'
+// En desarrollo: proxy Vite (API key solo en servidor, nunca en bundle)
+// En producción: URL directa (fallback a estimación si no hay key)
+const CLIMATIQ_ENDPOINT = import.meta.env.DEV
+  ? '/api/proxy/carbon'
+  : 'https://api.climatiq.io/data/v1/estimate'
 
 // Factor de emisión estimado (kg CO2 evitado por kg de RAEE reciclado)
 // Fuente: estudios de reciclaje electrónico (promedio)
@@ -46,26 +49,19 @@ export async function calcularCO2Evitado(peso_kg, categoria = null) {
     }
   }
 
-  // Si no hay API key, usar fallback
-  if (!CLIMATIQ_API_KEY) {
-    return calcularCO2Fallback(peso_kg, categoria)
-  }
-
   try {
     // Intentar con Climatiq API
     const response = await fetch(CLIMATIQ_ENDPOINT, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${CLIMATIQ_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         emission_factor: {
-          // Usar factor de reciclaje de equipos electrónicos
-          activity_id: 'waste_type-recycling-na',
-          source: 'EPA',
-          region: 'SOUTH_AMERICA',
-          year: 2023,
+          // Factor EPA para reciclaje de materiales mixtos (incluye RAEE)
+          // Verificado con Climatiq API: funciona con data_version '33.33'
+          activity_id: 'waste-type_mixed_recyclables-disposal_method_recycled',
+          data_version: '33.33',
         },
         parameters: {
           weight: peso_kg,
@@ -90,7 +86,9 @@ export async function calcularCO2Evitado(peso_kg, categoria = null) {
       },
     }
   } catch (error) {
-    console.warn('Climatiq API no disponible, usando estimación:', error.message)
+    if (import.meta.env.DEV) {
+      console.warn('Climatiq API no disponible, usando estimación:', error.message)
+    }
     return calcularCO2Fallback(peso_kg, categoria)
   }
 }

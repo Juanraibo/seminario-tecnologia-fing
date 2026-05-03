@@ -5,54 +5,56 @@
 @tailwind utilities;
 
 @layer base {
-  /* ── Design tokens CSS ────────────────────────────────────────
-   * Estas variables están disponibles para estilos que no
-   * puedan expresarse fácilmente con clases Tailwind.
-   * Uso: background-color: rgb(var(--color-bg-base));
-   */
+  /* ── Design tokens CSS (Enterprise Modern) ──────────────────── */
   :root {
-    --color-bg-base: 249 250 251; /* gray-50 */
+    --color-bg-base: 250 250 250; /* gray-50 */
     --color-bg-elevated: 255 255 255; /* white */
-    --color-text-primary: 17 24 39; /* gray-900 */
-    --color-text-secondary: 107 114 128; /* gray-500 */
-    --color-border: 229 231 235; /* gray-200 */
+    --color-text-primary: 23 23 23; /* gray-900 */
+    --color-text-secondary: 115 115 115; /* gray-500 */
+    --color-border: 229 229 229; /* gray-200 */
   }
 
   .dark {
-    --color-bg-base: 3 7 18; /* gray-950 */
-    --color-bg-elevated: 17 24 39; /* gray-900 */
-    --color-text-primary: 249 250 251; /* gray-50 */
-    --color-text-secondary: 156 163 175; /* gray-400 */
-    --color-border: 31 41 55; /* gray-800 */
+    --color-bg-base: 10 10 10; /* gray-950 */
+    --color-bg-elevated: 23 23 23; /* gray-900 */
+    --color-text-primary: 250 250 250; /* gray-50 */
+    --color-text-secondary: 163 163 163; /* gray-400 */
+    --color-border: 38 38 38; /* gray-800 */
   }
 
   body {
     background-color: rgb(var(--color-bg-base));
     color: rgb(var(--color-text-primary));
-    @apply transition-colors duration-200;
+    @apply transition-colors duration-100;
   }
 
-  /* Scrollbar personalizado — smooth */
+  /* Scrollbar personalizado — minimalista */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-800;
+    @apply bg-gray-100 dark:bg-gray-900;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+    @apply bg-gray-300 dark:bg-gray-700 rounded;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400 dark:bg-gray-500;
+    @apply bg-gray-400 dark:bg-gray-600;
   }
 
-  /* Smooth scroll para toda la app */
+  /* Smooth scroll */
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Focus ring global refinado */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary-500/50 ring-offset-2 ring-offset-white dark:ring-offset-gray-950;
+    transition: ring-offset-color 0.1s ease;
   }
 
   /* Animación para toasts */
@@ -68,93 +70,73 @@
   }
 
   .animate-slide-in {
-    animation: slide-in 0.3s ease-out;
+    animation: slide-in 0.2s ease-out;
   }
 
-  /* ── Clases de utilidad ────────────────────────────────────── */
+  /* ── Clases de utilidad Enterprise ─────────────────────────── */
 
-  /* Efecto glass genérico */
-  .glass {
-    @apply backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border border-white/20 dark:border-gray-700/30;
+  /* Card Enterprise — bordes sutiles, sombra mínima */
+  .enterprise-card {
+    @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-enterprise;
+    @apply transition-all duration-100;
   }
 
-  /* Card con efecto glass y sombra */
-  .glass-card {
-    @apply glass shadow-glass dark:shadow-glass-lg;
-    @apply transition-all duration-300;
+  .enterprise-card:hover {
+    @apply border-gray-300 dark:border-gray-700 shadow-enterprise-md;
   }
 
-  .glass-card:hover {
-    @apply shadow-glass-lg dark:shadow-glass-lg;
-    @apply border-white/30 dark:border-gray-600/40;
+  /* Table row hover */
+  .enterprise-table-row {
+    @apply border-b border-gray-100 dark:border-gray-800/50;
+    @apply transition-colors duration-75;
   }
 
-  /* Animación fade-in-up para entradas de página */
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .enterprise-table-row:hover {
+    @apply bg-gray-50 dark:bg-gray-900/50;
   }
 
-  .animate-fade-in-up {
-    animation: fade-in-up 0.4s ease-out;
+  /* Kbd tag para shortcuts */
+  .enterprise-kbd {
+    @apply px-1.5 py-0.5 text-xs font-medium;
+    @apply bg-gray-100 dark:bg-gray-800;
+    @apply border border-gray-300 dark:border-gray-700;
+    @apply rounded shadow-sm;
+    @apply text-gray-600 dark:text-gray-400;
+  }
+
+  /* Sidebar navigation item */
+  .nav-item {
+    @apply flex items-center gap-2 px-2 py-1.5 rounded-md text-sm font-medium;
+    @apply text-gray-700 dark:text-gray-300;
+    @apply transition-colors duration-75;
+  }
+
+  .nav-item:hover {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  .nav-item.active {
+    @apply bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white;
   }
 
   /* Clases para transiciones de ruta */
   .page-enter {
     opacity: 0;
-    transform: translateY(12px);
   }
 
   .page-enter-active {
     opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  }
-
-  /* Focus ring global refinado — respeta prefers-reduced-motion */
-  *:focus-visible {
-    @apply outline-none ring-2 ring-primary-500/50 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-950;
-    transition: ring-offset-color 0.2s ease;
-  }
-
-  /* === Efectos Premium === */
-  .text-gradient {
-    background: linear-gradient(135deg, #10b981, #06b6d4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-gradient-warm {
-    background: linear-gradient(135deg, #10b981, #f59e0b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .card-hover-lift {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .card-hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.15s ease-out;
   }
 
   .page-transition-enter {
-    animation: pageEnter 0.35s ease-out;
+    animation: pageEnter 0.2s ease-out;
   }
 
   @keyframes pageEnter {
     from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(8px);
     }
     to {
       opacity: 1;
@@ -162,6 +144,7 @@
     }
   }
 
+  /* Respeta prefers-reduced-motion */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

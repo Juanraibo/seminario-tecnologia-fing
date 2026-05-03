@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
-import { Recycle, Building2, Factory, Shield, Globe } from '../../components/atoms/Icon'
+import { Recycle, Building2, Factory, Shield, Globe, ChevronRight } from '../../components/atoms/Icon'
 
 export default function LoginPage() {
   const { state, dispatch } = useApp()
@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  // Activar dark mode por defecto
+  // Activar dark mode por defecto (Enterprise style)
   useEffect(() => {
     document.documentElement.classList.add('dark')
   }, [])
@@ -29,28 +29,28 @@ export default function LoginPage() {
       email: 'admin@fing.edu.uy',
       password: 'admin123',
       icon: Shield,
-      color: 'text-red-400',
+      rol: 'admin',
     },
     {
       nombre: 'Instituto',
       email: 'inco@fing.edu.uy',
       password: 'inco123',
       icon: Building2,
-      color: 'text-blue-400',
+      rol: 'instituto',
     },
     {
       nombre: 'Ecopunto',
       email: 'ecopunto@fing.edu.uy',
       password: 'eco123',
       icon: Recycle,
-      color: 'text-green-400',
+      rol: 'ecopunto',
     },
     {
       nombre: 'Gestora',
       email: 'gestora1@reciclauY.com',
       password: 'gest123',
       icon: Factory,
-      color: 'text-purple-400',
+      rol: 'gestora',
     },
   ]
 
@@ -70,55 +70,39 @@ export default function LoginPage() {
 
   // Auto-login al hacer click en un perfil
   function handleAutoLogin(perfil) {
-    setEmail(perfil.email)
-    setPassword(perfil.password)
-    setError('')
-
-    // Login automático después de un pequeño delay para feedback visual
-    setTimeout(() => {
-      const usuario = state.usuarios.find(
-        u => u.email === perfil.email && u.password === perfil.password
-      )
-      if (usuario) {
-        dispatch({ type: 'LOGIN', payload: usuario })
-        navigate(RUTAS_POR_ROL[usuario.rol])
-      }
-    }, 300)
+    const usuario = state.usuarios.find(
+      u => u.email === perfil.email && u.password === perfil.password
+    )
+    if (usuario) {
+      dispatch({ type: 'LOGIN', payload: usuario })
+      navigate(RUTAS_POR_ROL[usuario.rol])
+    }
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
-      {/* Gradiente de fondo animado */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/10 via-transparent to-secondary-500/10"></div>
-      </div>
-
-      {/* Efectos de fondo */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-500/5 rounded-full blur-3xl"></div>
-
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-950">
       {/* Card principal */}
-      <div className="relative w-full max-w-md animate-slide-up">
-        <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-800/50 p-8">
+      <div className="w-full max-w-md">
+        <div className="enterprise-card p-8 animate-fade-in">
 
           {/* Logo / Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl mb-4 shadow-glow-primary">
-              <Recycle size={40} className="text-white" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-900 dark:bg-gray-100 rounded-lg mb-4">
+              <Recycle size={32} className="text-white dark:text-gray-900" strokeWidth={2} />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">EcoFIng</h1>
-            <p className="text-sm text-gray-400">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">EcoFIng</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Sistema de Gestión de RAEE
             </p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-500 mt-0.5">
               Facultad de Ingeniería · UdelaR
             </p>
           </div>
 
           {/* Formulario */}
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wide">
                 Correo electrónico
               </label>
               <input
@@ -127,12 +111,12 @@ export default function LoginPage() {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="usuario@fing.edu.uy"
                 required
-                className="w-full bg-gray-950/50 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wide">
                 Contraseña
               </label>
               <input
@@ -141,42 +125,50 @@ export default function LoginPage() {
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full bg-gray-950/50 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-colors"
               />
             </div>
 
             {error && (
-              <div className="bg-red-500/10 border border-red-500/50 rounded-xl px-4 py-3 animate-fade-in">
-                <p className="text-sm text-red-400">{error}</p>
+              <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-md px-3 py-2.5 animate-fade-in">
+                <p className="text-xs text-red-700 dark:text-red-400 font-medium">{error}</p>
               </div>
             )}
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-xl py-3 text-sm transition-all shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 hover:-translate-y-0.5"
+              className="w-full bg-gray-900 dark:bg-gray-100 hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-gray-900 font-semibold rounded-md py-2.5 text-sm transition-colors shadow-enterprise-sm"
             >
               Ingresar al sistema
             </button>
           </form>
 
-          {/* Perfiles de prueba - Auto-login */}
-          <div className="mt-8 pt-6 border-t border-gray-800">
-            <p className="text-xs text-gray-400 font-medium mb-3 text-center">
+          {/* Perfiles de prueba - Auto-login (estilo table) */}
+          <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-3 uppercase tracking-wide">
               Acceso rápido · MVP
             </p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
               {PERFILES_PRUEBA.map((perfil) => {
                 const Icon = perfil.icon
                 return (
                   <button
                     key={perfil.email}
                     onClick={() => handleAutoLogin(perfil)}
-                    className="flex flex-col items-center gap-2 p-3 rounded-xl bg-gray-800/30 hover:bg-gray-800/60 border border-gray-700/50 hover:border-gray-600 transition-all group"
+                    className="enterprise-table-row w-full flex items-center gap-3 px-3 py-2.5 rounded-md group"
                   >
-                    <Icon size={20} className={`${perfil.color} group-hover:scale-110 transition-transform`} />
-                    <span className="text-xs font-medium text-gray-300 group-hover:text-white transition-colors">
-                      {perfil.nombre}
-                    </span>
+                    <div className="w-8 h-8 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0">
+                      <Icon size={16} className="text-gray-600 dark:text-gray-400" strokeWidth={2} />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {perfil.nombre}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {perfil.email}
+                      </p>
+                    </div>
+                    <ChevronRight size={14} className="text-gray-400 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 )
               })}
@@ -184,17 +176,17 @@ export default function LoginPage() {
           </div>
 
           {/* Acceso a vista pública */}
-          <div className="mt-6 pt-6 border-t border-gray-800">
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
             <button
               onClick={() => navigate('/trazabilidad')}
-              className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500/20 hover:to-purple-500/20 border border-blue-500/30 hover:border-blue-500/50 transition-all group"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-colors group"
             >
-              <Globe size={18} className="text-blue-400 group-hover:scale-110 transition-transform" />
-              <span className="text-sm font-medium text-blue-300 group-hover:text-blue-200">
+              <Globe size={16} className="text-gray-600 dark:text-gray-400" strokeWidth={2} />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Ver Registro Público
               </span>
             </button>
-            <p className="text-xs text-gray-500 text-center mt-2">
+            <p className="text-xs text-gray-500 dark:text-gray-500 text-center mt-2">
               Consultar trazabilidad de todos los lotes sin login
             </p>
           </div>
