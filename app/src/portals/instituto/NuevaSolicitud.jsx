@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, crearLoteConSupabase } from '../../context/AppContext'
 import { useToast } from '../../components/molecules/Toast'
 import Card from '../../components/molecules/Card'
 import Button from '../../components/atoms/Button'
@@ -75,7 +75,7 @@ export default function NuevaSolicitud() {
   }
 
   // Submit del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const newErrors = validate()
 
@@ -89,43 +89,34 @@ export default function NuevaSolicitud() {
     // Generar ID único
     const nuevoId = `LOT-${new Date().getFullYear()}-${String(state.lotes.length + 1).padStart(3, '0')}`
 
-    // Crear el nuevo lote
+    // Crear el nuevo lote (esquema Supabase: lotes_entrada)
     const nuevoLote = {
       id: nuevoId,
-      tipo: 'entrada', // Tipo de lote para filtrado en Ecopunto
-      institutoId: usuario.institutoId,
+      instituto_id: usuario.institutoId,
       tamano: tamano,
-      peso_real_kg: null,
-      categoria_ia: null,
-      categoria_final: null,
-      clasificado_por_ia: false,
-      confianza_ia: null,
+      peso_declarado_aprox_kg: null,
+      descripcion: observaciones || null,
       estado: ESTADOS_LOTE.PENDIENTE_ENVIO,
       fecha_solicitud: new Date().toISOString().split('T')[0],
-      fecha_recepcion_ecopunto: null,
-      fecha_clasificacion: null,
-      fecha_publicacion: null,
-      fecha_solicitud_gestora: null,
-      fecha_aprobacion: null,
-      fecha_certificado: null,
-      gestora_asignada: null,
-      gestora_asignada_id: null,
-      certificado_numero: null,
-      fotos: [foto.name],
-      observaciones: observaciones || null,
-      solicitudes_gestoras: [],
+      fotos: foto ? [foto.name] : [],
+      items_clasificados: 0,
     }
 
-    // Agregar al estado
-    dispatch({ type: 'AGREGAR_LOTE', payload: nuevoLote })
+    try {
+      // Guardar en Supabase
+      await crearLoteConSupabase(nuevoLote, dispatch)
 
-    // Mostrar toast de éxito
-    toast.success(`Solicitud ${nuevoId} creada correctamente`)
+      // Mostrar toast de éxito
+      toast.success(`Solicitud ${nuevoId} creada correctamente`)
 
-    // Redirigir
-    setTimeout(() => {
-      navigate('/instituto')
-    }, 500)
+      // Redirigir
+      setTimeout(() => {
+        navigate('/instituto')
+      }, 500)
+    } catch (error) {
+      console.error('Error creando lote:', error)
+      toast.error('Error al crear la solicitud. Intentá de nuevo.')
+    }
   }
 
   return (
