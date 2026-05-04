@@ -3,8 +3,8 @@
  * Enterprise design con logo, navegación y dark mode toggle
  */
 
-import { useNavigate } from 'react-router-dom'
-import { Recycle, Sun, Moon, LogIn } from '../atoms/Icon'
+import { useNavigate, NavLink } from 'react-router-dom'
+import { Recycle, Sun, Moon, LogIn, Calculator, Globe } from '../atoms/Icon'
 import Button from '../atoms/Button'
 import { useEffect, useState } from 'react'
 
@@ -44,6 +44,36 @@ export default function PublicNav() {
             <p className="text-xs text-gray-500 dark:text-gray-400">Trazabilidad RAEE</p>
           </div>
         </button>
+
+        {/* Navegación */}
+        <div className="hidden md:flex items-center gap-1">
+          <NavLink
+            to="/trazabilidad"
+            className={({ isActive }) =>
+              `flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive
+                  ? 'bg-primary-50 dark:bg-primary-950/30 text-primary-600 dark:text-primary-400'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
+              }`
+            }
+          >
+            <Globe size={16} />
+            <span>Trazabilidad</span>
+          </NavLink>
+          <NavLink
+            to="/calculadora"
+            className={({ isActive }) =>
+              `flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive
+                  ? 'bg-primary-50 dark:bg-primary-950/30 text-primary-600 dark:text-primary-400'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
+              }`
+            }
+          >
+            <Calculator size={16} />
+            <span>Calculadora</span>
+          </NavLink>
+        </div>
 
         {/* Acciones */}
         <div className="flex items-center gap-3">

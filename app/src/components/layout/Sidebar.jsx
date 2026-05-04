@@ -100,6 +100,7 @@ export default function Sidebar({ isOpen, onClose }) {
               <NavLink
                 key={item.to}
                 to={item.to}
+                end={item.to.endsWith('/instituto') || item.to.endsWith('/ecopunto') || item.to.endsWith('/gestora') || item.to.endsWith('/admin')}
                 onClick={() => {
                   // Solo cerrar en mobile (< lg breakpoint)
                   if (window.innerWidth < 1024) {

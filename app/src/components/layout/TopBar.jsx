@@ -11,6 +11,7 @@ import {
   Sun,
   Moon,
   Globe,
+  Calculator,
   LogOut,
   ChevronRight,
 } from '../atoms/Icon'
@@ -94,6 +95,16 @@ export default function TopBar({ onToggleSidebar }) {
         >
           <Globe size={14} />
           <span className="hidden sm:inline">Trazabilidad</span>
+        </Link>
+
+        {/* Calculadora de impacto */}
+        <Link
+          to="/calculadora"
+          className="flex items-center gap-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 rounded px-2.5 py-1.5 transition-colors"
+          title="Calculadora de impacto ambiental"
+        >
+          <Calculator size={14} />
+          <span className="hidden sm:inline">Calculadora</span>
         </Link>
 
         {/* Toggle dark mode */}

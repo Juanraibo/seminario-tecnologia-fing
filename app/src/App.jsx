@@ -4,6 +4,7 @@ import { AppProvider } from './context/AppContext'
 import PrivateRoute from './components/layout/PrivateRoute'
 import LayoutAutenticado from './components/layout/LayoutAutenticado'
 import ToastContainer from './components/organisms/ToastContainer'
+import ErrorBoundary from './components/layout/ErrorBoundary'
 
 // Inicializa dark mode desde localStorage AL INICIAR la app
 // (no solo cuando se monta LayoutAutenticado, para que funcione en login y trazabilidad)
@@ -17,6 +18,7 @@ function DarkModeInitializer() {
 }
 
 import LoginPage              from './portals/auth/LoginPage'
+import NotFound               from './portals/NotFound'
 import InstitutoDashboard     from './portals/instituto/Dashboard'
 import InstitutoNueva         from './portals/instituto/NuevaSolicitud'
 import InstitutoDetalle       from './portals/instituto/DetalleLote'
@@ -30,6 +32,7 @@ import AdminDashboard         from './portals/admin/Dashboard'
 import AdminGestionActores    from './portals/admin/GestionActores'
 import AdminAprobacionRetiros from './portals/admin/AprobacionRetiros'
 import Trazabilidad           from './portals/publico/Trazabilidad'
+import CalculadoraPage        from './portals/publico/CalculadoraPage'
 
 function AppRoutes() {
   return (
@@ -37,6 +40,7 @@ function AppRoutes() {
       {/* Pública — sin login */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/trazabilidad" element={<Trazabilidad />} />
+      <Route path="/calculadora" element={<CalculadoraPage />} />
 
       {/* Instituto */}
       <Route path="/instituto" element={
@@ -108,19 +112,23 @@ function AppRoutes() {
 
       {/* Raíz → login */}
       <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+
+      {/* 404 - Página no encontrada */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
 
 export default function App() {
   return (
-    <AppProvider>
-      <BrowserRouter>
-        <DarkModeInitializer />
-        <ToastContainer />
-        <AppRoutes />
-      </BrowserRouter>
-    </AppProvider>
+    <ErrorBoundary>
+      <AppProvider>
+        <BrowserRouter>
+          <DarkModeInitializer />
+          <ToastContainer />
+          <AppRoutes />
+        </BrowserRouter>
+      </AppProvider>
+    </ErrorBoundary>
   )
 }

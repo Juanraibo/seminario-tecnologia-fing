@@ -93,21 +93,25 @@ export default function GestoraDashboard() {
           icon={<Package size={24} />}
           label="Disponibles"
           value={stats.disponibles}
+          delay={0}
         />
         <StatCard
           icon={<Clock size={24} />}
           label="Mis solicitudes"
           value={stats.solicitados}
+          delay={50}
         />
         <StatCard
           icon={<TrendingUp size={24} />}
           label="Adjudicados"
           value={stats.adjudicados}
+          delay={100}
         />
         <StatCard
           icon={<CheckCircle size={24} />}
           label="Finalizados"
           value={stats.finalizados}
+          delay={150}
         />
       </div>
 

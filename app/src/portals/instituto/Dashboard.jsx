@@ -93,21 +93,25 @@ export default function InstitutoDashboard() {
           icon={<Package size={18} />}
           label="Total de lotes"
           value={stats.total}
+          delay={0}
         />
         <StatCard
           icon={<Clock size={18} />}
           label="Pendientes"
           value={stats.pendientes}
+          delay={50}
         />
         <StatCard
           icon={<TrendingUp size={18} />}
           label="En proceso"
           value={stats.enProceso}
+          delay={100}
         />
         <StatCard
           icon={<CheckCircle size={18} />}
           label="Finalizados"
           value={stats.finalizados}
+          delay={150}
         />
       </div>
 

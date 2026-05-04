@@ -114,21 +114,25 @@ export default function EcopuntoDashboard() {
           icon={<Clock size={18} />}
           label="Por recibir"
           value={lotesPendientes.length}
+          delay={0}
         />
         <StatCard
           icon={<Package size={18} />}
           label="Para clasificar"
           value={lotesRecibidos.length}
+          delay={50}
         />
         <StatCard
           icon={<FileCheck size={18} />}
           label="Clasificados"
           value={lotesClasificados.length}
+          delay={100}
         />
         <StatCard
           icon={<Upload size={18} />}
           label="Sin publicar"
           value={itemsSinPublicar.length}
+          delay={150}
         />
       </div>
 

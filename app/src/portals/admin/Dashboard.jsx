@@ -193,21 +193,25 @@ export default function AdminDashboard() {
             icon={<Package size={24} />}
             label="Total Gestionado"
             value={`${kpis.totalKg} kg`}
+            delay={0}
           />
           <StatCard
             icon={<Leaf size={24} />}
             label="CO₂ Evitado"
             value={`${kpis.co2Evitado} kg`}
+            delay={50}
           />
           <StatCard
             icon={<Cpu size={24} />}
             label="Cobre Recuperado"
             value={`${kpis.cobreRecuperado} kg`}
+            delay={100}
           />
           <StatCard
             icon={<Layers size={24} />}
             label="Aluminio Recuperado"
             value={`${kpis.aluminioRecuperado} kg`}
+            delay={150}
           />
         </div>
 

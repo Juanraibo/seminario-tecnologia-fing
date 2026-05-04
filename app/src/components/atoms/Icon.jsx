@@ -27,6 +27,7 @@ export const {
   ChevronUp,
   ArrowLeft,
   ArrowRight,
+  Home,
   LayoutDashboard,
   PlusCircle,
 
@@ -42,6 +43,7 @@ export const {
   Filter,
   MoreVertical,
   ArrowUpDown,
+  Calculator,
 
   // Estados y feedback
   Check,

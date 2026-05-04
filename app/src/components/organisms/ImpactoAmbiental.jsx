@@ -19,6 +19,25 @@ import {
 } from '../atoms/Icon'
 import { calcularEstadisticasCO2, obtenerEquivalenciasCO2 } from '../../services/carbonAPI'
 import { useState, useEffect } from 'react'
+import useScrollReveal from '../../hooks/useScrollReveal'
+
+// Card con scroll reveal
+function RevealCard({ children, title, subtitle, delay = 0 }) {
+  const { elementRef, isVisible } = useScrollReveal({ delay })
+
+  return (
+    <div
+      ref={elementRef}
+      className={`transition-all duration-300 ${
+        isVisible ? 'animate-slide-up opacity-100' : 'opacity-0 translate-y-4'
+      }`}
+    >
+      <Card title={title} subtitle={subtitle}>
+        {children}
+      </Card>
+    </div>
+  )
+}
 
 export default function ImpactoAmbiental() {
   const { state } = useApp()
@@ -203,7 +222,7 @@ export default function ImpactoAmbiental() {
       {/* Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Gráfico de área: CO2 por mes */}
-        <Card title="Tendencia Mensual de CO₂" subtitle="Evolución del impacto ambiental">
+        <RevealCard title="Tendencia Mensual de CO₂" subtitle="Evolución del impacto ambiental" delay={0}>
           {dataPorMes.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={dataPorMes}>
@@ -232,10 +251,10 @@ export default function ImpactoAmbiental() {
               No hay datos suficientes para mostrar la tendencia
             </div>
           )}
-        </Card>
+        </RevealCard>
 
         {/* Gráfico de barras: CO2 por categoría */}
-        <Card title="CO₂ por Categoría RAEE" subtitle="Distribución del impacto por tipo de residuo">
+        <RevealCard title="CO₂ por Categoría RAEE" subtitle="Distribución del impacto por tipo de residuo" delay={50}>
           {dataPorCategoria.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={dataPorCategoria} layout="horizontal">
@@ -251,10 +270,10 @@ export default function ImpactoAmbiental() {
               No hay datos por categoría
             </div>
           )}
-        </Card>
+        </RevealCard>
 
         {/* Gráfico de torta: Contribución por instituto */}
-        <Card title="Contribución por Instituto" subtitle="Distribución de CO₂ evitado por origen">
+        <RevealCard title="Contribución por Instituto" subtitle="Distribución de CO₂ evitado por origen" delay={0}>
           {dataPorInstituto.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -280,10 +299,10 @@ export default function ImpactoAmbiental() {
               No hay datos por instituto
             </div>
           )}
-        </Card>
+        </RevealCard>
 
         {/* Top categorías */}
-        <Card title="Top Categorías" subtitle="Mayor impacto ambiental">
+        <RevealCard title="Top Categorías" subtitle="Mayor impacto ambiental" delay={50}>
           {dataPorCategoria.length > 0 ? (
             <div className="space-y-3">
               {dataPorCategoria.slice(0, 5).map((cat, index) => (
@@ -308,7 +327,7 @@ export default function ImpactoAmbiental() {
               No hay datos disponibles
             </div>
           )}
-        </Card>
+        </RevealCard>
       </div>
 
       {/* Footer con crédito de Climatiq API */}

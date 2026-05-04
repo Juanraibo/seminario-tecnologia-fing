@@ -10,6 +10,7 @@ import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
 import Card from '../../components/molecules/Card'
 import StatusBadge from '../../components/molecules/StatusBadge'
+import CO2Badge from '../../components/molecules/CO2Badge'
 import {
   ArrowLeft, Upload, Sparkles, Check, X, Loader,
   AlertCircle, Scale, Package, Plus, Trash2, Info
@@ -17,6 +18,57 @@ import {
 import { ESTADOS_LOTE } from '../../constants/estados'
 import { clasificarImagenRAEE, fileToBase64 } from '../../services/claudeVision'
 import { formatDate } from '../../utils/formatDate'
+import { calcularCO2Evitado } from '../../services/carbonAPI'
+import { useCO2 } from '../../hooks/useCO2'
+import { Leaf } from '../../components/atoms/Icon'
+
+// Componente interno para mostrar vista previa del impacto ambiental
+function ImpactoPreview({ peso_kg, categoria }) {
+  const { co2_kg, loading, error } = useCO2(peso_kg, categoria, true)
+
+  if (loading) {
+    return (
+      <div className="mb-6 animate-slide-up">
+        <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex items-center justify-center gap-3">
+          <Loader size={18} className="animate-spin text-primary-600 dark:text-primary-400" />
+          <span className="text-sm text-gray-600 dark:text-gray-400">Calculando impacto...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || co2_kg === null) {
+    return null
+  }
+
+  return (
+    <div className="mb-6 animate-slide-up">
+      <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Leaf size={20} className="text-emerald-600 dark:text-emerald-400" />
+            <div>
+              <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
+                Impacto Ambiental
+              </p>
+              <p className="text-sm text-emerald-600 dark:text-emerald-400 mt-0.5">
+                Este producto evitará emitir
+              </p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-2xl font-bold text-emerald-900 dark:text-emerald-100">
+              {co2_kg.toFixed(2)}
+            </p>
+            <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
+              kg de CO₂
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function ClasificarLote() {
   const { loteId } = useParams()
@@ -117,7 +169,7 @@ export default function ClasificarLote() {
   }
 
   // Agregar ítem al lote
-  const handleAgregarItem = () => {
+  const handleAgregarItem = async () => {
     // Validaciones
     if (!categoriaSeleccionada) {
       setError('Debes seleccionar una categoría')
@@ -134,6 +186,21 @@ export default function ClasificarLote() {
 
     setGuardandoItem(true)
 
+    // Calcular CO2 del item
+    let co2_kg = null
+    let co2_source = 'estimated'
+
+    try {
+      const resultadoCO2 = await calcularCO2Evitado(parseFloat(pesoReal), categoriaSeleccionada)
+      co2_kg = resultadoCO2.co2_kg
+      co2_source = resultadoCO2.source
+    } catch (err) {
+      console.warn('Error calculando CO2, usando estimación:', err)
+      // Usar factor estimado si falla la API
+      co2_kg = parseFloat(pesoReal) * 1.4
+      co2_source = 'estimated'
+    }
+
     // Generar ID secuencial
     const ultimoId = state.items.length > 0
       ? Math.max(...state.items.map(i => parseInt(i.id.split('-')[2])))
@@ -148,6 +215,8 @@ export default function ClasificarLote() {
       categoria: categoriaSeleccionada,
       descripcion: descripcion.trim(),
       peso_kg: parseFloat(pesoReal),
+      co2_kg: co2_kg,
+      co2_source: co2_source,
       foto_url: imagenPreview,
       clasificado_por_ia: !!resultadoIA,
       confianza_ia: resultadoIA?.confianza || null,
@@ -477,6 +546,11 @@ export default function ClasificarLote() {
                 />
               </div>
 
+              {/* Vista previa de impacto ambiental */}
+              {categoriaSeleccionada && parseFloat(pesoReal) > 0 && (
+                <ImpactoPreview peso_kg={parseFloat(pesoReal)} categoria={categoriaSeleccionada} />
+              )}
+
               {/* Error */}
               {error && (
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/50 rounded-lg p-3 flex items-start gap-2 mb-4">
@@ -520,10 +594,18 @@ export default function ClasificarLote() {
                       </div>
                       <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">{item.descripcion}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{item.categoria}</p>
-                      <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center justify-between text-xs mb-2">
                         <span className="text-gray-500 dark:text-gray-400">Peso:</span>
                         <span className="text-gray-900 dark:text-gray-100 font-semibold">{item.peso_kg} kg</span>
                       </div>
+                      {item.co2_kg && (
+                        <div className="flex items-center gap-2 mt-2">
+                          <CO2Badge co2_kg={item.co2_kg} size="sm" />
+                          {item.co2_source === 'api' && (
+                            <span className="text-xs text-emerald-600 dark:text-emerald-400">✓ Real</span>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -537,11 +619,18 @@ export default function ClasificarLote() {
               )}
 
               {itemsDelLote.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500 dark:text-gray-400">Peso total:</span>
                     <span className="text-gray-900 dark:text-gray-100 font-bold">
                       {itemsDelLote.reduce((sum, item) => sum + item.peso_kg, 0).toFixed(1)} kg
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500 dark:text-gray-400">CO₂ evitado total:</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                      <Leaf size={14} />
+                      {itemsDelLote.reduce((sum, item) => sum + (item.co2_kg || 0), 0).toFixed(2)} kg
                     </span>
                   </div>
                 </div>

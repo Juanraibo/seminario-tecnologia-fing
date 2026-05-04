@@ -3,6 +3,8 @@
  * Diseño minimalista, funcional, bordes sutiles
  */
 
+import useScrollReveal from '../../hooks/useScrollReveal'
+
 export default function Card({
   children,
   title,
@@ -52,7 +54,9 @@ export default function Card({
 }
 
 // Variante para tarjetas de estadísticas
-export function StatCard({ icon, label, value, trend, trendValue, className = '' }) {
+export function StatCard({ icon, label, value, trend, trendValue, className = '', delay = 0 }) {
+  const { elementRef, isVisible } = useScrollReveal({ delay })
+
   const trendColors = {
     up: 'text-emerald-600 dark:text-emerald-400',
     down: 'text-red-600 dark:text-red-400',
@@ -60,7 +64,12 @@ export function StatCard({ icon, label, value, trend, trendValue, className = ''
   }
 
   return (
-    <div className={`enterprise-card p-5 transition-all duration-200 hover:scale-[1.02] hover:shadow-enterprise-md group ${className}`}>
+    <div
+      ref={elementRef}
+      className={`enterprise-card p-5 transition-all duration-200 hover:scale-[1.02] hover:shadow-enterprise-md group ${className} ${
+        isVisible ? 'animate-slide-up opacity-100' : 'opacity-0 translate-y-4'
+      }`}
+    >
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">

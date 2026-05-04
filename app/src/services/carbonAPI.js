@@ -8,11 +8,9 @@
  * Endpoint: POST https://api.climatiq.io/data/v1/estimate
  */
 
-// En desarrollo: proxy Vite (API key solo en servidor, nunca en bundle)
-// En producción: URL directa (fallback a estimación si no hay key)
-const CLIMATIQ_ENDPOINT = import.meta.env.DEV
-  ? '/api/proxy/carbon'
-  : 'https://api.climatiq.io/data/v1/estimate'
+// Endpoint directo de Climatiq API
+const CLIMATIQ_ENDPOINT = 'https://api.climatiq.io/data/v1/estimate'
+const CLIMATIQ_API_KEY = import.meta.env.VITE_CLIMATIQ_API_KEY
 
 // Factor de emisión estimado (kg CO2 evitado por kg de RAEE reciclado)
 // Fuente: estudios de reciclaje electrónico (promedio)
@@ -49,11 +47,20 @@ export async function calcularCO2Evitado(peso_kg, categoria = null) {
     }
   }
 
+  // Si no hay API key, usar fallback directamente
+  if (!CLIMATIQ_API_KEY) {
+    if (import.meta.env.DEV) {
+      console.warn('⚠️ VITE_CLIMATIQ_API_KEY no configurada, usando factores estimados')
+    }
+    return calcularCO2Fallback(peso_kg, categoria)
+  }
+
   try {
     // Intentar con Climatiq API
     const response = await fetch(CLIMATIQ_ENDPOINT, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${CLIMATIQ_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

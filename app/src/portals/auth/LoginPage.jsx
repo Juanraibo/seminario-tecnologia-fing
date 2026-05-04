@@ -81,14 +81,18 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-950 relative overflow-hidden">
-      {/* Patrón de fondo sutil */}
-      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.02]" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 15 L35 20 L40 15 L35 10 Z M20 25 L25 30 L20 35 L15 30 Z M40 25 L45 30 L40 35 L35 30 Z M30 35 L35 40 L30 45 L25 40 Z' fill='%2310b981' fill-opacity='0.15'/%3E%3C/svg%3E")`,
-        backgroundSize: '60px 60px'
+      {/* Patrón de fondo: circuitos y reciclaje */}
+      <div className="absolute inset-0 opacity-[0.08] dark:opacity-[0.05]" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2310b981' fill-rule='evenodd'%3E%3Ccircle cx='10' cy='10' r='1.5'/%3E%3Ccircle cx='30' cy='10' r='1.5'/%3E%3Ccircle cx='50' cy='10' r='1.5'/%3E%3Ccircle cx='70' cy='10' r='1.5'/%3E%3Ccircle cx='10' cy='30' r='1.5'/%3E%3Ccircle cx='70' cy='30' r='1.5'/%3E%3Ccircle cx='10' cy='50' r='1.5'/%3E%3Ccircle cx='70' cy='50' r='1.5'/%3E%3Ccircle cx='10' cy='70' r='1.5'/%3E%3Ccircle cx='30' cy='70' r='1.5'/%3E%3Ccircle cx='50' cy='70' r='1.5'/%3E%3Ccircle cx='70' cy='70' r='1.5'/%3E%3Cpath d='M10 10 L30 10 M50 10 L70 10 M10 30 L10 10 M70 30 L70 10 M10 50 L10 70 M70 50 L70 70 M10 70 L30 70 M50 70 L70 70' stroke='%2310b981' stroke-width='0.5' fill='none' opacity='0.3'/%3E%3Cpath d='M40 20 L35 25 L40 30 L45 25 Z M40 50 L35 55 L40 60 L45 55 Z' fill='%2310b981' opacity='0.4'/%3E%3C/g%3E%3C/svg%3E")`,
+        backgroundSize: '80px 80px'
       }}></div>
 
-      {/* Gradiente radial para profundidad */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-gray-100/50 dark:to-gray-950/50"></div>
+      {/* Gradiente con toques de color */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-primary-50/10 to-emerald-50/10 dark:from-gray-950 dark:via-primary-950/20 dark:to-emerald-950/10"></div>
+
+      {/* Elementos decorativos flotantes */}
+      <div className="absolute top-20 left-10 w-32 h-32 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-10 w-40 h-40 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl"></div>
 
       {/* Card principal */}
       <div className="w-full max-w-md relative z-10">

@@ -10,6 +10,7 @@ import Button from '../../components/atoms/Button'
 import { StatCard } from '../../components/molecules/Card'
 import PublicNav from '../../components/layout/PublicNav'
 import { useState } from 'react'
+import useScrollReveal from '../../hooks/useScrollReveal'
 
 export default function Trazabilidad() {
   const [params] = useSearchParams()
@@ -106,24 +107,28 @@ function RegistroPublico({ state }) {
               label="Total Lotes"
               value={lotesPublicos.length}
               variant="default"
+              delay={0}
             />
             <StatCard
               icon={<Scale size={18} />}
               label="Total RAEE"
               value={`${stats.totalKg.toFixed(1)} kg`}
               variant="default"
+              delay={50}
             />
             <StatCard
               icon={<Leaf size={18} />}
               label="CO₂ Evitado"
               value={`${stats.totalCO2.toFixed(1)} kg`}
               variant="default"
+              delay={100}
             />
             <StatCard
               icon={<CheckCircle size={18} />}
               label="Finalizados"
               value={`${stats.finalizados}/${lotesPublicos.length}`}
               variant="default"
+              delay={150}
             />
           </div>
         </Card>
@@ -238,6 +243,8 @@ function RegistroPublico({ state }) {
 // ============================================================================
 function TarjetaLote({ lote, state, index }) {
   const navigate = useNavigate()
+  const { elementRef, isVisible } = useScrollReveal({ delay: index * 50 })
+
   const gestora = lote.gestora_asignada_id
     ? state.gestoras?.find(g => g.id === lote.gestora_asignada_id)
     : null
@@ -264,9 +271,11 @@ function TarjetaLote({ lote, state, index }) {
 
   return (
     <button
+      ref={elementRef}
       onClick={() => navigate(`/trazabilidad?lote=${lote.id}`)}
-      className="enterprise-card transition-all duration-200 hover:scale-[1.01] hover:shadow-enterprise-md p-4 text-left group w-full cursor-pointer"
-      style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
+      className={`enterprise-card transition-all duration-200 hover:scale-[1.01] hover:shadow-enterprise-md p-4 text-left group w-full cursor-pointer ${
+        isVisible ? 'animate-slide-up opacity-100' : 'opacity-0 translate-y-4'
+      }`}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
