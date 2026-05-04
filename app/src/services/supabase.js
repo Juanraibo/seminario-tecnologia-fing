@@ -1,17 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
+import { SUPABASE_CONFIG } from '../config/supabase.config'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+// Usar credenciales del archivo de configuración
+const supabaseUrl = SUPABASE_CONFIG.url
+const supabaseAnonKey = SUPABASE_CONFIG.anonKey
 
-// DEBUG: verificar si las variables están definidas (TEMPORAL - eliminar después)
-console.log('🔍 Verificando credenciales Supabase...')
-console.log('URL definida:', supabaseUrl ? '✅ Sí' : '❌ No')
-console.log('ANON_KEY definida:', supabaseAnonKey ? '✅ Sí' : '❌ No')
-if (supabaseUrl) console.log('URL:', supabaseUrl.substring(0, 30) + '...')
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('❌ Supabase credentials missing. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local')
-}
+console.log('🔍 Conectando a Supabase...')
+console.log('URL:', supabaseUrl)
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
