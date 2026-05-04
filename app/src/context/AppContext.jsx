@@ -1,25 +1,49 @@
-import { createContext, useContext, useReducer } from 'react'
-import lotesData      from '../data/lotes.json'
-import itemsData      from '../data/items.json'
-import institutosData from '../data/institutos.json'
-import gestorasData   from '../data/gestoras.json'
-import usuariosData   from '../data/usuarios.json'
-import configData     from '../data/config.json'
+import { createContext, useContext, useReducer, useEffect, useState } from 'react'
+import {
+  getInstitutos,
+  getGestoras,
+  loginUsuario,
+  getLotesEntrada,
+  crearLoteEntrada,
+  actualizarLoteEntrada,
+  getItems,
+  crearItem,
+  actualizarItem,
+  getLotesPublicacion,
+  crearLotePublicacion,
+  actualizarLotePublicacion,
+  getSolicitudesGestoras,
+  crearSolicitudGestora,
+  getConfig,
+} from '../services/supabase'
 
-// ── Estado inicial ────────────────────────────────────────────────
+// ── Estado inicial (vacío - se carga desde Supabase) ──────────────
 const initialState = {
-  lotes:      lotesData,
-  items:      itemsData,
-  institutos: institutosData,
-  gestoras:   gestorasData,
-  usuarios:   usuariosData,
-  config:     configData,
-  usuarioActual: null, // se puebla al hacer login
+  lotes:      [],
+  items:      [],
+  institutos: [],
+  gestoras:   [],
+  usuarios:   [],
+  config:     {},
+  usuarioActual: null,
+  isLoading: true, // nuevo: indica si está cargando datos
 }
 
 // ── Reducer ───────────────────────────────────────────────────────
 function reducer(state, action) {
   switch (action.type) {
+
+    // ── Cargar datos iniciales desde Supabase ────────────────────────
+    case 'SET_INITIAL_DATA':
+      return {
+        ...state,
+        institutos: action.payload.institutos || [],
+        gestoras: action.payload.gestoras || [],
+        lotes: action.payload.lotes || [],
+        items: action.payload.items || [],
+        config: action.payload.config || {},
+        isLoading: false,
+      }
 
     case 'LOGIN':
       return { ...state, usuarioActual: action.payload }
@@ -118,6 +142,52 @@ const AppContext = createContext(null)
 
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  // Cargar datos desde Supabase al montar
+  useEffect(() => {
+    async function loadInitialData() {
+      try {
+        console.log('📥 Cargando datos desde Supabase...')
+
+        const [institutos, gestoras, lotes, items, categorias_raee] = await Promise.all([
+          getInstitutos(),
+          getGestoras(),
+          getLotesEntrada(),
+          getItems(),
+          getConfig('categorias_raee'),
+        ])
+
+        console.log('✅ Datos cargados:', { institutos, gestoras, lotes, items })
+
+        dispatch({
+          type: 'SET_INITIAL_DATA',
+          payload: {
+            institutos,
+            gestoras,
+            lotes,
+            items,
+            config: { categorias_raee },
+          },
+        })
+      } catch (error) {
+        console.error('❌ Error cargando datos iniciales:', error)
+        // Si falla Supabase, el estado queda vacío pero la app no crashea
+        dispatch({
+          type: 'SET_INITIAL_DATA',
+          payload: {
+            institutos: [],
+            gestoras: [],
+            lotes: [],
+            items: [],
+            config: {},
+          },
+        })
+      }
+    }
+
+    loadInitialData()
+  }, [])
+
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       {children}
@@ -129,4 +199,60 @@ export function useApp() {
   const ctx = useContext(AppContext)
   if (!ctx) throw new Error('useApp debe usarse dentro de <AppProvider>')
   return ctx
+}
+
+// ── Funciones helper para operaciones con Supabase ───────────────
+export async function loginConSupabase(email, password, dispatch) {
+  try {
+    const usuario = await loginUsuario(email, password)
+    dispatch({ type: 'LOGIN', payload: usuario })
+    return usuario
+  } catch (error) {
+    console.error('Error en login:', error)
+    throw error
+  }
+}
+
+export async function crearLoteConSupabase(lote, dispatch) {
+  try {
+    const nuevoLote = await crearLoteEntrada(lote)
+    dispatch({ type: 'AGREGAR_LOTE', payload: nuevoLote })
+    return nuevoLote
+  } catch (error) {
+    console.error('Error creando lote:', error)
+    throw error
+  }
+}
+
+export async function actualizarLoteConSupabase(id, cambios, dispatch) {
+  try {
+    const loteActualizado = await actualizarLoteEntrada(id, cambios)
+    dispatch({ type: 'ACTUALIZAR_LOTE', payload: loteActualizado })
+    return loteActualizado
+  } catch (error) {
+    console.error('Error actualizando lote:', error)
+    throw error
+  }
+}
+
+export async function crearItemConSupabase(item, dispatch) {
+  try {
+    const nuevoItem = await crearItem(item)
+    dispatch({ type: 'AGREGAR_ITEM', payload: nuevoItem })
+    return nuevoItem
+  } catch (error) {
+    console.error('Error creando item:', error)
+    throw error
+  }
+}
+
+export async function crearLotePublicacionConSupabase(lote, dispatch) {
+  try {
+    const nuevoLote = await crearLotePublicacion(lote)
+    dispatch({ type: 'AGREGAR_LOTE', payload: nuevoLote })
+    return nuevoLote
+  } catch (error) {
+    console.error('Error creando lote de publicación:', error)
+    throw error
+  }
 }

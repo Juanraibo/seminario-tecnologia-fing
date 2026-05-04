@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, loginConSupabase } from '../../context/AppContext'
 import { Recycle, Building2, Factory, Shield, Globe, ChevronRight } from '../../components/atoms/Icon'
 
 export default function LoginPage() {
@@ -54,28 +54,29 @@ export default function LoginPage() {
     },
   ]
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault()
     setError('')
-    const usuario = state.usuarios.find(
-      u => u.email === email && u.password === password
-    )
-    if (!usuario) {
+
+    try {
+      // Intentar login con Supabase
+      const usuario = await loginConSupabase(email, password, dispatch)
+      console.log('✅ Login exitoso:', usuario)
+      navigate(RUTAS_POR_ROL[usuario.rol])
+    } catch (error) {
+      console.error('❌ Error en login:', error)
       setError('Credenciales incorrectas. Verificá tu email y contraseña.')
-      return
     }
-    dispatch({ type: 'LOGIN', payload: usuario })
-    navigate(RUTAS_POR_ROL[usuario.rol])
   }
 
   // Auto-login al hacer click en un perfil
-  function handleAutoLogin(perfil) {
-    const usuario = state.usuarios.find(
-      u => u.email === perfil.email && u.password === perfil.password
-    )
-    if (usuario) {
-      dispatch({ type: 'LOGIN', payload: usuario })
+  async function handleAutoLogin(perfil) {
+    try {
+      const usuario = await loginConSupabase(perfil.email, perfil.password, dispatch)
       navigate(RUTAS_POR_ROL[usuario.rol])
+    } catch (error) {
+      console.error('Error en auto-login:', error)
+      setError('Error al iniciar sesión con este perfil.')
     }
   }
 
