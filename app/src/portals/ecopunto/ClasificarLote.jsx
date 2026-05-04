@@ -453,16 +453,31 @@ export default function ClasificarLote() {
                 )}
 
                 {imagen && !resultadoIA && (
-                  <Button
-                    variant="accent"
-                    fullWidth
-                    icon={clasificando ? <Loader size={18} className="animate-spin" /> : <Sparkles size={18} />}
+                  <button
                     onClick={handleClasificarConIA}
                     disabled={clasificando}
-                    className="mt-4"
+                    className="mt-4 w-full relative overflow-hidden group"
                   >
-                    {clasificando ? 'Clasificando con IA...' : 'Clasificar con IA'}
-                  </Button>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 opacity-100 group-hover:opacity-90 transition-opacity" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 via-pink-600/50 to-purple-600/50 blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
+
+                    <div className="relative flex items-center justify-center gap-3 px-6 py-3.5 text-white font-semibold text-base">
+                      {clasificando ? (
+                        <>
+                          <Loader size={20} className="animate-spin" />
+                          <span>Clasificando con IA...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={20} className="animate-pulse" />
+                          <span>✨ Clasificar con IA</span>
+                          <Sparkles size={20} className="animate-pulse" />
+                        </>
+                      )}
+                    </div>
+
+                    <div className="absolute inset-0 rounded-lg ring-2 ring-purple-400/50 group-hover:ring-purple-300/70 transition-all" />
+                  </button>
                 )}
               </div>
 
