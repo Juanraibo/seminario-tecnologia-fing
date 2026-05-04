@@ -1,16 +1,39 @@
 import { useNavigate } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, actualizarLoteConSupabase } from '../../context/AppContext'
+import { useToast } from '../../components/molecules/Toast'
 import Card, { StatCard } from '../../components/molecules/Card'
 import DataTable from '../../components/organisms/DataTable'
 import StatusBadge from '../../components/molecules/StatusBadge'
 import Button from '../../components/atoms/Button'
-import { Plus, Package, CheckCircle, Clock, TrendingUp } from '../../components/atoms/Icon'
+import { Plus, Package, CheckCircle, Clock, TrendingUp, X } from '../../components/atoms/Icon'
+import { ESTADOS_LOTE } from '../../constants/estados'
 
 export default function InstitutoDashboard() {
-  const { state } = useApp()
+  const { state, dispatch } = useApp()
   const navigate = useNavigate()
+  const toast = useToast()
   const usuario = state.usuarioActual
   const lotes = state.lotes.filter(l => l.institutoId === usuario?.institutoId)
+
+  // Handler para cancelar envío
+  const handleCancelarEnvio = async (lote) => {
+    if (!confirm(`¿Confirmar cancelación del lote ${lote.id}?\n\nEsta acción no se puede deshacer.`)) {
+      return
+    }
+
+    try {
+      await actualizarLoteConSupabase(lote.id, {
+        estado: 'Cancelado',
+        observaciones: lote.observaciones
+          ? `${lote.observaciones}\n\n[CANCELADO por el instituto el ${new Date().toLocaleDateString('es-UY')}]`
+          : `[CANCELADO por el instituto el ${new Date().toLocaleDateString('es-UY')}]`
+      }, dispatch)
+      toast.success(`Lote ${lote.id} cancelado correctamente`)
+    } catch (error) {
+      console.error('Error al cancelar lote:', error)
+      toast.error('Error al cancelar el lote')
+    }
+  }
 
   // Estadísticas
   const stats = {
@@ -36,7 +59,7 @@ export default function InstitutoDashboard() {
       key: 'fecha_solicitud',
       render: (row) => (
         <span className="text-sm text-gray-600 dark:text-gray-400">
-          {new Date(row.fecha_solicitud).toLocaleDateString('es-UY', {
+          {new Date(row.fechaSolicitud || row.fecha_solicitud).toLocaleDateString('es-UY', {
             day: '2-digit',
             month: 'short',
             year: 'numeric'
@@ -57,6 +80,26 @@ export default function InstitutoDashboard() {
       header: 'Estado',
       key: 'estado',
       render: (row) => <StatusBadge estado={row.estado} />
+    },
+    {
+      header: 'Acciones',
+      key: 'acciones',
+      align: 'right',
+      render: (row) => (
+        row.estado === ESTADOS_LOTE.PENDIENTE_ENVIO ? (
+          <Button
+            variant="danger"
+            size="sm"
+            icon={<X size={14} />}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleCancelarEnvio(row)
+            }}
+          >
+            Cancelar
+          </Button>
+        ) : null
+      )
     },
   ]
 

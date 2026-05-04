@@ -13,6 +13,7 @@ export function normalizeLote(lote) {
   if (!lote) return null
   return {
     ...lote,
+    tipo: 'entrada', // Identificar como lote de entrada
     institutoId: lote.instituto_id,
     gestoraAsignada: lote.gestora_asignada,
     gestoraAsignada_id: lote.gestora_asignada_id,
@@ -21,6 +22,8 @@ export function normalizeLote(lote) {
     fechaClasificacionCompleta: lote.fecha_clasificacion_completa,
     itemsClasificados: lote.items_clasificados,
     pesoDeclaradoAproxKg: lote.peso_declarado_aprox_kg,
+    descripcion: lote.descripcion,
+    observaciones: lote.observaciones,
   }
 }
 
@@ -45,8 +48,11 @@ export function normalizeLotePublicacion(lote) {
   if (!lote) return null
   return {
     ...lote,
+    tipo: 'publicacion', // Identificar como lote de publicación
     cantidadItems: lote.cantidad_items,
+    cantidad_items: lote.cantidad_items, // Mantener ambos para compatibilidad
     pesoTotalKg: lote.peso_total_kg,
+    peso_total_kg: lote.peso_total_kg, // Mantener ambos para compatibilidad
     co2TotalKg: lote.co2_total_kg,
     gestoraAsignada_id: lote.gestora_asignada_id,
     fechaPublicacion: lote.fecha_publicacion,

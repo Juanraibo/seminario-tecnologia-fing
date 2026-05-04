@@ -28,11 +28,12 @@ export default function DetalleLote() {
   // Buscar lote de publicación
   const lote = state.lotes.find(l => l.id === id && l.tipo === 'publicacion')
 
-  // Buscar ítems del lote
-  const items = state.items?.filter(item => lote?.items_ids?.includes(item.id)) || []
+  // Buscar ítems del lote (usando lotePublicadoId)
+  const items = state.items?.filter(item => item.lotePublicadoId === id) || []
 
-  // Buscar institutos de origen
-  const institutos = state.institutos?.filter(inst => lote?.institutos_origen?.includes(inst.id)) || []
+  // Buscar institutos de origen (únicos de los items)
+  const institutosIds = [...new Set(items.map(item => item.institutoId))]
+  const institutos = state.institutos?.filter(inst => institutosIds.includes(inst.id)) || []
 
   // Verificar si esta gestora ya cotizó
   const miCotizacion = lote?.solicitudes_gestoras?.find(s => s.gestoraId === gestora?.id)

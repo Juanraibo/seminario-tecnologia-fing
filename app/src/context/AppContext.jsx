@@ -157,15 +157,40 @@ export function AppProvider({ children }) {
       try {
         console.log('📥 Cargando datos desde Supabase...')
 
-        const [institutos, gestoras, lotes, items, categorias_raee] = await Promise.all([
+        const [institutos, gestoras, lotesEntrada, lotesPublicacion, items, solicitudes, categorias_raee] = await Promise.all([
           getInstitutos(),
           getGestoras(),
           getLotesEntrada(),
+          getLotesPublicacion(),
           getItems(),
+          getSolicitudesGestoras(),
           getConfig('categorias_raee'),
         ])
 
-        console.log('✅ Datos cargados:', { institutos, gestoras, lotes, items })
+        console.log('✅ Datos cargados:', { institutos, gestoras, lotesEntrada, lotesPublicacion, items, solicitudes })
+
+        // Agrupar solicitudes por lote
+        const solicitudesPorLote = solicitudes.reduce((acc, sol) => {
+          if (!acc[sol.lote_publicacion_id]) {
+            acc[sol.lote_publicacion_id] = []
+          }
+          acc[sol.lote_publicacion_id].push({
+            gestoraId: sol.gestora_id,
+            cotizacion: sol.monto_ofrecido,
+            fecha: sol.created_at,
+            estado: sol.estado
+          })
+          return acc
+        }, {})
+
+        // Combinar lotes de entrada y publicación
+        const todosLotes = [
+          ...lotesEntrada.map(normalizeLote),
+          ...lotesPublicacion.map(lote => ({
+            ...normalizeLotePublicacion(lote),
+            solicitudes_gestoras: solicitudesPorLote[lote.id] || []
+          }))
+        ]
 
         // Normalizar datos de snake_case a camelCase
         dispatch({
@@ -173,7 +198,7 @@ export function AppProvider({ children }) {
           payload: {
             institutos: institutos.map(normalizeInstituto),
             gestoras: gestoras.map(normalizeGestora),
-            lotes: lotes.map(normalizeLote),
+            lotes: todosLotes,
             items: items.map(normalizeItem),
             config: { categorias_raee },
           },
@@ -226,8 +251,9 @@ export async function loginConSupabase(email, password, dispatch) {
 export async function crearLoteConSupabase(lote, dispatch) {
   try {
     const nuevoLote = await crearLoteEntrada(lote)
-    dispatch({ type: 'AGREGAR_LOTE', payload: nuevoLote })
-    return nuevoLote
+    const loteNormalizado = normalizeLote(nuevoLote)
+    dispatch({ type: 'AGREGAR_LOTE', payload: loteNormalizado })
+    return loteNormalizado
   } catch (error) {
     console.error('Error creando lote:', error)
     throw error
@@ -237,8 +263,9 @@ export async function crearLoteConSupabase(lote, dispatch) {
 export async function actualizarLoteConSupabase(id, cambios, dispatch) {
   try {
     const loteActualizado = await actualizarLoteEntrada(id, cambios)
-    dispatch({ type: 'ACTUALIZAR_LOTE', payload: loteActualizado })
-    return loteActualizado
+    const loteNormalizado = normalizeLote(loteActualizado)
+    dispatch({ type: 'ACTUALIZAR_LOTE', payload: loteNormalizado })
+    return loteNormalizado
   } catch (error) {
     console.error('Error actualizando lote:', error)
     throw error
@@ -248,8 +275,9 @@ export async function actualizarLoteConSupabase(id, cambios, dispatch) {
 export async function crearItemConSupabase(item, dispatch) {
   try {
     const nuevoItem = await crearItem(item)
-    dispatch({ type: 'AGREGAR_ITEM', payload: nuevoItem })
-    return nuevoItem
+    const itemNormalizado = normalizeItem(nuevoItem)
+    dispatch({ type: 'AGREGAR_ITEM', payload: itemNormalizado })
+    return itemNormalizado
   } catch (error) {
     console.error('Error creando item:', error)
     throw error
@@ -259,8 +287,9 @@ export async function crearItemConSupabase(item, dispatch) {
 export async function crearLotePublicacionConSupabase(lote, dispatch) {
   try {
     const nuevoLote = await crearLotePublicacion(lote)
-    dispatch({ type: 'AGREGAR_LOTE', payload: nuevoLote })
-    return nuevoLote
+    const loteNormalizado = normalizeLotePublicacion(nuevoLote)
+    dispatch({ type: 'AGREGAR_LOTE', payload: loteNormalizado })
+    return loteNormalizado
   } catch (error) {
     console.error('Error creando lote de publicación:', error)
     throw error
