@@ -24,8 +24,8 @@ export default function NuevaSolicitud() {
   // Opciones de tamaño con información de topes
   const opcionesTamano = [
     {
-      value: 'chico',
-      label: 'Lote Chico',
+      value: 'pequeño',
+      label: 'Lote Pequeño',
       descripcion: 'Hasta 0.5 m³',
       tope: `Máx. ${config.lote_chico_max_kg} kg`,
       icon: <Package size={32} className="text-primary-500" />,
