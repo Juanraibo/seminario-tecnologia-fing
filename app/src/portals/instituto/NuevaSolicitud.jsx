@@ -98,7 +98,7 @@ export default function NuevaSolicitud() {
       descripcion: observaciones || null,
       estado: ESTADOS_LOTE.PENDIENTE_ENVIO,
       fecha_solicitud: new Date().toISOString().split('T')[0],
-      fotos: foto ? [foto.name] : [],
+      fotos: fotoPreview ? [fotoPreview] : [], // Guardar base64 de la imagen
       items_clasificados: 0,
     }
 

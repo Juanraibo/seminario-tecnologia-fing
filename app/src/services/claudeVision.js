@@ -69,14 +69,26 @@ Respondé ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markd
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
+    // Construir headers
+    const headers = {
+      "Content-Type": "application/json",
+    }
+
+    // En producción, agregar la API key desde las variables de entorno
+    if (!import.meta.env.DEV) {
+      const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY
+      if (!apiKey) {
+        throw new Error("VITE_OPENROUTER_API_KEY no está configurada en Vercel. Agregala en Project Settings → Environment Variables")
+      }
+      headers["Authorization"] = `Bearer ${apiKey}`
+      headers["HTTP-Referer"] = window.location.origin
+      headers["X-Title"] = "EcoFIng MVP"
+    }
+    // En desarrollo, el proxy de Vite agrega los headers automáticamente
+
     const response = await fetch(OPENROUTER_API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // NOTA: En desarrollo, el proxy de Vite agrega Authorization y demás headers.
-        // En producción, se envían directamente a OpenRouter (también sin headers por ahora,
-        // hasta implementar Vercel API Route).
-      },
+      headers,
       signal: controller.signal,
       body: JSON.stringify({
         model: MODELO,
