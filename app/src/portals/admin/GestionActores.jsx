@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { useToast } from '../../components/molecules/Toast'
+import { actualizarGestora } from '../../services/supabase'
 import Button from '../../components/atoms/Button'
 import Card from '../../components/molecules/Card'
 import PageHeader from '../../components/layout/PageHeader'
@@ -123,7 +124,7 @@ export default function GestionActores() {
   }
 
   // Handler para toggle de habilitación
-  const handleToggleHabilitacion = (gestoraId, nombreGestora, habilitacionActual) => {
+  const handleToggleHabilitacion = async (gestoraId, nombreGestora, habilitacionActual) => {
     const accion = habilitacionActual ? 'deshabilitar' : 'habilitar'
     if (confirm(
       `¿Confirmar ${accion} a "${nombreGestora}"?\n\n` +
@@ -131,11 +132,23 @@ export default function GestionActores() {
         ? 'No podrá participar en nuevas licitaciones.'
         : 'Podrá ver y solicitar lotes disponibles.')
     )) {
-      dispatch({
-        type: 'TOGGLE_HABILITACION_GESTORA',
-        payload: gestoraId
-      })
-      toast.success(`${nombreGestora} ${habilitacionActual ? 'deshabilitada' : 'habilitada'}`)
+      try {
+        // Actualizar en Supabase (usamos el campo 'activa' en lugar de 'habilitacion_ministerio')
+        await actualizarGestora(gestoraId, {
+          activa: !habilitacionActual
+        })
+
+        // Actualizar estado local
+        dispatch({
+          type: 'TOGGLE_HABILITACION_GESTORA',
+          payload: gestoraId
+        })
+
+        toast.success(`${nombreGestora} ${habilitacionActual ? 'deshabilitada' : 'habilitada'}`)
+      } catch (error) {
+        console.error('Error actualizando gestora:', error)
+        toast.error('Error al actualizar la gestora. Intentá de nuevo.')
+      }
     }
   }
 

@@ -38,6 +38,18 @@ export async function getGestoras() {
   return data
 }
 
+export async function actualizarGestora(id, cambios) {
+  const { data, error } = await supabase
+    .from('gestoras')
+    .update(cambios)
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
 // Usuarios
 export async function loginUsuario(email, password) {
   const { data, error } = await supabase
@@ -213,6 +225,20 @@ export async function getConfig(key) {
 
   if (error) throw error
   return data.value
+}
+
+export async function getAllConfig() {
+  const { data, error } = await supabase
+    .from('config')
+    .select('key, value')
+
+  if (error) throw error
+
+  // Convertir array de {key, value} a objeto
+  return data.reduce((acc, item) => {
+    acc[item.key] = item.value
+    return acc
+  }, {})
 }
 
 // ============================================================================

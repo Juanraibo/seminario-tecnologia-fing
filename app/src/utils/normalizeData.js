@@ -34,7 +34,9 @@ export function normalizeItem(item) {
     loteOrigenId: item.lote_origen_id,
     institutoId: item.instituto_id,
     pesoKg: item.peso_kg,
+    peso_kg: item.peso_kg, // Mantener ambos para compatibilidad
     co2Kg: item.co2_kg,
+    co2_kg: item.co2_kg, // Mantener ambos
     co2Source: item.co2_source,
     fotoUrl: item.foto_url,
     clasificadoPorIa: item.clasificado_por_ia,

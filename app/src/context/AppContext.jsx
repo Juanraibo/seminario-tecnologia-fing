@@ -15,6 +15,7 @@ import {
   getSolicitudesGestoras,
   crearSolicitudGestora,
   getConfig,
+  getAllConfig,
 } from '../services/supabase'
 import {
   normalizeUsuario,
@@ -157,17 +158,17 @@ export function AppProvider({ children }) {
       try {
         console.log('📥 Cargando datos desde Supabase...')
 
-        const [institutos, gestoras, lotesEntrada, lotesPublicacion, items, solicitudes, categorias_raee] = await Promise.all([
+        const [institutos, gestoras, lotesEntrada, lotesPublicacion, items, solicitudes, config] = await Promise.all([
           getInstitutos(),
           getGestoras(),
           getLotesEntrada(),
           getLotesPublicacion(),
           getItems(),
           getSolicitudesGestoras(),
-          getConfig('categorias_raee'),
+          getAllConfig(),
         ])
 
-        console.log('✅ Datos cargados:', { institutos, gestoras, lotesEntrada, lotesPublicacion, items, solicitudes })
+        console.log('✅ Datos cargados:', { institutos, gestoras, lotesEntrada, lotesPublicacion, items, solicitudes, config })
 
         // Agrupar solicitudes por lote
         const solicitudesPorLote = solicitudes.reduce((acc, sol) => {
@@ -200,7 +201,7 @@ export function AppProvider({ children }) {
             gestoras: gestoras.map(normalizeGestora),
             lotes: todosLotes,
             items: items.map(normalizeItem),
-            config: { categorias_raee },
+            config: config,
           },
         })
       } catch (error) {

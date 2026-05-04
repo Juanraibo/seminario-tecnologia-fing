@@ -5,8 +5,9 @@
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, actualizarLoteConSupabase } from '../../context/AppContext'
 import { useToast } from '../../components/molecules/Toast'
+import { actualizarLotePublicacion } from '../../services/supabase'
 import Button from '../../components/atoms/Button'
 import Card from '../../components/molecules/Card'
 import StatusBadge from '../../components/molecules/StatusBadge'
@@ -30,7 +31,7 @@ export default function AprobacionRetiros() {
   )
 
   // Handler para aprobar retiro
-  const handleAprobarRetiro = (lote) => {
+  const handleAprobarRetiro = async (lote) => {
     const gestoraId = gestoraSeleccionada[lote.id]
 
     if (!gestoraId) {
@@ -48,45 +49,75 @@ export default function AprobacionRetiros() {
     )
 
     if (confirmacion) {
-      dispatch({
-        type: 'ACTUALIZAR_LOTE',
-        payload: {
-          id: lote.id,
+      try {
+        // Actualizar en Supabase
+        await actualizarLotePublicacion(lote.id, {
           estado: ESTADOS_LOTE.RETIRO_APROBADO,
           gestora_asignada_id: gestoraId,
-          gestora_asignada: gestora?.nombre,
-          fecha_aprobacion: new Date().toISOString().split('T')[0]
-        }
-      })
+          fecha_asignacion: new Date().toISOString().split('T')[0]
+        })
 
-      // Limpiar selección
-      setGestoraSeleccionada({ ...gestoraSeleccionada, [lote.id]: null })
-      setLoteExpandido(null)
+        // Actualizar en estado local
+        dispatch({
+          type: 'ACTUALIZAR_LOTE',
+          payload: {
+            id: lote.id,
+            estado: ESTADOS_LOTE.RETIRO_APROBADO,
+            gestora_asignada_id: gestoraId,
+            gestoraAsignada_id: gestoraId,
+            fecha_asignacion: new Date().toISOString().split('T')[0],
+            fechaAsignacion: new Date().toISOString().split('T')[0]
+          }
+        })
 
-      toast.success(`Retiro aprobado para ${gestora?.nombre}`)
+        // Limpiar selección
+        setGestoraSeleccionada({ ...gestoraSeleccionada, [lote.id]: null })
+        setLoteExpandido(null)
+
+        toast.success(`Retiro aprobado para ${gestora?.nombre}`)
+      } catch (error) {
+        console.error('Error aprobando retiro:', error)
+        toast.error('Error al aprobar el retiro. Intentá de nuevo.')
+      }
     }
   }
 
   // Handler para rechazar todas las solicitudes
-  const handleRechazarSolicitudes = (lote) => {
+  const handleRechazarSolicitudes = async (lote) => {
     const confirmacion = confirm(
       `¿Rechazar todas las solicitudes para ${lote.id}?\n\n` +
       `El lote volverá al catálogo como "Disponible para retiro".\n` +
-      `Las ${lote.solicitudes_gestoras.length} gestora(s) no serán notificadas.`
+      `Las ${lote.solicitudes_gestoras.length} gestora(s) recibirán notificación.`
     )
 
     if (confirmacion) {
-      dispatch({
-        type: 'ACTUALIZAR_LOTE',
-        payload: {
-          id: lote.id,
+      try {
+        // Actualizar estado del lote en Supabase (las solicitudes quedan registradas)
+        await actualizarLotePublicacion(lote.id, {
           estado: ESTADOS_LOTE.DISPONIBLE,
-          solicitudes_gestoras: []
-        }
-      })
+          gestora_asignada_id: null,
+          fecha_asignacion: null
+        })
 
-      setLoteExpandido(null)
-      toast.info('Solicitudes rechazadas. Lote devuelto al catálogo.')
+        // Actualizar en estado local
+        dispatch({
+          type: 'ACTUALIZAR_LOTE',
+          payload: {
+            id: lote.id,
+            estado: ESTADOS_LOTE.DISPONIBLE,
+            gestora_asignada_id: null,
+            gestoraAsignada_id: null,
+            fecha_asignacion: null,
+            fechaAsignacion: null
+          }
+        })
+
+        setLoteExpandido(null)
+        toast.info('Solicitudes rechazadas. Lote devuelto al catálogo.')
+      } catch (error) {
+        console.error('Error rechazando solicitudes:', error)
+        toast.error('Error al rechazar solicitudes. Intentá de nuevo.')
+      }
     }
   }
 

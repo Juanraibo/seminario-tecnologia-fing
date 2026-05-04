@@ -41,8 +41,8 @@ export default function AdminDashboard() {
     const lotesEntrada = state.lotes.filter(l => l.tipo === 'entrada')
     const lotesPublicacion = state.lotes.filter(l => l.tipo === 'publicacion')
 
-    // Total kg gestionados (usar items para cálculo preciso)
-    const totalKg = state.items?.reduce((sum, item) => sum + (item.peso_kg || 0), 0) || 0
+    // Total kg gestionados (usar items para cálculo preciso, compatibilidad con ambos nombres)
+    const totalKg = state.items?.reduce((sum, item) => sum + (item.pesoKg || item.peso_kg || 0), 0) || 0
 
     // CO2 evitado
     const co2Evitado = totalKg * (state.config?.factor_co2_por_kg || 1.4)

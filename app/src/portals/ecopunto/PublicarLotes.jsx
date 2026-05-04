@@ -78,9 +78,9 @@ export default function PublicarLotes() {
       // Obtener ítems seleccionados
       const items = state.items.filter(i => itemsSeleccionados.includes(i.id))
 
-      // Calcular peso total y CO2 total
-      const pesoTotal = items.reduce((sum, i) => sum + i.peso_kg, 0)
-      const co2Total = items.reduce((sum, i) => sum + (i.co2_kg || 0), 0)
+      // Calcular peso total y CO2 total (usar campos normalizados)
+      const pesoTotal = items.reduce((sum, i) => sum + (i.pesoKg || i.peso_kg || 0), 0)
+      const co2Total = items.reduce((sum, i) => sum + (i.co2Kg || i.co2_kg || 0), 0)
 
       // Institutos de origen (únicos)
       const institutosOrigen = [...new Set(items.map(i => i.institutoId))]
