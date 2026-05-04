@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { useToast } from '../../components/molecules/Toast'
+import { crearSolicitudGestora } from '../../services/supabase'
 import Button from '../../components/atoms/Button'
 import Card from '../../components/molecules/Card'
 import StatusBadge from '../../components/molecules/StatusBadge'
@@ -55,7 +56,7 @@ export default function DetalleLote() {
     )
   }
 
-  const handleEnviarCotizacion = () => {
+  const handleEnviarCotizacion = async () => {
     const monto = parseFloat(cotizacion)
 
     if (!monto || monto <= 0) {
@@ -65,9 +66,18 @@ export default function DetalleLote() {
 
     setEnviando(true)
 
-    // Simular delay de red
-    setTimeout(() => {
-      // Actualizar lote con nueva solicitud
+    try {
+      // Crear solicitud en Supabase
+      const nuevaSolicitud = {
+        lote_publicacion_id: lote.id,
+        gestora_id: gestora.id,
+        cotizacion_monto: monto,
+        estado: 'pendiente'
+      }
+
+      await crearSolicitudGestora(nuevaSolicitud)
+
+      // Actualizar estado local
       dispatch({
         type: 'AGREGAR_SOLICITUD_GESTORA',
         payload: {
@@ -78,10 +88,14 @@ export default function DetalleLote() {
         }
       })
 
-      setEnviando(false)
       setCotizacion('')
       toast.success(`Cotización de $${monto.toLocaleString()} enviada correctamente`)
-    }, 800)
+    } catch (error) {
+      console.error('Error enviando cotización:', error)
+      toast.error('Error al enviar la cotización. Intentá de nuevo.')
+    } finally {
+      setEnviando(false)
+    }
   }
 
   return (

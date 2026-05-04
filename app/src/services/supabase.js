@@ -118,6 +118,18 @@ export async function crearItem(item) {
   return data
 }
 
+export async function actualizarItem(id, cambios) {
+  const { data, error } = await supabase
+    .from('items')
+    .update(cambios)
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
 // Lotes de publicación
 export async function getLotesPublicacion() {
   const { data, error } = await supabase

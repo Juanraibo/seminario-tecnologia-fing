@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .certificado-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        padding: 80px;
+      }
+      .logo-container {
+        margin-bottom: 60px;
+      }
+      .title {
+        font-size: 96px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+      }
+      .subtitle {
+        font-size: 48px;
+        font-weight: 300;
+        margin-bottom: 80px;
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        width: 100%;
+        max-width: 1400px;
+        margin-bottom: 60px;
+      }
+      .info-item {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: left;
+      }
+      .info-label {
+        font-size: 28px;
+        opacity: 0.8;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      .info-value {
+        font-size: 42px;
+        font-weight: 600;
+      }
+      .qr-container {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        margin-top: 40px;
+      }
+      .footer {
+        margin-top: 60px;
+        font-size: 24px;
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="certificado-retiro"
+      data-start="0"
+      data-duration="10"
+      data-width="1920"
+      data-height="1080"
+    >
+
+      <!-- Logo EcoFIng -->
+      <div id="logo" class="clip logo-container" data-start="0" data-duration="10" data-track-index="1">
+        <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="90" stroke="white" stroke-width="8" opacity="0.8"/>
+          <path d="M60 100 L90 130 L140 70" stroke="white" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- Título -->
+      <div id="title" class="clip title" data-start="0.5" data-duration="9.5" data-track-index="2">
+        Certificado de Retiro
+      </div>
+
+      <!-- Subtítulo -->
+      <div id="subtitle" class="clip subtitle" data-start="1" data-duration="9" data-track-index="3">
+        Gestión Responsable de RAEE
+      </div>
+
+      <!-- Grid de información -->
+      <div class="info-grid clip" data-start="1.5" data-duration="8.5" data-track-index="4">
+        <div id="lote-info" class="info-item">
+          <div class="info-label">Lote</div>
+          <div id="lote-codigo" class="info-value">{{LOTE_CODIGO}}</div>
+        </div>
+
+        <div id="gestora-info" class="info-item">
+          <div class="info-label">Gestora</div>
+          <div id="gestora-nombre" class="info-value">{{GESTORA_NOMBRE}}</div>
+        </div>
+
+        <div id="peso-info" class="info-item">
+          <div class="info-label">Peso Total</div>
+          <div id="peso-total" class="info-value">{{PESO_TOTAL}} kg</div>
+        </div>
+
+        <div id="fecha-info" class="info-item">
+          <div class="info-label">Fecha de Retiro</div>
+          <div id="fecha-retiro" class="info-value">{{FECHA_RETIRO}}</div>
+        </div>
+      </div>
+
+      <!-- QR Code placeholder -->
+      <div id="qr" class="clip qr-container" data-start="2" data-duration="8" data-track-index="5">
+        <div style="width: 200px; height: 200px; background: #000; display: flex; align-items: center; justify-content: center; color: white;">
+          QR CODE
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div id="footer" class="clip footer" data-start="2.5" data-duration="7.5" data-track-index="6">
+        EcoFIng - Facultad de Ingeniería - Universidad de la República
+      </div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Animaciones secuenciales
+      tl.from("#logo", { scale: 0, rotation: 360, duration: 1, ease: "back.out(1.7)" }, 0)
+        .from("#title", { opacity: 0, y: -100, duration: 0.8 }, 0.5)
+        .from("#subtitle", { opacity: 0, y: -50, duration: 0.8 }, 1)
+        .from(".info-item", {
+          opacity: 0,
+          scale: 0.8,
+          stagger: 0.2,
+          duration: 0.6,
+          ease: "back.out(1.2)"
+        }, 1.5)
+        .from("#qr", { opacity: 0, scale: 0, duration: 0.6, ease: "back.out(1.5)" }, 2)
+        .from("#footer", { opacity: 0, y: 30, duration: 0.8 }, 2.5);
+
+      window.__timelines["certificado-retiro"] = tl;
+    </script>
+  </body>
+</html>

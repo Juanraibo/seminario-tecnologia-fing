@@ -5,8 +5,9 @@
 
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, crearLotePublicacionConSupabase } from '../../context/AppContext'
 import { useToast } from '../../components/molecules/Toast'
+import { actualizarItem } from '../../services/supabase'
 import Button from '../../components/atoms/Button'
 import Card from '../../components/molecules/Card'
 import { ArrowLeft, Upload as PublishIcon, Check, Package, Building2 } from '../../components/atoms/Icon'
@@ -60,71 +61,69 @@ export default function PublicarLotes() {
     setItemsSeleccionados([])
   }
 
-  const crearLotePublicacion = () => {
+  const crearLotePublicacion = async () => {
     if (itemsSeleccionados.length === 0) {
       toast.warning('Seleccioná al menos un ítem para publicar')
       return
     }
 
-    // Generar ID para lote de publicación
-    const lotesPublicacion = state.lotes.filter(l => l.tipo === 'publicacion')
-    const ultimoNumero = lotesPublicacion.length > 0
-      ? Math.max(...lotesPublicacion.map(l => parseInt(l.id.split('-')[2])))
-      : 0
-    const nuevoId = `PUB-2026-${String(ultimoNumero + 1).padStart(3, '0')}`
+    try {
+      // Generar ID para lote de publicación
+      const lotesPublicacion = state.lotes.filter(l => l.tipo === 'publicacion')
+      const ultimoNumero = lotesPublicacion.length > 0
+        ? Math.max(...lotesPublicacion.map(l => parseInt(l.id.split('-')[2])))
+        : 0
+      const nuevoId = `PUB-2026-${String(ultimoNumero + 1).padStart(3, '0')}`
 
-    // Obtener ítems seleccionados
-    const items = state.items.filter(i => itemsSeleccionados.includes(i.id))
+      // Obtener ítems seleccionados
+      const items = state.items.filter(i => itemsSeleccionados.includes(i.id))
 
-    // Calcular peso total
-    const pesoTotal = items.reduce((sum, i) => sum + i.peso_kg, 0)
+      // Calcular peso total y CO2 total
+      const pesoTotal = items.reduce((sum, i) => sum + i.peso_kg, 0)
+      const co2Total = items.reduce((sum, i) => sum + (i.co2_kg || 0), 0)
 
-    // Institutos de origen (únicos)
-    const institutosOrigen = [...new Set(items.map(i => i.institutoId))]
+      // Institutos de origen (únicos)
+      const institutosOrigen = [...new Set(items.map(i => i.institutoId))]
 
-    // Crear lote de publicación
-    const nuevoLote = {
-      id: nuevoId,
-      tipo: 'publicacion',
-      categoria: categoriaSeleccionada,
-      items_ids: itemsSeleccionados,
-      peso_total_kg: pesoTotal,
-      cantidad_items: itemsSeleccionados.length,
-      institutos_origen: institutosOrigen,
-      estado: ESTADOS_LOTE.DISPONIBLE,
-      fecha_publicacion: new Date().toISOString().split('T')[0],
-      fecha_solicitud_gestora: null,
-      fecha_aprobacion: null,
-      fecha_certificado: null,
-      gestora_asignada: null,
-      gestora_asignada_id: null,
-      certificado_numero: null,
-      observaciones: null,
-      solicitudes_gestoras: []
-    }
-
-    // Agregar lote
-    dispatch({
-      type: 'AGREGAR_LOTE',
-      payload: nuevoLote
-    })
-
-    // Asignar ítems al lote
-    dispatch({
-      type: 'ASIGNAR_ITEMS_A_LOTE_PUBLICACION',
-      payload: {
-        itemsIds: itemsSeleccionados,
-        lotePublicadoId: nuevoId
+      // Crear lote de publicación (snake_case para Supabase)
+      const nuevoLote = {
+        id: nuevoId,
+        categoria: categoriaSeleccionada,
+        cantidad_items: itemsSeleccionados.length,
+        peso_total_kg: pesoTotal,
+        co2_total_kg: co2Total,
+        estado: ESTADOS_LOTE.DISPONIBLE,
+        fecha_publicacion: new Date().toISOString().split('T')[0],
+        gestora_asignada_id: null,
+        fecha_asignacion: null,
+        fecha_retiro: null,
+        fecha_certificado: null,
+        certificado_url: null
       }
-    })
 
-    // Mostrar toast de éxito
-    toast.success(`Lote ${nuevoId} publicado con ${itemsSeleccionados.length} ítems`)
+      // Guardar lote en Supabase
+      await crearLotePublicacionConSupabase(nuevoLote, dispatch)
 
-    // Navegar de vuelta
-    setTimeout(() => {
-      navigate('/ecopunto')
-    }, 300)
+      // Actualizar cada ítem para asignarlo al lote de publicación
+      for (const itemId of itemsSeleccionados) {
+        await actualizarItem(itemId, { lote_publicado_id: nuevoId })
+        dispatch({
+          type: 'ACTUALIZAR_ITEM',
+          payload: { id: itemId, lotePublicadoId: nuevoId }
+        })
+      }
+
+      // Mostrar toast de éxito
+      toast.success(`Lote ${nuevoId} publicado con ${itemsSeleccionados.length} ítems`)
+
+      // Navegar de vuelta
+      setTimeout(() => {
+        navigate('/ecopunto')
+      }, 300)
+    } catch (error) {
+      console.error('Error creando lote de publicación:', error)
+      toast.error('Error al publicar el lote. Intentá de nuevo.')
+    }
   }
 
   const itemsCategoria = itemsPorCategoria[categoriaSeleccionada] || []

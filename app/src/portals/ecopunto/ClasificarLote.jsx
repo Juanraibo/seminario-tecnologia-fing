@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, crearItemConSupabase, actualizarLoteConSupabase } from '../../context/AppContext'
 import { useToast } from '../../components/molecules/Toast'
 import Button from '../../components/atoms/Button'
 import Card from '../../components/molecules/Card'
@@ -186,98 +186,99 @@ export default function ClasificarLote() {
 
     setGuardandoItem(true)
 
-    // Calcular CO2 del item
-    let co2_kg = null
-    let co2_source = 'estimated'
-
     try {
-      const resultadoCO2 = await calcularCO2Evitado(parseFloat(pesoReal), categoriaSeleccionada)
-      co2_kg = resultadoCO2.co2_kg
-      co2_source = resultadoCO2.source
-    } catch (err) {
-      console.warn('Error calculando CO2, usando estimación:', err)
-      // Usar factor estimado si falla la API
-      co2_kg = parseFloat(pesoReal) * 1.4
-      co2_source = 'estimated'
-    }
+      // Calcular CO2 del item
+      let co2_kg = null
+      let co2_source = 'estimated'
 
-    // Generar ID secuencial
-    const ultimoId = state.items.length > 0
-      ? Math.max(...state.items.map(i => parseInt(i.id.split('-')[2])))
-      : 0
-    const nuevoId = `ITEM-2026-${String(ultimoId + 1).padStart(3, '0')}`
-
-    // Crear ítem
-    const nuevoItem = {
-      id: nuevoId,
-      loteOrigenId: loteId,
-      institutoId: lote.institutoId,
-      categoria: categoriaSeleccionada,
-      descripcion: descripcion.trim(),
-      peso_kg: parseFloat(pesoReal),
-      co2_kg: co2_kg,
-      co2_source: co2_source,
-      foto_url: imagenPreview,
-      clasificado_por_ia: !!resultadoIA,
-      confianza_ia: resultadoIA?.confianza || null,
-      fecha_clasificacion: new Date().toISOString().split('T')[0],
-      lotePublicadoId: null,
-      observaciones: null
-    }
-
-    // Agregar al estado
-    dispatch({
-      type: 'AGREGAR_ITEM',
-      payload: nuevoItem
-    })
-
-    // Actualizar contador de ítems en el lote
-    dispatch({
-      type: 'ACTUALIZAR_LOTE',
-      payload: {
-        id: loteId,
-        items_clasificados: itemsDelLote.length + 1
+      try {
+        const resultadoCO2 = await calcularCO2Evitado(parseFloat(pesoReal), categoriaSeleccionada)
+        co2_kg = resultadoCO2.co2_kg
+        co2_source = resultadoCO2.source
+      } catch (err) {
+        console.warn('Error calculando CO2, usando estimación:', err)
+        // Usar factor estimado si falla la API
+        co2_kg = parseFloat(pesoReal) * 1.4
+        co2_source = 'estimated'
       }
-    })
 
-    // Mostrar toast de éxito
-    toast.success(`Ítem ${nuevoId} agregado correctamente`)
+      // Generar ID secuencial
+      const ultimoId = state.items.length > 0
+        ? Math.max(...state.items.map(i => parseInt(i.id.split('-')[2])))
+        : 0
+      const nuevoId = `ITEM-2026-${String(ultimoId + 1).padStart(3, '0')}`
 
-    // Resetear formulario
-    setImagen(null)
-    setImagenPreview(null)
-    setResultadoIA(null)
-    setCategoriaSeleccionada('')
-    setPesoReal('')
-    setDescripcion('')
-    setError('')
-    setGuardandoItem(false)
+      // Crear ítem (usando snake_case para Supabase)
+      const nuevoItem = {
+        id: nuevoId,
+        lote_origen_id: loteId,
+        instituto_id: lote.institutoId,
+        categoria: categoriaSeleccionada,
+        descripcion: descripcion.trim(),
+        peso_kg: parseFloat(pesoReal),
+        co2_kg: co2_kg,
+        co2_source: co2_source,
+        foto_url: imagenPreview,
+        clasificado_por_ia: !!resultadoIA,
+        confianza_ia: resultadoIA?.confianza || null,
+        fecha_clasificacion: new Date().toISOString().split('T')[0],
+        lote_publicado_id: null,
+        observaciones: null
+      }
+
+      // Guardar en Supabase
+      await crearItemConSupabase(nuevoItem, dispatch)
+
+      // Actualizar contador de ítems en el lote
+      await actualizarLoteConSupabase(loteId, {
+        items_clasificados: itemsDelLote.length + 1
+      }, dispatch)
+
+      // Mostrar toast de éxito
+      toast.success(`Ítem ${nuevoId} agregado correctamente`)
+
+      // Resetear formulario
+      setImagen(null)
+      setImagenPreview(null)
+      setResultadoIA(null)
+      setCategoriaSeleccionada('')
+      setPesoReal('')
+      setDescripcion('')
+      setError('')
+    } catch (error) {
+      console.error('Error creando item:', error)
+      toast.error('Error al guardar el ítem. Intentá de nuevo.')
+      setError('Error al guardar el ítem')
+    } finally {
+      setGuardandoItem(false)
+    }
   }
 
   // Terminar clasificación del lote
-  const handleTerminarClasificacion = () => {
+  const handleTerminarClasificacion = async () => {
     if (itemsDelLote.length === 0) {
       setError('Debes clasificar al menos un ítem antes de terminar')
       toast.warning('Debes clasificar al menos un ítem antes de terminar')
       return
     }
 
-    // Marcar lote como clasificado
-    dispatch({
-      type: 'ACTUALIZAR_LOTE',
-      payload: {
-        id: loteId,
+    try {
+      // Marcar lote como clasificado en Supabase
+      await actualizarLoteConSupabase(loteId, {
         estado: ESTADOS_LOTE.CLASIFICADO,
         fecha_clasificacion_completa: new Date().toISOString().split('T')[0],
         items_clasificados: itemsDelLote.length
-      }
-    })
+      }, dispatch)
 
-    toast.success(`Lote ${loteId} clasificado con ${itemsDelLote.length} ítems`)
+      toast.success(`Lote ${loteId} clasificado con ${itemsDelLote.length} ítems`)
 
-    setTimeout(() => {
-      navigate('/ecopunto')
-    }, 500)
+      setTimeout(() => {
+        navigate('/ecopunto')
+      }, 500)
+    } catch (error) {
+      console.error('Error al terminar clasificación:', error)
+      toast.error('Error al actualizar el estado del lote')
+    }
   }
 
   const nivelConfianzaColor = {

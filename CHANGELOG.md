@@ -5,6 +5,164 @@ Formato: `[Sesión N — Fecha] Título`
 
 ---
 
+## [Sesión 11 — 04 de mayo de 2026] 🎬 Integración HyperFrames para Generación de Videos
+
+### Contexto
+Integración del framework **HyperFrames** (HeyGen) para generar videos automatizados a partir de composiciones HTML. Permite crear certificados de retiro y reportes visuales en formato video (MP4).
+
+### Instalación y configuración
+
+**1. Dependencias instaladas:**
+- ✅ **FFmpeg 8.1** (instalado vía winget)
+- ✅ **HyperFrames 0.4.43** (inicializado con `npx hyperframes init video-generation`)
+
+**2. Estructura creada:**
+```
+video-generation/           ← Proyecto HyperFrames
+├── compositions/           ← Composiciones HTML personalizadas
+│   ├── certificado-retiro.html
+│   └── reporte-lotes-gestora.html
+├── assets/                 ← Assets (logos, imágenes)
+├── output/                 ← Videos renderizados (MP4)
+├── index.html
+├── hyperframes.json
+└── package.json
+
+app/src/
+├── components/
+│   └── VideoGenerator.jsx      ← Componente React para generar videos
+└── services/
+    └── videoGeneration.js      ← Servicio de integración con HyperFrames
+```
+
+### Funcionalidades implementadas
+
+**1. Servicio de integración (`videoGeneration.js`):**
+- `prepararDatosCertificado(lote, gestora)` — Procesa datos para certificado
+- `prepararDatosReporteLotes(lotes)` — Procesa datos para reporte
+- `generarComposicionHTML(tipo, datos)` — Genera HTML personalizado
+- `descargarComposicion(tipo, datos)` — Descarga composición HTML
+- `generarInstruccionesVideo(tipo, datos)` — Genera guía de renderizado
+
+**2. Componente React (`VideoGenerator.jsx`):**
+- Botón para generar video con estado de carga
+- Descarga automática de composición HTML personalizada
+- Muestra instrucciones paso a paso para renderizar
+- Manejo de errores y feedback visual
+
+**3. Composiciones HTML creadas:**
+
+**a) Certificado de Retiro** (`certificado-retiro.html`)
+- **Duración:** 10 segundos
+- **Resolución:** 1920x1080
+- **Variables:** `LOTE_CODIGO`, `GESTORA_NOMBRE`, `PESO_TOTAL`, `FECHA_RETIRO`
+- **Animaciones:** GSAP (logo, título, grid de info, QR code, footer)
+- **Diseño:** Gradiente purple-violet, glassmorphism, responsive grid
+
+**b) Reporte de Lotes** (`reporte-lotes-gestora.html`)
+- **Duración:** 15 segundos
+- **Resolución:** 1920x1080
+- **Variables:** `FECHA_ACTUAL`, `TOTAL_LOTES`, `PESO_TOTAL`, `CATEGORIAS`
+- **Animaciones:** Stats animados, lista de lotes con stagger
+- **Diseño:** Gradiente blue, stat cards, tabla de lotes
+
+### Casos de uso propuestos
+
+**1. Portal Gestora → Certificado de Retiro:**
+- Cuando un lote pasa a estado `Finalizado`
+- Genera certificado en video con datos del lote y gestora
+- Include QR code para verificación
+
+**2. Portal Admin → Reporte de Lotes:**
+- Genera reporte visual de lotes disponibles
+- Stats: total lotes, peso total, categorías
+- Lista top 3 lotes con más peso
+
+**3. Futuros (no implementados):**
+- Videos tutoriales para Institutos (onboarding)
+- Videos de impacto ambiental (CO2 evitado)
+- Resúmenes mensuales automatizados
+
+### Flujo de uso
+
+```bash
+# 1. Usuario genera video desde la app (descarga HTML personalizado)
+# 2. Copiar archivo a video-generation/compositions/
+# 3. Previsualizar
+cd video-generation && npm run dev
+
+# 4. Validar
+npm run check
+
+# 5. Renderizar a MP4
+npm run render
+
+# 6. Video generado en video-generation/output/
+```
+
+### Tecnologías utilizadas
+
+| Tecnología | Versión | Propósito |
+|---|---|---|
+| HyperFrames | 0.4.43 | Framework de video HTML |
+| FFmpeg | 8.1 | Renderizado de video |
+| GSAP | 3.14.2 | Animaciones |
+| React | 18 | Componente de integración |
+
+### Documentación generada
+
+- ✅ **`docs/hyperframes-integration.md`** — Guía completa de integración
+  - Instalación y configuración
+  - Casos de uso con ejemplos de código
+  - Personalización de composiciones
+  - Comandos útiles
+  - Troubleshooting
+  - Próximos pasos sugeridos
+
+### Decisiones técnicas
+
+**¿Por qué HyperFrames?**
+- ✅ HTML nativo (sin DSL propietario)
+- ✅ Optimizado para IA/agentes
+- ✅ Renderizado determinista
+- ✅ Soporte GSAP, Lottie, Three.js
+- ✅ Código abierto
+
+**¿Por qué no integración directa en React?**
+- HyperFrames funciona mejor como herramienta independiente
+- Separación de concerns: app web vs generación de video
+- Permite previsualizar antes de renderizar
+- CLI más eficiente para renderizado que integración en runtime
+
+**Variables de entorno:**
+- No requiere variables adicionales (HyperFrames es local)
+- Solo FFmpeg como dependencia del sistema
+
+### Limitaciones conocidas
+
+1. **No es real-time:** El video debe renderizarse localmente (no en navegador)
+2. **Requiere paso manual:** Copiar archivo descargado a `video-generation/compositions/`
+3. **FFmpeg necesario:** Dependencia del sistema (no npm package)
+4. **Sin preview embebido:** La app muestra instrucciones, no preview del video
+
+### Próximos pasos (backlog)
+
+- [ ] Integrar `VideoGenerator` en `DetalleLote.jsx` (portal Gestora)
+- [ ] Integrar `VideoGenerator` en `Dashboard.jsx` (portal Admin)
+- [ ] Crear composición `tutorial-instituto.html`
+- [ ] Crear composición `impacto-ambiental.html`
+- [ ] Agregar QR codes dinámicos a certificados
+- [ ] Automatizar renderizado (script o CI/CD)
+- [ ] Subir videos a storage cloud (opcional)
+
+### Referencias
+
+- **Repositorio HyperFrames:** https://github.com/heygen-com/hyperframes
+- **Documentación oficial:** https://hyperframes.heygen.com
+- **Catálogo de bloques:** https://hyperframes.heygen.com/catalog
+
+---
+
 ## [Sesión 10.3 — 28 de abril de 2026] 🚨 Security Fix: API Key Expuesta + Migración a Modelo Gratuito
 
 ### Incidente de seguridad

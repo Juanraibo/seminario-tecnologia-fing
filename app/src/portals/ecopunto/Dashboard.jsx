@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, actualizarLoteConSupabase } from '../../context/AppContext'
+import { useToast } from '../../components/molecules/Toast'
 import PageHeader from '../../components/layout/PageHeader'
 import Card, { StatCard } from '../../components/molecules/Card'
 import DataTable from '../../components/organisms/DataTable'
@@ -12,22 +13,25 @@ import { ESTADOS_LOTE } from '../../constants/estados'
 export default function EcopuntoDashboard() {
   const { state, dispatch } = useApp()
   const navigate = useNavigate()
+  const toast = useToast()
 
-  const lotesEntrada = state.lotes.filter(l => l.tipo === 'entrada')
+  const lotesEntrada = state.lotes.filter(l => !l.tipo || l.tipo === 'entrada')
   const lotesPendientes = lotesEntrada.filter(l => l.estado === ESTADOS_LOTE.PENDIENTE_ENVIO)
   const lotesRecibidos = lotesEntrada.filter(l => l.estado === ESTADOS_LOTE.EN_ECOPUNTO)
   const lotesClasificados = lotesEntrada.filter(l => l.estado === ESTADOS_LOTE.CLASIFICADO)
   const itemsSinPublicar = state.items.filter(i => i.lotePublicadoId === null)
 
-  const marcarComoRecibido = (lote) => {
-    dispatch({
-      type: 'ACTUALIZAR_LOTE',
-      payload: {
-        id: lote.id,
+  const marcarComoRecibido = async (lote) => {
+    try {
+      await actualizarLoteConSupabase(lote.id, {
         estado: ESTADOS_LOTE.EN_ECOPUNTO,
         fecha_recepcion_ecopunto: new Date().toISOString().split('T')[0]
-      }
-    })
+      }, dispatch)
+      toast.success(`Lote ${lote.id} marcado como recibido`)
+    } catch (error) {
+      console.error('Error al marcar lote como recibido:', error)
+      toast.error('Error al actualizar el lote')
+    }
   }
 
   const columnasPendientes = [
