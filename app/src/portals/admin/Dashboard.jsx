@@ -45,11 +45,12 @@ export default function AdminDashboard() {
     const totalKg = state.items?.reduce((sum, item) => sum + (item.peso_kg || 0), 0) || 0
 
     // CO2 evitado
-    const co2Evitado = totalKg * state.config.factor_co2_por_kg
+    const co2Evitado = totalKg * (state.config?.factor_co2_por_kg || 1.4)
 
-    // Materiales recuperados
-    const cobreRecuperado = totalKg * state.config.materiales_recuperados_pct.cobre
-    const aluminioRecuperado = totalKg * state.config.materiales_recuperados_pct.aluminio
+    // Materiales recuperados (valores por defecto si no existen en config)
+    const materialesPct = state.config?.materiales_recuperados_pct || { cobre: 0.15, aluminio: 0.25 }
+    const cobreRecuperado = totalKg * materialesPct.cobre
+    const aluminioRecuperado = totalKg * materialesPct.aluminio
 
     // % lotes con certificado
     const lotesFinalizados = lotesPublicacion.filter(l => l.estado === ESTADOS_LOTE.FINALIZADO).length
