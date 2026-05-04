@@ -208,7 +208,7 @@ export default function DetalleLote() {
                               <p className="text-gray-900 dark:text-gray-100 font-medium">{item.descripcion}</p>
                             </div>
                             <span className="text-sm font-semibold text-primary-500">
-                              {item.peso_kg} kg
+                              {(item.pesoKg || item.peso_kg || 0)} kg
                             </span>
                           </div>
 

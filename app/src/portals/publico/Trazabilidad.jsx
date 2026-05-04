@@ -554,7 +554,7 @@ function DetalleLote({ loteId, state }) {
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.descripcion}</p>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-xs text-gray-600 dark:text-gray-400">{item.categoria}</span>
-                    <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">{item.peso_kg} kg</span>
+                    <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">{(item.pesoKg || item.peso_kg || 0)} kg</span>
                   </div>
                 </div>
               ))}

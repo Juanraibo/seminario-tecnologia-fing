@@ -612,11 +612,11 @@ export default function ClasificarLote() {
                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{item.categoria}</p>
                       <div className="flex items-center justify-between text-xs mb-2">
                         <span className="text-gray-500 dark:text-gray-400">Peso:</span>
-                        <span className="text-gray-900 dark:text-gray-100 font-semibold">{item.peso_kg} kg</span>
+                        <span className="text-gray-900 dark:text-gray-100 font-semibold">{(item.pesoKg || item.peso_kg || 0)} kg</span>
                       </div>
-                      {item.co2_kg && (
+                      {(item.co2Kg || item.co2_kg) && (
                         <div className="flex items-center gap-2 mt-2">
-                          <CO2Badge co2_kg={item.co2_kg} size="sm" />
+                          <CO2Badge co2_kg={(item.co2Kg || item.co2_kg)} size="sm" />
                           {item.co2_source === 'api' && (
                             <span className="text-xs text-emerald-600 dark:text-emerald-400">✓ Real</span>
                           )}
@@ -639,14 +639,14 @@ export default function ClasificarLote() {
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500 dark:text-gray-400">Peso total:</span>
                     <span className="text-gray-900 dark:text-gray-100 font-bold">
-                      {itemsDelLote.reduce((sum, item) => sum + item.peso_kg, 0).toFixed(1)} kg
+                      {itemsDelLote.reduce((sum, item) => sum + (item.pesoKg || item.peso_kg || 0), 0).toFixed(1)} kg
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500 dark:text-gray-400">CO₂ evitado total:</span>
                     <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
                       <Leaf size={14} />
-                      {itemsDelLote.reduce((sum, item) => sum + (item.co2_kg || 0), 0).toFixed(2)} kg
+                      {itemsDelLote.reduce((sum, item) => sum + (item.co2Kg || item.co2_kg || 0), 0).toFixed(2)} kg
                     </span>
                   </div>
                 </div>

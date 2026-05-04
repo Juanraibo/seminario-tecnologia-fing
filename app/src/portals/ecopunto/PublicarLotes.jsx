@@ -282,7 +282,7 @@ export default function PublicarLotes() {
 
                         <div className="flex items-center justify-between text-sm pt-3 border-t border-gray-100 dark:border-gray-700">
                           <span className="text-gray-500 dark:text-gray-400">Peso:</span>
-                          <span className="text-gray-900 dark:text-gray-100 font-semibold">{item.peso_kg} kg</span>
+                          <span className="text-gray-900 dark:text-gray-100 font-semibold">{(item.pesoKg || item.peso_kg || 0)} kg</span>
                         </div>
                       </div>
                     )
@@ -310,7 +310,7 @@ export default function PublicarLotes() {
                       <p className="text-gray-900 dark:text-gray-100 font-semibold">
                         {state.items
                           .filter(i => itemsSeleccionados.includes(i.id))
-                          .reduce((sum, i) => sum + i.peso_kg, 0)
+                          .reduce((sum, i) => sum + (i.pesoKg || i.peso_kg || 0), 0)
                           .toFixed(1)} kg
                       </p>
                     </div>
