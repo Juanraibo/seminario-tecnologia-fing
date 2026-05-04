@@ -16,6 +16,14 @@ import {
   crearSolicitudGestora,
   getConfig,
 } from '../services/supabase'
+import {
+  normalizeUsuario,
+  normalizeLote,
+  normalizeItem,
+  normalizeLotePublicacion,
+  normalizeGestora,
+  normalizeInstituto,
+} from '../utils/normalizeData'
 
 // ── Estado inicial (vacío - se carga desde Supabase) ──────────────
 const initialState = {
@@ -159,13 +167,14 @@ export function AppProvider({ children }) {
 
         console.log('✅ Datos cargados:', { institutos, gestoras, lotes, items })
 
+        // Normalizar datos de snake_case a camelCase
         dispatch({
           type: 'SET_INITIAL_DATA',
           payload: {
-            institutos,
-            gestoras,
-            lotes,
-            items,
+            institutos: institutos.map(normalizeInstituto),
+            gestoras: gestoras.map(normalizeGestora),
+            lotes: lotes.map(normalizeLote),
+            items: items.map(normalizeItem),
             config: { categorias_raee },
           },
         })
@@ -205,8 +214,9 @@ export function useApp() {
 export async function loginConSupabase(email, password, dispatch) {
   try {
     const usuario = await loginUsuario(email, password)
-    dispatch({ type: 'LOGIN', payload: usuario })
-    return usuario
+    const usuarioNormalizado = normalizeUsuario(usuario)
+    dispatch({ type: 'LOGIN', payload: usuarioNormalizado })
+    return usuarioNormalizado
   } catch (error) {
     console.error('Error en login:', error)
     throw error
