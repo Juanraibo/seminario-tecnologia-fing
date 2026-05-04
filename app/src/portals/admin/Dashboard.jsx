@@ -75,11 +75,11 @@ export default function AdminDashboard() {
     const institutoKg = {}
 
     state.items?.forEach(item => {
-      const institutoId = item.institutoId
+      const institutoId = item.institutoId || item.instituto_id
       if (!institutoKg[institutoId]) {
         institutoKg[institutoId] = 0
       }
-      institutoKg[institutoId] += item.peso_kg || 0
+      institutoKg[institutoId] += (item.pesoKg || item.peso_kg || 0)
     })
 
     return Object.entries(institutoKg).map(([institutoId, kg]) => {
