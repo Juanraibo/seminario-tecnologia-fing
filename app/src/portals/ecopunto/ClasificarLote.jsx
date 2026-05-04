@@ -212,7 +212,7 @@ export default function ClasificarLote() {
       const nuevoItem = {
         id: nuevoId,
         lote_origen_id: loteId,
-        instituto_id: lote.institutoId,
+        instituto_id: lote.instituto_id || lote.institutoId, // Compatibilidad
         categoria: categoriaSeleccionada,
         descripcion: descripcion.trim(),
         peso_kg: parseFloat(pesoReal),
@@ -246,8 +246,10 @@ export default function ClasificarLote() {
       setDescripcion('')
       setError('')
     } catch (error) {
-      console.error('Error creando item:', error)
-      toast.error('Error al guardar el ítem. Intentá de nuevo.')
+      console.error('❌ Error creando item:', error)
+      console.error('Error details:', error.message, error.details, error.hint)
+      console.error('Item que se intentó guardar:', nuevoItem)
+      toast.error(`Error al guardar el ítem: ${error.message || 'Intentá de nuevo.'}`)
       setError('Error al guardar el ítem')
     } finally {
       setGuardandoItem(false)

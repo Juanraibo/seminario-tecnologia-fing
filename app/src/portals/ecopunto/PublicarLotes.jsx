@@ -19,7 +19,10 @@ export default function PublicarLotes() {
   const toast = useToast()
 
   // Ítems sin asignar a lote de publicación
-  const itemsSinPublicar = state.items.filter(i => i.lotePublicadoId === null)
+  const itemsSinPublicar = state.items.filter(i =>
+    (i.lotePublicadoId === null || i.lotePublicadoId === undefined) &&
+    (i.lote_publicado_id === null || i.lote_publicado_id === undefined)
+  )
 
   // Agrupar ítems por categoría
   const itemsPorCategoria = useMemo(() => {

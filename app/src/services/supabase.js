@@ -120,13 +120,20 @@ export async function getItems(loteOrigenId = null) {
 }
 
 export async function crearItem(item) {
+  console.log('🔄 Intentando crear item en Supabase:', item)
+
   const { data, error } = await supabase
     .from('items')
     .insert(item)
     .select()
     .single()
 
-  if (error) throw error
+  if (error) {
+    console.error('❌ Error de Supabase al crear item:', error)
+    throw error
+  }
+
+  console.log('✅ Item creado exitosamente:', data)
   return data
 }
 
