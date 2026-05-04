@@ -80,9 +80,18 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-950 relative overflow-hidden">
+      {/* Patrón de fondo sutil */}
+      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.02]" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 15 L35 20 L40 15 L35 10 Z M20 25 L25 30 L20 35 L15 30 Z M40 25 L45 30 L40 35 L35 30 Z M30 35 L35 40 L30 45 L25 40 Z' fill='%2310b981' fill-opacity='0.15'/%3E%3C/svg%3E")`,
+        backgroundSize: '60px 60px'
+      }}></div>
+
+      {/* Gradiente radial para profundidad */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-gray-100/50 dark:to-gray-950/50"></div>
+
       {/* Card principal */}
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md relative z-10">
         <div className="enterprise-card p-8 animate-fade-in">
 
           {/* Logo / Header */}

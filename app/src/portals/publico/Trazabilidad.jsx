@@ -3,11 +3,12 @@ import { useApp } from '../../context/AppContext'
 import {
   Recycle, MapPin, Calendar, Package, CheckCircle,
   Building2, Factory, Award, FileCheck, ChevronRight,
-  Filter, Search, TrendingUp, Leaf, Scale
+  Filter, Search, TrendingUp, Leaf, Scale, QrCode, Globe
 } from '../../components/atoms/Icon'
 import Card from '../../components/molecules/Card'
 import Button from '../../components/atoms/Button'
 import { StatCard } from '../../components/molecules/Card'
+import PublicNav from '../../components/layout/PublicNav'
 import { useState } from 'react'
 
 export default function Trazabilidad() {
@@ -74,24 +75,31 @@ function RegistroPublico({ state }) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
-        {/* Header con branding */}
-        <Card>
-          <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
-            <div className="flex items-center gap-3">
-              <Recycle size={40} className="text-primary-500" />
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  EcoFIng · Registro Público
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Trazabilidad de RAEE · FIng UdelaR
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* Navbar público */}
+      <PublicNav />
 
-          {/* Estadísticas globales con StatCard */}
+      {/* Hero section */}
+      <div className="bg-gradient-to-br from-primary-600 via-primary-500 to-primary-400 dark:from-primary-800 dark:via-primary-700 dark:to-primary-600">
+        <div className="max-w-7xl mx-auto px-6 py-16 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur-sm rounded-lg mb-6">
+            <Globe size={32} className="text-white" strokeWidth={2} />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Registro Público de Trazabilidad
+          </h1>
+          <p className="text-lg text-primary-50 max-w-2xl mx-auto mb-2">
+            Consulta el recorrido completo de cada lote RAEE gestionado en la Facultad de Ingeniería.
+          </p>
+          <p className="text-sm text-primary-100 max-w-xl mx-auto">
+            Transparencia total desde la solicitud hasta el certificado de disposición final.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto p-6 space-y-6 -mt-8">
+        {/* Estadísticas globales - Elevadas sobre el hero */}
+        <Card className="shadow-enterprise-lg">
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard
               icon={<Package size={18} />}
@@ -368,6 +376,9 @@ function DetalleLote({ loteId, state }) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
+      {/* Navbar público */}
+      <PublicNav />
+
       <div className="max-w-4xl mx-auto p-6 space-y-6">
         {/* Botón volver */}
         <button
@@ -378,20 +389,11 @@ function DetalleLote({ loteId, state }) {
           Volver al registro
         </button>
 
-        {/* Header con branding */}
-        <Card className="text-center">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <Recycle size={40} className="text-primary-500" />
-            <div className="text-left">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">EcoFIng</h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Gestión de RAEE · FIng UdelaR</p>
-            </div>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent my-4"></div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Sistema de trazabilidad pública de Residuos de Aparatos Eléctricos y Electrónicos
-          </p>
-        </Card>
+        {/* Header del lote */}
+        <div className="flex items-center gap-3 mb-2">
+          <QrCode size={24} className="text-primary-600 dark:text-primary-400" />
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Detalle del Lote</h1>
+        </div>
 
         {/* Información del lote */}
         <Card>

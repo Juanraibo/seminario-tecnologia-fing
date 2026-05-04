@@ -65,8 +65,7 @@ export default function MisSolicitudes() {
     : 0
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <PageHeader
           title="Mis Solicitudes"
@@ -75,20 +74,20 @@ export default function MisSolicitudes() {
 
         {/* Grid de estadísticas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Scoring actual con gradient */}
-          <div className="bg-gradient-to-br from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700 rounded-2xl p-6 text-white shadow-soft">
+          {/* Scoring actual - Enterprise style */}
+          <div className="enterprise-card p-5 bg-primary-50 dark:bg-primary-950/20 border-primary-200 dark:border-primary-800">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-primary-100">
+                <p className="text-xs font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wide">
                   Scoring Actual
                 </p>
-                <p className="text-4xl font-bold mt-2">
+                <p className="text-4xl font-bold text-primary-900 dark:text-primary-100 mt-2 tracking-tight">
                   {gestora?.scoring || 0}
                 </p>
-                <p className="text-xs text-primary-200 mt-1">de 100 puntos</p>
+                <p className="text-xs text-primary-600 dark:text-primary-400 mt-1">de 100 puntos</p>
               </div>
-              <div className="p-3 bg-white/10 rounded-xl">
-                <Award size={24} />
+              <div className="p-2.5 rounded-lg bg-primary-600 dark:bg-primary-500 shrink-0 ml-4">
+                <Award size={18} className="text-white" />
               </div>
             </div>
           </div>
@@ -162,12 +161,12 @@ export default function MisSolicitudes() {
                 <div
                   key={lote.id}
                   onClick={() => navigate(`/gestora/lote/${lote.id}`)}
-                  className={`p-5 rounded-xl border cursor-pointer transition-all hover:scale-[1.01] ${
+                  className={`enterprise-card p-5 cursor-pointer transition-all duration-200 hover:scale-[1.01] ${
                     esAdjudicado
-                      ? 'bg-primary-50 dark:bg-primary-900/10 border-primary-200 dark:border-primary-700/50 hover:bg-primary-100 dark:hover:bg-primary-900/20'
+                      ? 'bg-primary-50 dark:bg-primary-950/20 border-primary-200 dark:border-primary-800'
                       : esRechazado
-                      ? 'bg-gray-50 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800/50'
-                      : 'bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-700/50 hover:bg-amber-100 dark:hover:bg-amber-900/20'
+                      ? ''
+                      : 'bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-3">
@@ -243,7 +242,6 @@ export default function MisSolicitudes() {
             </div>
           )}
         </Card>
-      </div>
     </div>
   )
 }

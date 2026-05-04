@@ -310,6 +310,27 @@ export default function ImpactoAmbiental() {
           )}
         </Card>
       </div>
+
+      {/* Footer con crédito de Climatiq API */}
+      <Card className="bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-800">
+        <div className="text-center text-xs text-gray-500 dark:text-gray-400">
+          <p>
+            Cálculos de emisiones de CO₂ realizados con{' '}
+            <a
+              href="https://www.climatiq.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+            >
+              Climatiq API
+            </a>
+            {estadisticasCO2?.source === 'api' ? ' (datos en tiempo real)' : ' (factores estimados promedio)'}
+          </p>
+          <p className="mt-1 text-gray-400 dark:text-gray-500">
+            Factores de emisión basados en estudios de reciclaje electrónico y recuperación de materiales
+          </p>
+        </div>
+      </Card>
     </div>
   )
 }
