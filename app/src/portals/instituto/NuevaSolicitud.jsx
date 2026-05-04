@@ -92,7 +92,7 @@ export default function NuevaSolicitud() {
     // Crear el nuevo lote (esquema Supabase: lotes_entrada)
     const nuevoLote = {
       id: nuevoId,
-      instituto_id: usuario.institutoId,
+      instituto_id: usuario.instituto_id, // Usar snake_case como viene de Supabase
       tamano: tamano,
       peso_declarado_aprox_kg: null,
       descripcion: observaciones || null,
