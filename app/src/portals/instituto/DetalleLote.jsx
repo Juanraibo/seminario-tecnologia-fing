@@ -159,11 +159,12 @@ export default function DetalleLote() {
             {/* Fotografía */}
             {lote.fotos && lote.fotos.length > 0 && (
               <Card title="Fotografía del lote">
-                <div className="bg-gray-100 dark:bg-gray-950 rounded-lg p-4 flex items-center justify-center">
-                  <Package size={64} className="text-gray-400" />
-                  <p className="text-sm text-gray-500 dark:text-gray-400 ml-4">
-                    Imagen: {lote.fotos[0]}
-                  </p>
+                <div className="bg-gray-100 dark:bg-gray-950 rounded-lg p-4">
+                  <img
+                    src={lote.fotos[0]}
+                    alt="Fotografía del lote"
+                    className="w-full h-auto rounded-lg object-contain max-h-96"
+                  />
                 </div>
               </Card>
             )}

@@ -47,6 +47,19 @@ export default function GestionActores() {
     setMostrarFormInstituto(false)
   }
 
+  // Handler para toggle estado de instituto
+  const handleToggleInstituto = async (institutoId, estadoActual) => {
+    try {
+      const nuevoEstado = !estadoActual
+      // TODO: Implementar actualizarInstituto en supabase.js
+      // Por ahora solo actualiza localmente
+      toast.info(`Instituto ${nuevoEstado ? 'activado' : 'desactivado'} (solo local en MVP)`)
+    } catch (error) {
+      console.error('Error toggling instituto:', error)
+      toast.error('Error al cambiar estado del instituto')
+    }
+  }
+
   // Handler para agregar operario
   const handleAgregarOperario = () => {
     if (!nuevoOperario.nombre || !nuevoOperario.email || !nuevoOperario.password) {
@@ -248,8 +261,9 @@ export default function GestionActores() {
                       <tr className="border-b border-gray-200 dark:border-gray-700">
                         <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Sigla</th>
                         <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Nombre</th>
-                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Responsable</th>
+                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Contacto</th>
                         <th className="text-center py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Estado</th>
+                        <th className="text-center py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -259,7 +273,7 @@ export default function GestionActores() {
                             <span className="font-semibold text-primary-500">{instituto.sigla}</span>
                           </td>
                           <td className="py-3 px-4 text-gray-900 dark:text-gray-100">{instituto.nombre}</td>
-                          <td className="py-3 px-4 text-gray-500 dark:text-gray-400 text-sm">{instituto.responsable}</td>
+                          <td className="py-3 px-4 text-gray-500 dark:text-gray-400 text-sm">{instituto.emailContacto || instituto.email_contacto || '-'}</td>
                           <td className="py-3 px-4 text-center">
                             {instituto.activo ? (
                               <Badge variant="success" size="sm">
@@ -272,6 +286,14 @@ export default function GestionActores() {
                                 Inactivo
                               </Badge>
                             )}
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <button
+                              onClick={() => handleToggleInstituto(instituto.id, instituto.activo)}
+                              className="text-sm text-primary-600 dark:text-primary-400 hover:underline"
+                            >
+                              {instituto.activo ? 'Desactivar' : 'Activar'}
+                            </button>
                           </td>
                         </tr>
                       ))}

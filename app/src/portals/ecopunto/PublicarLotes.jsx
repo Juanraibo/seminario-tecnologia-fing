@@ -18,11 +18,18 @@ export default function PublicarLotes() {
   const navigate = useNavigate()
   const toast = useToast()
 
+  // Debug: ver todos los items
+  console.log('📦 Total items en estado:', state.items.length)
+  console.log('Items completos:', state.items)
+
   // Ítems sin asignar a lote de publicación
-  const itemsSinPublicar = state.items.filter(i =>
-    (i.lotePublicadoId === null || i.lotePublicadoId === undefined) &&
-    (i.lote_publicado_id === null || i.lote_publicado_id === undefined)
-  )
+  const itemsSinPublicar = state.items.filter(i => {
+    const sinPublicar = !i.lotePublicadoId && !i.lote_publicado_id
+    console.log(`Item ${i.id}: lotePublicadoId=${i.lotePublicadoId}, lote_publicado_id=${i.lote_publicado_id}, sinPublicar=${sinPublicar}`)
+    return sinPublicar
+  })
+
+  console.log('📋 Items sin publicar:', itemsSinPublicar.length)
 
   // Agrupar ítems por categoría
   const itemsPorCategoria = useMemo(() => {

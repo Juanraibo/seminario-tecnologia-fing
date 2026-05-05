@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AppProvider } from './context/AppContext'
+import { AppProvider, useApp } from './context/AppContext'
 import PrivateRoute from './components/layout/PrivateRoute'
 import LayoutAutenticado from './components/layout/LayoutAutenticado'
 import ToastContainer from './components/organisms/ToastContainer'
@@ -35,6 +35,21 @@ import Trazabilidad           from './portals/publico/Trazabilidad'
 import CalculadoraPage        from './portals/publico/CalculadoraPage'
 
 function AppRoutes() {
+  const { state } = useApp()
+
+  // Mostrar loading mientras carga datos de Supabase
+  if (state.isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-950 dark:to-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-500 mx-auto mb-4"></div>
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">Cargando EcoFIng...</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Conectando con la base de datos</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Routes>
       {/* Pública — sin login */}

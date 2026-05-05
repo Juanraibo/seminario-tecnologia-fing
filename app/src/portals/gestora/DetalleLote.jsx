@@ -72,7 +72,7 @@ export default function DetalleLote() {
       const nuevaSolicitud = {
         lote_publicacion_id: lote.id,
         gestora_id: gestora.id,
-        cotizacion_monto: monto,
+        monto_ofrecido: monto,
         estado: 'pendiente'
       }
 
