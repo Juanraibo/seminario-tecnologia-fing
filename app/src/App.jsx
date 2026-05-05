@@ -33,6 +33,7 @@ import AdminGestionActores    from './portals/admin/GestionActores'
 import AdminAprobacionRetiros from './portals/admin/AprobacionRetiros'
 import Trazabilidad           from './portals/publico/Trazabilidad'
 import CalculadoraPage        from './portals/publico/CalculadoraPage'
+import LandingPage            from './portals/publico/LandingPage'
 
 function AppRoutes() {
   const { state } = useApp()
@@ -53,6 +54,7 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Pública — sin login */}
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/trazabilidad" element={<Trazabilidad />} />
       <Route path="/calculadora" element={<CalculadoraPage />} />
@@ -124,9 +126,6 @@ function AppRoutes() {
           <LayoutAutenticado><AdminAprobacionRetiros /></LayoutAutenticado>
         </PrivateRoute>
       } />
-
-      {/* Raíz → login */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
 
       {/* 404 - Página no encontrada */}
       <Route path="*" element={<NotFound />} />

@@ -4,7 +4,7 @@
  */
 
 import { useNavigate, NavLink } from 'react-router-dom'
-import { Recycle, Sun, Moon, LogIn, Calculator, Globe } from '../atoms/Icon'
+import { Recycle, Sun, Moon, LogIn, Calculator, Globe, Home } from '../atoms/Icon'
 import Button from '../atoms/Button'
 import { useEffect, useState } from 'react'
 
@@ -33,7 +33,7 @@ export default function PublicNav() {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <button
-          onClick={() => navigate('/trazabilidad')}
+          onClick={() => navigate('/')}
           className="flex items-center gap-2 group"
         >
           <div className="w-9 h-9 bg-primary-600 dark:bg-primary-500 rounded-lg flex items-center justify-center group-hover:bg-primary-700 dark:group-hover:bg-primary-400 transition-colors">
@@ -41,12 +41,26 @@ export default function PublicNav() {
           </div>
           <div className="hidden sm:block">
             <p className="text-sm font-bold text-gray-900 dark:text-white">EcoFIng</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Trazabilidad RAEE</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Gestión Sustentable</p>
           </div>
         </button>
 
         {/* Navegación */}
         <div className="hidden md:flex items-center gap-1">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive
+                  ? 'bg-primary-50 dark:bg-primary-950/30 text-primary-600 dark:text-primary-400'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
+              }`
+            }
+          >
+            <Home size={16} />
+            <span>Inicio</span>
+          </NavLink>
           <NavLink
             to="/trazabilidad"
             className={({ isActive }) =>
@@ -91,7 +105,7 @@ export default function PublicNav() {
             variant="primary"
             size="sm"
             icon={<LogIn size={16} />}
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/login')}
           >
             <span className="hidden sm:inline">Iniciar Sesión</span>
           </Button>
