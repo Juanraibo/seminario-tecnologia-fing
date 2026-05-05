@@ -124,4 +124,5 @@ export const {
 
   // Efectos y decoración
   Sparkles,
+  Zap,
 } = LucideIcons
