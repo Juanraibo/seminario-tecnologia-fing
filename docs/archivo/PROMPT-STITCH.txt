@@ -1,0 +1,121 @@
+PROMPT PARA GOOGLE STITCH - COPIAR Y PEGAR
+============================================
+
+Eres un diseñador experto de interfaces web. Necesito que rediseñes este sistema de gestión de RAEE (Residuos Electrónicos) con un diseño moderno y profesional.
+
+CONTEXTO DEL PROYECTO:
+- Sistema web para Facultad de Ingeniería (UdelaR, Uruguay)
+- 4 portales autenticados + 1 vista pública
+- Usuarios: Institutos, Ecopunto (clasificación con IA), Gestoras (retiro), Admin (supervisión)
+- Objetivo: Trazabilidad completa de residuos electrónicos
+
+STACK TECNOLÓGICO (MANTENER OBLIGATORIAMENTE):
+- React 18 con JSX
+- Vite 5 (bundler)
+- TailwindCSS 3 (utility-first, NO CSS custom)
+- React Router v6
+- Lucide React (iconos)
+- Recharts (gráficos)
+- Google Fonts Inter (ya cargada)
+- Dark mode implementado con clase .dark
+
+DISEÑO OBJETIVO:
+- Estilo: Moderno, minimalista, profesional
+- Inspiración: Linear, Vercel Dashboard, Stripe
+- Colores primarios:
+  * Verde sostenibilidad: #10b981 (green-500) para acciones principales
+  * Azul tecnología: #3b82f6 (blue-500) para acciones secundarias
+  * Grises: gray-50 a gray-950 (fondos, textos, borders)
+- Efectos:
+  * Glassmorphism en modals: bg-white/80 backdrop-blur-xl
+  * Gradientes sutiles en fondos
+  * Sombras suaves: shadow-sm, shadow-md
+  * Hover states con transition-colors
+  * Micro-interacciones en botones
+
+REGLAS DE CÓDIGO:
+1. SOLO usar clases de TailwindCSS (nunca CSS inline o <style>)
+2. Mantener estructura de componentes React actual
+3. Preservar toda la funcionalidad (no cambiar lógica)
+4. Dark mode compatible: usar dark:clase para cada color
+5. Responsive mobile-first: usar sm:, md:, lg: breakpoints
+6. Iconos solo de Lucide React
+7. Mantener nombres de archivos y exports
+
+COMPONENTES A MEJORAR:
+
+1. BUTTONS:
+   - Primary: bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-sm
+   - Secondary: bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 rounded-lg
+   - Ghost: hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700
+   - Danger: bg-red-500 hover:bg-red-600 text-white rounded-lg
+
+2. CARDS:
+   - Border sutil: border border-gray-200 dark:border-gray-800
+   - Fondo: bg-white dark:bg-gray-900
+   - Sombra: shadow-sm hover:shadow-md
+   - Bordes: rounded-xl
+   - Padding generoso: p-6
+
+3. INPUTS:
+   - Labels encima: text-sm font-medium text-gray-700 dark:text-gray-300
+   - Border: border-gray-200 dark:border-gray-800
+   - Focus ring: focus:ring-2 focus:ring-green-500 focus:border-transparent
+   - Fondo: bg-white dark:bg-gray-900
+
+4. TABLES:
+   - Row hover: hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors
+   - Border: border-b border-gray-200 dark:border-gray-800
+   - Header sticky: sticky top-0 bg-white dark:bg-gray-900
+
+5. MODALS:
+   - Backdrop: bg-black/50 backdrop-blur-sm
+   - Card: bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl
+   - Animación: fade-in
+
+6. TOASTS (ya implementados):
+   - Posición: fixed top-4 right-4 z-50
+   - Animación: animate-slide-in
+   - Colores por tipo: green (success), red (error), amber (warning), blue (info)
+
+NO CAMBIAR:
+- Nombres de archivos
+- Exports de componentes
+- Props de componentes
+- Lógica de negocio (useEffect, useState, funciones)
+- Estructura de rutas React Router
+- Context API (useApp)
+- Llamadas a API OpenRouter
+
+PRIORIDAD DE REDISEÑO:
+1. Admin Dashboard (página más visible en demos)
+2. Login (primera impresión)
+3. Gestora Dashboard (diferenciador: cotizaciones)
+4. Ecopunto Clasificar (feature de IA)
+5. Vista Pública Trazabilidad
+
+ENTREGABLE:
+Para cada captura de pantalla que te comparto, genera:
+1. Código React completo con TailwindCSS
+2. Mantener estructura JSX actual
+3. Solo cambiar atributos className
+4. Incluir variantes dark mode (dark:*)
+5. Asegurar responsive (usar sm:, md:, lg:)
+6. Comentarios solo si hay cambios complejos
+
+EJEMPLO DE TRANSFORMACIÓN:
+
+ANTES:
+<button className="bg-blue-500 text-white p-2 rounded">
+  Guardar
+</button>
+
+DESPUÉS:
+<button className="bg-green-500 hover:bg-green-600 text-white font-medium px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all">
+  Guardar
+</button>
+
+¿Estás listo? Voy a compartir las capturas de pantalla una por una o en grupos por portal.
+
+Empieza rediseñando el ADMIN DASHBOARD (captura 11-admin-dashboard.png).
+Genera el código React + Tailwind completo para ese componente.

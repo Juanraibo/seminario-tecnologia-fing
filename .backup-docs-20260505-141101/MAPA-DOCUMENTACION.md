@@ -1,31 +1,22 @@
 # Mapa de Documentación — EcoFIng
 
-**Última actualización:** 5 de mayo de 2026  
-**Estado del MVP:** 100% completado (13/13 HUs)  
-**Estado de Documentación:** ✅ REORGANIZADA Y COMPLETA
+**Última actualización:** 27 de abril de 2026  
+**Estado del MVP:** 100% completado (13/13 HUs)
 
 ---
 
 ## 📋 Índice Rápido
 
-### ⭐ DOCUMENTOS PRINCIPALES
-- **[README.md](README.md)** — ÍNDICE PRINCIPAL de toda la documentación
-- **[GUIA-DEL-PROYECTO.md](GUIA-DEL-PROYECTO.md)** — Guía completa del proyecto
-- **[TODOS-LOS-PROMPTS.md](TODOS-LOS-PROMPTS.md)** — TODOS los prompts usados (para docentes) 🎓
-- **[ARQUITECTURA-TECNICA.md](ARQUITECTURA-TECNICA.md)** — Arquitectura técnica completa
-- **[DECISIONES-Y-JUSTIFICACIONES.md](DECISIONES-Y-JUSTIFICACIONES.md)** — Decisiones técnicas justificadas
-
 ### Para empezar rápidamente
-- **[../README.md](../README.md)** — Descripción del proyecto, instalación, usuarios de prueba
-- **[GUIA-DEL-PROYECTO.md](GUIA-DEL-PROYECTO.md)** — Guía completa del proyecto
+- **[README.md](../README.md)** — Descripción del proyecto, instalación, usuarios de prueba
+- **[INICIO-RAPIDO-SESION-5.md](INICIO-RAPIDO-SESION-5.md)** — Guía paso a paso para nuevos desarrolladores
 
 ### Historial y decisiones
-- **[../CHANGELOG.md](../CHANGELOG.md)** — Bitácora completa de 10 sesiones de desarrollo
+- **[CHANGELOG.md](../CHANGELOG.md)** — Bitácora completa de 9 sesiones de desarrollo
 - **[decisions/](decisions/)** — ADRs (Architecture Decision Records) del proyecto
-- **[DECISIONES-Y-JUSTIFICACIONES.md](DECISIONES-Y-JUSTIFICACIONES.md)** — Consolidado de todas las decisiones
 
 ### Para desarrollo
-- **[../CLAUDE.md](../CLAUDE.md)** — Instrucciones para el agente de IA
+- **[CLAUDE.md](../CLAUDE.md)** — Instrucciones para el agente de IA
 - **[guia-desarrollo.md](guia-desarrollo.md)** — Convenciones de código y flujo de trabajo
 
 ### Deployment y seguridad
@@ -35,8 +26,8 @@
 ### User Stories
 - **[user-stories/](user-stories/)** — Historias de usuario por portal
 
-### Documentación Archivada
-- **[archivo/](archivo/)** — Documentación temporal y técnica archivada (27 archivos)
+### Para la próxima sesión
+- **[PROXIMA_SESION.md](PROXIMA_SESION.md)** — Tareas pendientes y revisión de flujos
 
 ---
 
@@ -169,13 +160,11 @@
 
 ## 📊 Métricas de Documentación
 
-- **Archivos de documentación:** 50+ archivos
-- **Líneas de documentación:** ~10,000+ líneas
+- **Archivos de documentación:** 31 archivos
+- **Líneas de documentación:** ~5,000 líneas (estimado)
 - **Cobertura de HUs:** 100% (13/13 documentadas)
 - **ADRs:** 2 decisiones arquitectónicas formalizadas
-- **Sesiones documentadas:** 10 de 10 sesiones
-- **Documentos maestros:** 4 (NUEVO)
-- **Archivos archivados:** 19 archivos temporales
+- **Sesiones documentadas:** 9 de 9 sesiones
 
 ---
 
@@ -202,29 +191,5 @@ La documentación sirve para:
 
 ---
 
-**Reorganizado por:** Juan Raimondo  
-**Con asistencia de:** Claude Sonnet 4.5  
-**Fecha:** 5 de mayo de 2026
-
----
-
-## 🆕 CAMBIOS RECIENTES (5 mayo 2026)
-
-### ✅ Documentos Principales Creados
-1. **GUIA-DEL-PROYECTO.md** — Guía completa del proyecto
-2. **TODOS-LOS-PROMPTS.md** — Todos los prompts consolidados (requisito docente)
-3. **ARQUITECTURA-TECNICA.md** — Arquitectura técnica completa
-4. **DECISIONES-Y-JUSTIFICACIONES.md** — Decisiones técnicas justificadas
-
-### ✅ Reorganización y Limpieza
-- Creada carpeta `archivo/` con 27 archivos (temporales + técnicos)
-- Eliminada carpeta `video-generation/` (no relacionada con el proyecto)
-- Movidos docs técnicos (Supabase, Hyperframes, schemas) a `archivo/`
-- Renombrados documentos principales a nombres más amigables en español
-- Reducidos archivos en `docs/` de 50+ a solo 11 principales
-
-### ✅ Propósito
-- Facilitar comprensión para docentes
-- Simplificar navegación de la documentación
-- Consolidar información dispersa
-- Nombres más claros y amigables en español
+**Documentado por:** Claude Sonnet 4.5  
+**Fecha:** 27 de abril de 2026
