@@ -57,7 +57,7 @@ seminario-tecnologia-fing/
 
 ## Stack tecnológico
 
-React 18 · Vite 5 · TailwindCSS · React Router v6 · OpenRouter API (IA)
+React 18 · Vite 5 · TailwindCSS · React Router v6 · Supabase (PostgreSQL) · OpenRouter API (IA) · Climatiq API (CO₂)
 
 ---
 
@@ -83,11 +83,11 @@ React 18 · Vite 5 · TailwindCSS · React Router v6 · OpenRouter API (IA)
 
 ## KPIs del Sistema
 
-Según el Dashboard Administrativo y Registro Público (datos mock):
-- 📦 **Lotes gestionados:** 8 lotes de publicación + 6 lotes de entrada
-- ⚖️ **RAEE procesado:** ~81 kg de residuos electrónicos
-- 🌍 **CO₂ evitado:** ~113 kg (factores específicos por categoría)
-- 🔩 **Materiales recuperados:** Cobre (5%), Aluminio (8%)
+Según el Dashboard Administrativo y Registro Público:
+- 📦 **Lotes gestionados:** Múltiples lotes de publicación y entrada
+- ⚖️ **RAEE procesado:** Residuos electrónicos por categoría
+- 🌍 **CO₂ evitado:** Cálculo real con Climatiq API + factores estimados
+- 🔩 **Materiales recuperados:** Cobre, Aluminio, Plástico, etc.
 - ✅ **Trazabilidad completa:** Desde instituto hasta certificado final
 - 📊 **Registro público:** Vista abierta con búsqueda y filtros
 
@@ -97,15 +97,16 @@ Según el Dashboard Administrativo y Registro Público (datos mock):
 
 > ✅ **MVP Completado** — 13/13 User Stories implementadas  
 > 🚀 **Deployado en:** [seminario.noah.uy](https://seminario.noah.uy)  
+> 🗄️ **Base de datos:** Supabase (PostgreSQL)  
 > 🌐 **Registro público:** Vista mejorada con estadísticas y filtros  
-> 📊 **Datos mock:** 8 lotes de publicación con estados variados  
-> 🔬 **API CO₂:** Integración con Climatiq API (factores específicos por categoría)  
+> 🔬 **APIs integradas:** OpenRouter (IA), Climatiq (CO₂), Supabase (datos)  
 > 📅 **Presentación final:** 26 de mayo de 2026
 
-## Últimas Actualizaciones (Sesión 10 — 28 de abril)
+## Últimas Actualizaciones (Mayo 2026)
 
-- ✨ **Registro público mejorado:** KPIs globales, ordenamiento, búsqueda avanzada
+- 🗄️ **Migración a Supabase:** Base de datos PostgreSQL para persistencia real
+- 🔐 **Seguridad mejorada:** Credenciales migradas a variables de entorno
 - 🌓 **Modo oscuro persistente:** Preferencia guardada en localStorage
 - 🔬 **API de CO₂:** Servicio carbonAPI.js con Climatiq + factores estimados
-- 📦 **Datos enriquecidos:** 5 lotes adicionales, 7 categorías RAEE
-- 📸 **Prompts IA:** 45+ prompts listos para generar assets visuales
+- 🧹 **Limpieza de código:** Atomic Design, estructura optimizada
+- 📊 **Landing page moderna:** Presentación pública del sistema
