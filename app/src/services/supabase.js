@@ -39,15 +39,26 @@ export async function getGestoras() {
 }
 
 export async function actualizarGestora(id, cambios) {
+  console.log('🔄 Actualizando gestora:', id, cambios)
+
   const { data, error } = await supabase
     .from('gestoras')
     .update(cambios)
     .eq('id', id)
     .select()
-    .single()
 
-  if (error) throw error
-  return data
+  if (error) {
+    console.error('❌ Error actualizando gestora:', error)
+    throw error
+  }
+
+  if (!data || data.length === 0) {
+    console.error('❌ No se encontró gestora con ID:', id)
+    throw new Error(`No se encontró la gestora con ID: ${id}`)
+  }
+
+  console.log('✅ Gestora actualizada:', data[0])
+  return data[0]
 }
 
 // Usuarios

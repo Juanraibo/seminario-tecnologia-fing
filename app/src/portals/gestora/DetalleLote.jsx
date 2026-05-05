@@ -73,7 +73,7 @@ export default function DetalleLote() {
         lote_publicacion_id: lote.id,
         gestora_id: gestora.id,
         monto_ofrecido: monto,
-        estado: 'pendiente'
+        estado: 'Pendiente' // Mayúscula inicial para el CHECK constraint
       }
 
       await crearSolicitudGestora(nuevaSolicitud)
