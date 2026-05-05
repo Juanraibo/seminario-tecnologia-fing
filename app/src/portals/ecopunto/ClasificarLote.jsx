@@ -208,6 +208,13 @@ export default function ClasificarLote() {
         : 0
       const nuevoId = `ITEM-2026-${String(ultimoId + 1).padStart(3, '0')}`
 
+      // Convertir confianza de string a número (Supabase espera INTEGER 0-100)
+      let confianzaNumerica = null
+      if (resultadoIA?.confianza) {
+        const confianzaMap = { 'alto': 90, 'medio': 60, 'bajo': 30 }
+        confianzaNumerica = confianzaMap[resultadoIA.confianza.toLowerCase()] || null
+      }
+
       // Crear ítem (usando snake_case para Supabase)
       const nuevoItem = {
         id: nuevoId,
@@ -220,7 +227,7 @@ export default function ClasificarLote() {
         co2_source: co2_source,
         foto_url: imagenPreview,
         clasificado_por_ia: !!resultadoIA,
-        confianza_ia: resultadoIA?.confianza || null,
+        confianza_ia: confianzaNumerica, // Convertido a INTEGER (30, 60, 90)
         fecha_clasificacion: new Date().toISOString().split('T')[0],
         lote_publicado_id: null,
         observaciones: null
